@@ -1,0 +1,39 @@
+.homeContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.searchPanel {
+  height: 575px;
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url("../../assets/students.jpg") no-repeat center;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .searchHeader {
+    font-size: 60px;
+    font-weight: 700;
+    color: #ffffff;
+    user-select: none;
+    margin-bottom: 30px;
+  }
+
+  .searchForm {
+    width: 40%;
+
+    .searchInput {
+      height: 40px;
+      padding: 0 10px;
+      border: solid 1px grey;
+      border-radius: 5px;
+      font-size: 25px;
+      color: #495057;
+    }
+    .searchInput:focus {
+      outline: none;
+    }
+  }
+}

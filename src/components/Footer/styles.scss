@@ -1,0 +1,30 @@
+.footerContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 150px;
+  background: #ffffff;
+}
+
+.linksContainer {
+  display: flex;
+  justify-content: space-around;
+  width: 40%;
+  margin: 0 20px;
+}
+
+.footerLink {
+  color: #007bff;
+  font-size: 1em;
+  cursor: pointer;
+}
+.footerLink:hover {
+  color: #0069d9;
+  text-decoration: underline;
+}
+
+.disclaimer {
+  color: #c0c0c0;
+  font-size: 0.8em;
+  margin: 35px;
+}

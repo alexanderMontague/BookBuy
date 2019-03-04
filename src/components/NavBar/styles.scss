@@ -1,0 +1,39 @@
+.navContainer {
+  display: flex;
+  justify-content: space-between;
+  height: 50px;
+  background: white;
+}
+
+.logoLink {
+  display: flex;
+  align-items: center;
+  font-size: 1.35rem;
+  font-weight: bold;
+  padding-left: 3%;
+  min-width: 200px;
+}
+
+.navLinks {
+  min-width: 30%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.navItem {
+  color: #ffffff;
+  background: #007bff;
+  height: 40px;
+  min-width: 70px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  transition: background-color 0.15s ease-in-out;
+}
+.navItem:hover {
+  cursor: pointer;
+  background: #0069d9;
+}
