@@ -1,7 +1,7 @@
 .navContainer {
   display: flex;
   justify-content: space-between;
-  height: 50px;
+  height: 70px;
   background: white;
 }
 
@@ -22,11 +22,11 @@
 }
 
 .navItem {
+  font-size: 15px;
   color: #ffffff;
   background: #007bff;
-  height: 40px;
-  min-width: 70px;
-  border-radius: 5px;
+  height: 100%;
+  width: 35%;
   display: flex;
   align-items: center;
   justify-content: center;

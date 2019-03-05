@@ -1,0 +1,15 @@
+.inputWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  font-size: 10px;
+  color: #ffffff;
+  padding-left: 2px;
+}
+
+.required {
+  font-size: 10px;
+  color: red;
+}

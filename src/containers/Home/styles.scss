@@ -22,18 +22,72 @@
   }
 
   .searchForm {
-    width: 40%;
+    width: 45%;
 
-    .searchInput {
-      height: 40px;
-      padding: 0 10px;
-      border: solid 1px grey;
-      border-radius: 5px;
-      font-size: 25px;
-      color: #495057;
-    }
-    .searchInput:focus {
-      outline: none;
+    .inputRow {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+
+      @media (max-width: 768px) {
+        flex-direction: column;
+      }
+
+      .searchInput {
+        width: 180px;
+        height: 37px;
+        padding: 0 10px;
+        border: solid 1px grey;
+        border-radius: 5px;
+        font-size: 16px;
+        color: #333333;
+      }
+      .searchInput:focus {
+        outline: none;
+      }
+
+      .searchInputTwo {
+        width: 400px;
+        height: 38px;
+        padding: 0 10px;
+        border: solid 1px grey;
+        border-radius: 5px;
+        font-size: 16px;
+        color: #333333;
+      }
+      .searchInputTwo:focus {
+        outline: none;
+      }
+
+      .searchButton {
+        color: #ffffff;
+        background: #007bff;
+        height: 40px;
+        width: 200px;
+        border: none;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        user-select: none;
+        transition: background-color 0.15s ease-in-out;
+      }
+      .searchButton:hover {
+        cursor: pointer;
+        background: #0069d9;
+      }
+      .searchButton:focus {
+        outline: none;
+      }
+      .searchButton:disabled {
+        background: grey;
+      }
+
+      .schoolInput {
+        width: 200px;
+        height: 40px;
+      }
     }
   }
 }
