@@ -1,5 +1,5 @@
 .authSection {
-  height: 550px;
+  height: 500px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -9,16 +9,56 @@
     min-height: 400px;
     width: 550px;
     background: #f8f9fa;
+    padding-top: 50px;
 
     .selectorButtons {
       display: flex;
       justify-content: center;
       width: 80%;
+      margin: 0 auto;
 
       .selectorButton {
+        height: 50px;
         width: 50%;
         background: #333333;
+        color: #ffffff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: 0.3s;
       }
+      .selectorButton:hover {
+        cursor: pointer;
+        background: #0069d9;
+      }
+      .selected {
+        background: #007bff;
+      }
+    }
+
+    .authTitle {
+      color: #333333;
+      font-size: 30px;
+      text-align: center;
+      margin: 25px 0;
+    }
+
+    .form {
+      width: 80%;
+      display: flex;
+      flex-direction: column;
+      margin: 0 auto;
+    }
+
+    .input {
+      padding: 0 10px;
+      border: solid 1px grey;
+      border-radius: 5px;
+      font-size: 20px;
+      color: #333333;
+    }
+    .input:focus {
+      outline: none;
     }
   }
 }
