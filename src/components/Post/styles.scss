@@ -1,0 +1,32 @@
+.postContainer {
+  height: 70px;
+  display: flex;
+  border-radius: 50px;
+}
+.postContainer:hover {
+  cursor: pointer;
+  color: #ffffff;
+  background: #007bff;
+}
+
+.postHeaderItem {
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.date {
+  width: 10%;
+}
+.program {
+  width: 30%;
+}
+.course {
+  width: 10%;
+}
+.name {
+  width: 40%;
+}
+.price {
+  width: 10%;
+}

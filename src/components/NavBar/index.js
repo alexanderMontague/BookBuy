@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 import styles from "./styles.scss";
 
@@ -8,9 +9,15 @@ const NavBar = () => {
       <div className={styles.navContainer}>
         <div className={styles.logoLink}>Textbook Trade</div>
         <div className={styles.navLinks}>
-          <div className={styles.navItem}>Home</div>
-          <div className={styles.navItem}>Postings</div>
-          <div className={styles.navItem}>Sign Up!</div>
+          <Link className={styles.navItem} to="/">
+            Home
+          </Link>
+          <Link className={styles.navItem} to="/postings">
+            Postings
+          </Link>
+          <Link className={styles.navItem} to="/auth">
+            Register & Log In
+          </Link>
         </div>
       </div>
     </nav>

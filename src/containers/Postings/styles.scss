@@ -1,0 +1,185 @@
+.postingsContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.searchPanel {
+  height: 270px;
+  background: #333333;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 50px 0;
+  @media (max-width: 1000px) {
+    height: auto;
+  }
+
+  .searchHeader {
+    font-size: 60px;
+    font-weight: 700;
+    color: #ffffff;
+    user-select: none;
+    margin-bottom: 30px;
+    text-align: center;
+    @media (max-width: 1000px) {
+      font-size: 30px;
+    }
+  }
+
+  .searchForm {
+    width: 45%;
+    @media (max-width: 1000px) {
+      width: auto;
+    }
+
+    .inputRow {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+
+      @media (max-width: 768px) {
+        flex-direction: column;
+      }
+
+      .searchInput {
+        width: 180px;
+        height: 37px;
+        padding: 0 10px;
+        border: solid 1px grey;
+        border-radius: 5px;
+        font-size: 16px;
+        color: #333333;
+      }
+      .searchInput:focus {
+        outline: none;
+      }
+
+      .searchInputTwo {
+        width: 400px;
+        height: 38px;
+        padding: 0 10px;
+        border: solid 1px grey;
+        border-radius: 5px;
+        font-size: 16px;
+        color: #333333;
+        @media (max-width: 1000px) {
+          width: 180px;
+        }
+      }
+      .searchInputTwo:focus {
+        outline: none;
+      }
+
+      .searchButton {
+        color: #ffffff;
+        background: #007bff;
+        height: 40px;
+        width: 200px;
+        border: none;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        user-select: none;
+        transition: background-color 0.15s ease-in-out;
+      }
+      .searchButton:hover {
+        cursor: pointer;
+        background: #0069d9;
+      }
+      .searchButton:focus {
+        outline: none;
+      }
+      .searchButton:disabled {
+        background: grey;
+      }
+
+      .schoolInput {
+        width: 200px;
+        height: 40px;
+      }
+    }
+  }
+}
+
+.postContainer {
+  background: #f8f9fa;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .postings {
+    min-height: 300px;
+    width: 80%;
+    margin: 25px 0;
+
+    @media (max-width: 1000px) {
+      width: 90%;
+    }
+  }
+
+  .postHeader {
+    display: flex;
+    border-bottom: 2px solid #333333;
+    height: 50px;
+
+    .postHeaderItem {
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .date {
+      width: 10%;
+    }
+    .program {
+      width: 30%;
+    }
+    .code {
+      width: 10%;
+    }
+    .name {
+      width: 40%;
+    }
+    .price {
+      width: 10%;
+    }
+  }
+}
+
+ul {
+  display: inline-block;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+li {
+  display: inline-block;
+  width: 50px;
+  text-align: center;
+  margin: auto 0;
+  cursor: pointer;
+}
+
+.pageNavContainer {
+  width: 100%;
+  background: #333333;
+  display: flex;
+  justify-content: center;
+}
+
+.paginationContainer {
+  height: 100px;
+  width: 80%;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  color: #ffffff;
+}
+
+.active {
+  color: #007bff;
+}
