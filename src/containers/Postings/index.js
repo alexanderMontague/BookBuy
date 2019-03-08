@@ -132,7 +132,7 @@ class Postings extends Component {
               nextLabel={"Next"}
               breakLabel={"..."}
               breakClassName={"break-me"}
-              pageCount={10}
+              pageCount={20}
               marginPagesDisplayed={2}
               pageRangeDisplayed={5}
               onPageChange={null}

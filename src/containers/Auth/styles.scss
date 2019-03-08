@@ -1,0 +1,24 @@
+.authSection {
+  height: 550px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #333333;
+
+  .authContainer {
+    min-height: 400px;
+    width: 550px;
+    background: #f8f9fa;
+
+    .selectorButtons {
+      display: flex;
+      justify-content: center;
+      width: 80%;
+
+      .selectorButton {
+        width: 50%;
+        background: #333333;
+      }
+    }
+  }
+}

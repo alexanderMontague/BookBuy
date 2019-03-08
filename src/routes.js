@@ -4,6 +4,7 @@ import { Switch, Route } from "react-router";
 import Layout from "./containers/Layout";
 import Home from "./containers/Home";
 import Postings from "./containers/Postings";
+import Auth from "./containers/Auth";
 
 const DefaultComponent = ({ component: Component, ...rest }) => {
   return (
@@ -22,6 +23,7 @@ const routes = (
   <Switch>
     <DefaultComponent exact path={"/"} component={Home} />
     <DefaultComponent path={"/postings"} component={Postings} />
+    <DefaultComponent path={"/auth"} component={Auth} />
   </Switch>
 );
 
