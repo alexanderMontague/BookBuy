@@ -1,7 +1,5 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import styles from "./styles.scss";
-
-import InputWrapper from "../../components/InputWrapper";
 
 class Auth extends Component {
   state = {
@@ -43,7 +41,7 @@ class Auth extends Component {
               ? "Register For Free!"
               : "Welcome Back!"}
           </div>
-          <div className={[styles.formContainer].join(" ")}>
+          <Fragment>
             {selectedAuth === "register" ? (
               <form className={styles.form}>
                 <input
@@ -71,6 +69,9 @@ class Auth extends Component {
                   type="password"
                   placeholder="Re-enter Password"
                 />
+                <button className={styles.submitButton} type="submit">
+                  Register!
+                </button>
               </form>
             ) : (
               <form className={[styles.form].join(" ")}>
@@ -84,9 +85,12 @@ class Auth extends Component {
                   type="password"
                   placeholder="Password"
                 />
+                <button className={styles.submitButton} type="submit">
+                  Log In
+                </button>
               </form>
             )}
-          </div>
+          </Fragment>
         </div>
       </div>
     );
