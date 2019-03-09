@@ -3,11 +3,32 @@ import styles from "./styles.scss";
 
 class Auth extends Component {
   state = {
-    selectedAuth: "register"
+    selectedAuth: "register",
+
+    regName: "",
+    regEmail: "",
+    regPhone: "",
+    regPasswordOne: "",
+    regPasswordTwo: "",
+
+    loginEmail: "",
+    loginPassword: ""
   };
 
   authButtonClickHandler = event => {
     this.setState({ selectedAuth: event.target.id });
+  };
+
+  formFieldInputHandler = event => {
+    this.setState({ [event.target.id]: event.target.value });
+  };
+
+  registerHandler = () => {
+    console.log(this.state);
+  };
+
+  loginHandler = () => {
+    console.log(this.state);
   };
 
   render() {
@@ -43,47 +64,71 @@ class Auth extends Component {
           </div>
           <Fragment>
             {selectedAuth === "register" ? (
-              <form className={styles.form}>
+              <form className={styles.form} onSubmit={this.registerHandler}>
                 <input
                   className={styles.input}
                   type="text"
                   placeholder="Full Name"
+                  id="regName"
+                  onChange={this.formFieldInputHandler}
+                  value={this.state.regName}
                 />
                 <input
                   className={styles.input}
                   type="email"
                   placeholder="Email Address"
+                  id="regEmail"
+                  onChange={this.formFieldInputHandler}
+                  value={this.state.regEmail}
                 />
                 <input
                   className={styles.input}
                   type="tel"
                   placeholder="Phone Number"
+                  id="regPhone"
+                  onChange={this.formFieldInputHandler}
+                  value={this.state.regPhone}
                 />
                 <input
                   className={styles.input}
                   type="password"
                   placeholder="Password"
+                  id="regPasswordOne"
+                  onChange={this.formFieldInputHandler}
+                  value={this.state.regPasswordOne}
                 />
                 <input
                   className={styles.input}
                   type="password"
                   placeholder="Re-enter Password"
+                  id="regPasswordTwo"
+                  onChange={this.formFieldInputHandler}
+                  value={this.state.regPasswordTwo}
                 />
                 <button className={styles.submitButton} type="submit">
-                  Register!
+                  Register
                 </button>
               </form>
             ) : (
-              <form className={[styles.form].join(" ")}>
+              <form
+                className={[styles.form].join(" ")}
+                onSubmit={this.loginHandler}
+              >
                 <input
                   className={styles.input}
                   type="email"
                   placeholder="Email Address"
+                  id="loginEmail"
+                  onChange={this.formFieldInputHandler}
+                  value={this.state.loginEmail}
                 />
                 <input
                   className={styles.input}
                   type="password"
                   placeholder="Password"
+                  id="loginPassword"
+                  onChange={this.formFieldInputHandler}
+                  value={this.state.loginPassword}
                 />
                 <button className={styles.submitButton} type="submit">
                   Log In
