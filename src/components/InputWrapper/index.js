@@ -2,13 +2,15 @@ import React from "react";
 import styles from "./styles.scss";
 
 const InputWrapper = props => {
+  const { label, required, color, children } = props;
+
   return (
     <div className={styles.inputWrapper}>
-      <span className={styles.label}>
-        {props.label}
-        {props.required && <span className={styles.required}> *</span>}
+      <span className={styles.label} style={{ color }}>
+        {label}
+        {required && <span className={styles.required}> *</span>}
       </span>
-      {props.children}
+      {children}
     </div>
   );
 };

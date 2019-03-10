@@ -5,13 +5,14 @@ import Layout from "./containers/Layout";
 import Home from "./containers/Home";
 import Postings from "./containers/Postings";
 import Auth from "./containers/Auth";
+import Profile from "./containers/Profile";
 
 const DefaultComponent = ({ component: Component, ...rest }) => {
   return (
     <Route
       {...rest}
       render={componentProps => (
-        <Layout>
+        <Layout {...componentProps}>
           <Component {...componentProps} />
         </Layout>
       )}
@@ -24,6 +25,7 @@ const routes = (
     <DefaultComponent exact path={"/"} component={Home} />
     <DefaultComponent path={"/postings"} component={Postings} />
     <DefaultComponent path={"/auth"} component={Auth} />
+    <DefaultComponent path={"/profile"} component={Profile} />
   </Switch>
 );
 
