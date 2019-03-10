@@ -8,19 +8,33 @@ class Profile extends Component {
     return (
       <div className={styles.profileContainer}>
         <div className={styles.infoContainer}>
-          <div className={styles.header}>Profile Info</div>
+          <div className={styles.header}>Update Profile Info</div>
           <div className={styles.detailsContainer}>
-            <InputWrapper color="#000000" label="Name">
-              <div>Name: _______</div>
-            </InputWrapper>
-            <div>Phone: _______</div>
-            <div>Email: _______</div>
-            <div>Password: _______</div>
-            <div>Save Changes</div>
+            <label className={styles.inputLabel}>
+              Name:
+              <input className={styles.input} type="text" />
+            </label>
+            <label className={styles.inputLabel}>
+              Phone:
+              <input className={styles.input} type="tel" />
+            </label>
+            <label className={styles.inputLabel}>
+              Email:
+              <input className={styles.input} type="email" />
+            </label>
+            <label className={styles.inputLabel}>
+              Old Password:
+              <input className={styles.input} type="password" />
+            </label>
+            <label className={styles.inputLabel}>
+              New Password:
+              <input className={styles.input} type="password" />
+            </label>
+            <div className={styles.saveButton}>Save Changes</div>
           </div>
         </div>
         <div className={styles.infoContainer}>
-          <div className={styles.header}>Postings</div>
+          <div className={styles.header}>Manage Posts</div>
           <div className={styles.detailsContainer}>
             <div>Posting One</div>
             <div>Posting One</div>
