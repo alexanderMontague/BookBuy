@@ -15,6 +15,9 @@ const NavBar = () => {
           <Link className={styles.navItem} to="/postings">
             Postings
           </Link>
+          <Link className={styles.navItem} to="/sell">
+            Sell Books
+          </Link>
           <Link className={styles.navItem} to="/auth">
             Register & Log In
           </Link>

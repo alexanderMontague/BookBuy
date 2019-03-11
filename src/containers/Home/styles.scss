@@ -208,6 +208,40 @@
   }
 }
 
+.addPostingPanel {
+  min-height: 300px;
+  background: #333333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  .postingTitle {
+    font-size: 40px;
+    font-weight: 700;
+    color: #ffffff;
+  }
+  .postingButton {
+    height: 50px;
+    width: 25%;
+    font-size: 20px;
+    font-family: "Overpass";
+    background: #007bff;
+    border: none;
+    color: #ffffff;
+    transition: 0.3s;
+    margin-top: 20px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .postingButton:hover {
+    cursor: pointer;
+    background: #0069d9;
+  }
+}
+
 .reviewsPanel {
   min-height: 450px;
   background: #f8f9fa;

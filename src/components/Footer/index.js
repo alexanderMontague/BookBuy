@@ -3,9 +3,15 @@ import { Link } from "react-router-dom";
 
 import styles from "./styles.scss";
 
-const Footer = () => {
+const Footer = props => {
+  const darkFooter =
+    window.location.hash === "#/" || window.location.hash === "#/postings";
+
   return (
-    <div className={styles.footerContainer}>
+    <div
+      className={styles.footerContainer}
+      style={{ background: darkFooter ? "#333333" : null }}
+    >
       <div className={styles.linksContainer}>
         <Link className={styles.footerLink} to="/">
           Home

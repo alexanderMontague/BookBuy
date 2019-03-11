@@ -142,6 +142,14 @@ class Home extends Component {
           </div>
         </div>
 
+        {/* ADD A POSTING PANEL */}
+        <div className={styles.addPostingPanel}>
+          <div className={styles.postingTitle}>
+            Ready to sell your old books?
+          </div>
+          <div className={styles.postingButton}>Make Money Now!</div>
+        </div>
+
         {/* REVIEWS PANEL */}
         <div className={styles.reviewsPanel}>
           <div className={styles.reviewTitle}>What people are saying...</div>
