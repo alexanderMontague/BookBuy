@@ -1,7 +1,18 @@
 import React, { Component } from "react";
 import styles from "./styles.scss";
 
-import InputWrapper from "../../components/InputWrapper";
+import { FaTimesCircle } from "react-icons/fa";
+
+const PostItem = props => {
+  return (
+    <div className={styles.postItemContainer}>
+      <div className={styles.postItemDate}>21/04/2019</div>
+      <div className={styles.postItemProgram}>CIS</div>
+      <div className={styles.postItemTitle}>Fundamentals of Computing</div>
+      <FaTimesCircle className={styles.postItemDelete} color="red" />
+    </div>
+  );
+};
 
 class Profile extends Component {
   render() {
@@ -36,9 +47,24 @@ class Profile extends Component {
         <div className={styles.infoContainer}>
           <div className={styles.header}>Manage Posts</div>
           <div className={styles.detailsContainer}>
-            <div>Posting One</div>
-            <div>Posting One</div>
-            <div>Posting One</div>
+            <div className={styles.postHeader}>
+              <div className={styles.postCol}>Date Posted</div>
+              <div className={styles.progCol}>Program</div>
+              <div className={styles.titleCol}>Title</div>
+              <div className={styles.fillerItem} />
+            </div>
+            <div className={styles.postsContainer}>
+              <PostItem />
+              <PostItem />
+              <PostItem />
+              <PostItem />
+              <PostItem />
+              <PostItem />
+              <PostItem />
+              <PostItem />
+              <PostItem />
+              <PostItem />
+            </div>
           </div>
         </div>
       </div>
