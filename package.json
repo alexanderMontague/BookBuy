@@ -17,6 +17,7 @@
     "dotenv": "^6.2.0",
     "eslint": "^5.9.0",
     "file-loader": "^1.1.11",
+    "firebase": "^5.8.6",
     "gh-pages": "^2.0.1",
     "install": "^0.12.1",
     "prop-types": "^15.6.2",
