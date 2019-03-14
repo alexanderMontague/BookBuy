@@ -7,8 +7,11 @@ import FloatingLabel, {
   inputStyles,
   labelStyles
 } from "floating-label-react";
+import InputWrapper from "../../components/InputWrapper";
+import Select from "react-select";
+import { programDropdownValues } from "../../assets/dropdownValues";
 
-const inputStyle = {
+const inputStyle = isDouble => ({
   floating: {
     ...floatingStyles,
     color: "#333333"
@@ -20,26 +23,31 @@ const inputStyle = {
   input: {
     ...inputStyles,
     borderBottomWidth: 1,
-    width: "100%",
     color: "#333333",
     background: "inherit",
     fontFamily: "Overpass",
-    paddingLeft: "10px"
+    paddingLeft: "10px",
+    width: "100%"
   },
   label: {
     ...labelStyles,
     marginTop: ".5em",
-    width: "100%",
+    width: isDouble ? "48%" : "100%",
     color: "grey",
-    fontFamily: "Overpass"
+    fontFamily: "Overpass",
+    zIndex: 0
   }
-};
+});
 
 class Sell extends Component {
   state = {};
 
   uploadBook = event => {
     event.preventDefault();
+  };
+
+  formFieldInputHandler = event => {
+    this.setState({ [event.target.id]: event.target.value });
   };
 
   render() {
@@ -49,23 +57,50 @@ class Sell extends Component {
         <div className={styles.sellForm}>
           <form className={styles.form} onSubmit={this.uploadBook}>
             <FloatingLabel
-              type="email"
-              placeholder="Email Address"
-              id="loginEmail"
+              type="text"
+              placeholder="Title"
+              id="bookTitle"
               onChange={this.formFieldInputHandler}
-              value={this.state.loginEmail}
-              styles={inputStyle}
+              value={this.state.bookTitle}
+              styles={inputStyle(false)}
             />
             <FloatingLabel
-              type="password"
-              placeholder="Password"
-              id="loginPassword"
+              type="text"
+              placeholder="Author"
+              id="bookAuthor"
               onChange={this.formFieldInputHandler}
-              value={this.state.loginPassword}
-              styles={inputStyle}
+              value={this.state.bookAuthor}
+              styles={inputStyle(false)}
+            />
+            <div className={styles.row}>
+              <InputWrapper color="#333333" label="Program">
+                <Select
+                  value={this.state.selectedProgram}
+                  onChange={this.programSelector}
+                  options={programDropdownValues}
+                  className={styles.schoolInput}
+                  placeholder="Select a Program"
+                />
+              </InputWrapper>
+              <FloatingLabel
+                type="number"
+                placeholder="Course Level"
+                id="bookLevel"
+                onChange={this.formFieldInputHandler}
+                value={this.state.bookLevel}
+                styles={inputStyle(true)}
+              />
+            </div>
+            <FloatingLabel
+              type="text"
+              placeholder="Price $"
+              id="bookPrice"
+              onChange={this.formFieldInputHandler}
+              value={this.state.bookPrice}
+              styles={inputStyle(true)}
             />
             <button className={styles.submitButton} type="submit">
-              Log In
+              Post Book!
             </button>
           </form>
         </div>
