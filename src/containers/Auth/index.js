@@ -1,6 +1,40 @@
 import React, { Component, Fragment } from "react";
 import styles from "./styles.scss";
 
+import FloatingLabel, {
+  floatingStyles,
+  focusStyles,
+  inputStyles,
+  labelStyles
+} from "floating-label-react";
+
+const inputStyle = {
+  floating: {
+    ...floatingStyles,
+    color: "#333333"
+  },
+  focus: {
+    ...focusStyles,
+    borderColor: "#333333"
+  },
+  input: {
+    ...inputStyles,
+    borderBottomWidth: 1,
+    width: "100%",
+    color: "#333333",
+    background: "inherit",
+    fontFamily: "Overpass",
+    paddingLeft: "10px"
+  },
+  label: {
+    ...labelStyles,
+    marginTop: ".5em",
+    width: "100%",
+    color: "grey",
+    fontFamily: "Overpass"
+  }
+};
+
 class Auth extends Component {
   state = {
     selectedAuth: "register",
@@ -64,41 +98,45 @@ class Auth extends Component {
           </div>
           <Fragment>
             {selectedAuth === "register" ? (
-              <form className={styles.form} onSubmit={this.registerHandler}>
-                <input
-                  className={styles.input}
+              <form
+                className={styles.form}
+                onSubmit={this.registerHandler}
+                key="regForm"
+              >
+                <FloatingLabel
+                  styles={inputStyle}
                   type="text"
                   placeholder="Full Name"
                   id="regName"
                   onChange={this.formFieldInputHandler}
                   value={this.state.regName}
                 />
-                <input
-                  className={styles.input}
+                <FloatingLabel
+                  styles={inputStyle}
                   type="email"
                   placeholder="Email Address"
                   id="regEmail"
                   onChange={this.formFieldInputHandler}
                   value={this.state.regEmail}
                 />
-                <input
-                  className={styles.input}
+                <FloatingLabel
+                  styles={inputStyle}
                   type="tel"
                   placeholder="Phone Number"
                   id="regPhone"
                   onChange={this.formFieldInputHandler}
                   value={this.state.regPhone}
                 />
-                <input
-                  className={styles.input}
+                <FloatingLabel
+                  styles={inputStyle}
                   type="password"
                   placeholder="Password"
                   id="regPasswordOne"
                   onChange={this.formFieldInputHandler}
                   value={this.state.regPasswordOne}
                 />
-                <input
-                  className={styles.input}
+                <FloatingLabel
+                  styles={inputStyle}
                   type="password"
                   placeholder="Re-enter Password"
                   id="regPasswordTwo"
@@ -111,19 +149,20 @@ class Auth extends Component {
               </form>
             ) : (
               <form
-                className={[styles.form].join(" ")}
+                className={styles.form}
                 onSubmit={this.loginHandler}
+                key="loginForm"
               >
-                <input
-                  className={styles.input}
+                <FloatingLabel
+                  styles={inputStyle}
                   type="email"
                   placeholder="Email Address"
                   id="loginEmail"
                   onChange={this.formFieldInputHandler}
                   value={this.state.loginEmail}
                 />
-                <input
-                  className={styles.input}
+                <FloatingLabel
+                  styles={inputStyle}
                   type="password"
                   placeholder="Password"
                   id="loginPassword"

@@ -44,26 +44,12 @@
     }
 
     .form {
-      height: 270px;
       width: 80%;
       display: flex;
       flex-direction: column;
       justify-content: space-evenly;
       margin: 0 auto;
-    }
-
-    .input {
-      padding: 0 10px;
-      border: solid 1px grey;
-      font-size: 20px;
-      color: #333333;
-      font-family: "Overpass";
-      border: none;
-      border-bottom: solid 1px #333333;
-      background: inherit;
-    }
-    .input:focus {
-      outline: none;
+      margin-bottom: 30px;
     }
 
     .submitButton {

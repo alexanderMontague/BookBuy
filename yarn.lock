@@ -3588,6 +3588,13 @@ flatted@^2.0.0:
   resolved "https://registry.yarnpkg.com/flatted/-/flatted-2.0.0.tgz#55122b6536ea496b4b44893ee2608141d10d9916"
   integrity sha512-R+H8IZclI8AAkSBRQJLVOsxwAoHd6WC40b4QTNWIjzAa6BXOBfQcM587MXDTVPeYaopFNWHUFLx7eNmHDSxMWg==
 
+floating-label-react@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/floating-label-react/-/floating-label-react-0.3.0.tgz#69deb3734db7841a407db8cbf5ec88c34134c95c"
+  integrity sha512-E7R32doq121fINgc41qVWMSFWXk9XtF/2yThF0hkFO1aj31dJIlAHDB9mTmSOGVA527VSb3TFLhH18NdyqZm4g==
+  dependencies:
+    babel-core "^6.26.3"
+
 flush-write-stream@^1.0.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/flush-write-stream/-/flush-write-stream-1.1.1.tgz#8dd7d873a1babc207d94ead0c2e0e44276ebf2e8"
