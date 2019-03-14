@@ -7,6 +7,9 @@ import FloatingLabel, {
   inputStyles,
   labelStyles
 } from "floating-label-react";
+import { ClipLoader } from "react-spinners";
+
+import firebase from "../../firebase";
 
 const inputStyle = {
   floating: {
@@ -44,6 +47,8 @@ class Auth extends Component {
     regPhone: "",
     regPasswordOne: "",
     regPasswordTwo: "",
+    regError: false,
+    regLoading: false,
 
     loginEmail: "",
     loginPassword: ""
@@ -54,11 +59,53 @@ class Auth extends Component {
   };
 
   formFieldInputHandler = event => {
-    this.setState({ [event.target.id]: event.target.value });
+    this.setState({ [event.target.id]: event.target.value }, () => {
+      this.registerPasswordValidate();
+    });
   };
 
-  registerHandler = () => {
-    console.log(this.state);
+  registerHandler = async () => {
+    const { regEmail, regPasswordOne, regName, regPhone } = this.state;
+    this.setState({ regLoading: true });
+
+    try {
+      const regResponse = await firebase.register(regEmail, regPasswordOne, {
+        fullName: regName,
+        phone: regPhone
+      });
+      console.log("res", regResponse);
+    } catch (error) {
+      this.setState({ regError: error.message });
+    } finally {
+      this.setState({ regLoading: false });
+    }
+  };
+
+  registerPasswordValidate = () => {
+    const { regPasswordOne, regPasswordTwo } = this.state;
+
+    if (
+      !!regPasswordOne &&
+      !!regPasswordTwo &&
+      regPasswordOne !== regPasswordTwo
+    ) {
+      return this.setState({ regError: "Passwords do not match!" });
+    } else if (
+      !!regPasswordOne &&
+      !!regPasswordTwo &&
+      regPasswordOne === regPasswordTwo &&
+      regPasswordOne.length >= 6
+    ) {
+      return this.setState({ regError: null });
+    }
+
+    if (!!regPasswordOne && !!regPasswordTwo && regPasswordOne.length < 6) {
+      return this.setState({
+        regError: "Password must be at least 6 characters long!"
+      });
+    }
+
+    return this.setState({ regError: null });
   };
 
   loginHandler = () => {
@@ -96,6 +143,7 @@ class Auth extends Component {
               ? "Register For Free!"
               : "Welcome Back!"}
           </div>
+          <div className={styles.errorMessage}>{this.state.regError}</div>
           <Fragment>
             {selectedAuth === "register" ? (
               <form
@@ -143,9 +191,37 @@ class Auth extends Component {
                   onChange={this.formFieldInputHandler}
                   value={this.state.regPasswordTwo}
                 />
-                <button className={styles.submitButton} type="submit">
-                  Register
-                </button>
+                {this.state.regLoading ? (
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      marginTop: 10
+                    }}
+                  >
+                    <ClipLoader
+                      sizeUnit={"px"}
+                      size={50}
+                      color={"#0069d9"}
+                      loading={this.state.regLoading}
+                    />
+                  </div>
+                ) : (
+                  <button
+                    className={styles.submitButton}
+                    type="submit"
+                    disabled={
+                      !this.state.regName ||
+                      !this.state.regEmail ||
+                      !this.state.regPhone ||
+                      !this.state.regPasswordOne ||
+                      !this.state.regPasswordTwo ||
+                      !!this.state.regError
+                    }
+                  >
+                    Register
+                  </button>
+                )}
               </form>
             ) : (
               <form

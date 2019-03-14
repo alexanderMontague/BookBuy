@@ -26,8 +26,15 @@ class Firebase {
     return this.auth.signOut();
   }
 
-  async register(email, password) {
+  async register(email, password, { fullName, phone }) {
     await this.auth.createUserWithEmailAndPassword(email, password);
+    this.db.collection("users").add({
+      fullName,
+      email,
+      phone,
+      id: this.auth.currentUser.uid
+    });
+
     return this.auth.currentUser;
   }
 
@@ -40,10 +47,16 @@ class Firebase {
       .doc(`users_codedamn_video/${this.auth.currentUser.uid}`)
       .set({
         quote
+      })
+      .then(docRef => {
+        console.log("Document written with ID: ", docRef.id);
+      })
+      .catch(error => {
+        console.error("Error adding document: ", error);
       });
   }
 
-  async isInitialized() {
+  async isAuthenticated() {
     return new Promise(resolve => {
       this.auth.onAuthStateChanged(resolve);
     });

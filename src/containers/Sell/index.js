@@ -10,6 +10,7 @@ import FloatingLabel, {
 import InputWrapper from "../../components/InputWrapper";
 import Select from "react-select";
 import { programDropdownValues } from "../../assets/dropdownValues";
+import { FaUpload } from "react-icons/fa";
 
 const inputStyle = isDouble => ({
   floating: {
@@ -32,7 +33,7 @@ const inputStyle = isDouble => ({
   label: {
     ...labelStyles,
     marginTop: ".5em",
-    width: isDouble ? "48%" : "100%",
+    width: isDouble ? (window.innerWidth <= 550 ? "100%" : "48%") : "100%",
     color: "grey",
     fontFamily: "Overpass",
     zIndex: 0
@@ -40,14 +41,26 @@ const inputStyle = isDouble => ({
 });
 
 class Sell extends Component {
-  state = {};
+  state = {
+    bookTitle: "",
+    bookAuthor: "",
+    selectedProgram: "",
+    courseLevel: "",
+    bookPrice: "",
+    bookPic: ""
+  };
 
   uploadBook = event => {
     event.preventDefault();
+    console.log(this.state);
   };
 
   formFieldInputHandler = event => {
     this.setState({ [event.target.id]: event.target.value });
+  };
+
+  programSelector = option => {
+    this.setState({ selectedProgram: option });
   };
 
   render() {
@@ -85,20 +98,33 @@ class Sell extends Component {
               <FloatingLabel
                 type="number"
                 placeholder="Course Level"
-                id="bookLevel"
+                id="courseLevel"
                 onChange={this.formFieldInputHandler}
-                value={this.state.bookLevel}
+                value={this.state.courseLevel}
                 styles={inputStyle(true)}
               />
             </div>
-            <FloatingLabel
-              type="text"
-              placeholder="Price $"
-              id="bookPrice"
-              onChange={this.formFieldInputHandler}
-              value={this.state.bookPrice}
-              styles={inputStyle(true)}
-            />
+            <div className={styles.row}>
+              <FloatingLabel
+                type="number"
+                placeholder="Price $"
+                id="bookPrice"
+                onChange={this.formFieldInputHandler}
+                value={this.state.bookPrice}
+                styles={inputStyle(true)}
+              />
+              <input
+                type="file"
+                id="bookPic"
+                onChange={this.formFieldInputHandler}
+                className={styles.fileUpload}
+                accept="image/png, image/jpeg"
+              />
+              <label htmlFor="bookPic" className={styles.fileLabel}>
+                <FaUpload />
+                Optional Picture of Book
+              </label>
+            </div>
             <button className={styles.submitButton} type="submit">
               Post Book!
             </button>

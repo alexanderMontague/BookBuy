@@ -3,7 +3,15 @@ import { Link } from "react-router-dom";
 
 import styles from "./styles.scss";
 
+import firebase from "../../firebase";
+
 const NavBar = () => {
+  // const logOutUser = () => {
+  //   firebase.logout();
+  // };
+
+  // const isAuthenticated = firebase.isAuthenticated().then(val => val);
+
   return (
     <nav>
       <div className={styles.navContainer}>
@@ -18,9 +26,15 @@ const NavBar = () => {
           <Link className={styles.navItem} to="/sell">
             Sell Books
           </Link>
-          <Link className={styles.navItem} to="/auth">
-            Register & Log In
-          </Link>
+          {false ? (
+            <div className={styles.navItem} onClick={logOutUser}>
+              Log Out
+            </div>
+          ) : (
+            <Link className={styles.navItem} to="/auth">
+              Register & Log In
+            </Link>
+          )}
         </div>
       </div>
     </nav>
