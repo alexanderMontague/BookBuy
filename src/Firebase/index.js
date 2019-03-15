@@ -26,24 +26,23 @@ class Firebase {
     return this.auth.signOut();
   }
 
-  async register(email, password, { fullName, phone }) {
+  async register(email, password, otherTraits) {
     await this.auth.createUserWithEmailAndPassword(email, password);
     this.db
       .collection("users")
       .doc(this.auth.currentUser.uid)
       .set({
-        fullName,
         email,
-        phone,
-        id: this.auth.currentUser.uid
+        id: this.auth.currentUser.uid,
+        ...otherTraits
       });
 
     return this.auth.currentUser;
   }
 
-  addQuote(quote) {
+  addPosting(posting) {
     if (!this.auth.currentUser) {
-      return alert("Not authorized");
+      return;
     }
 
     return this.db

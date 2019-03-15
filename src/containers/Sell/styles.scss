@@ -106,5 +106,9 @@
       cursor: pointer;
       background: #0069d9;
     }
+    .submitButton:disabled {
+      cursor: not-allowed;
+      background: grey;
+    }
   }
 }

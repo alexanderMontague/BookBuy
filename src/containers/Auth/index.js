@@ -1,17 +1,18 @@
 import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
-
 import styles from "./styles.scss";
-
 import FloatingLabel, {
   floatingStyles,
   focusStyles,
   inputStyles,
   labelStyles
 } from "floating-label-react";
+import InputWrapper from "../../components/InputWrapper";
 import { ClipLoader } from "react-spinners";
+import Select from "react-select";
 import { getUserStatus } from "../../actions/authActions";
 import firebase from "../../firebase";
+import { schoolDropdownValues } from "../../assets/dropdownValues";
 
 const inputStyle = {
   floating: {
@@ -29,7 +30,8 @@ const inputStyle = {
     color: "#333333",
     background: "inherit",
     fontFamily: "Overpass",
-    paddingLeft: "10px"
+    paddingLeft: "10px",
+    zIndex: "1"
   },
   label: {
     ...labelStyles,
@@ -52,6 +54,7 @@ class Auth extends Component {
     regError: false,
     regLoading: false,
     regSuccess: false,
+    regSchool: { label: "University of Guelph", value: "UofG" },
 
     loginEmail: "",
     loginPassword: "",
@@ -75,13 +78,20 @@ class Auth extends Component {
   };
 
   registerHandler = async () => {
-    const { regEmail, regPasswordOne, regName, regPhone } = this.state;
+    const {
+      regEmail,
+      regPasswordOne,
+      regName,
+      regPhone,
+      regSchool
+    } = this.state;
     this.setState({ regLoading: true });
 
     try {
       await firebase.register(regEmail, regPasswordOne, {
         fullName: regName,
-        phone: regPhone
+        phone: regPhone,
+        school: regSchool
       });
       this.setState({ regSuccess: true });
       setTimeout(() => (window.location.hash = "#/sell"), 3000);
@@ -134,6 +144,10 @@ class Auth extends Component {
       this.setState({ loginLoading: false });
       this.props.getUserStatus();
     }
+  };
+
+  schoolSelector = option => {
+    this.setState({ selectedSchool: option });
   };
 
   render() {
@@ -194,6 +208,14 @@ class Auth extends Component {
                     onSubmit={this.registerHandler}
                     key="regForm"
                   >
+                    <InputWrapper color="#333333" label="School">
+                      <Select
+                        value={this.state.regSchool}
+                        onChange={this.schoolSelector}
+                        options={schoolDropdownValues}
+                        className={styles.schoolInput}
+                      />
+                    </InputWrapper>
                     <FloatingLabel
                       styles={inputStyle}
                       type="text"

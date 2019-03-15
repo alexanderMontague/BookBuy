@@ -77,7 +77,7 @@ class Sell extends Component {
             <form className={styles.form} onSubmit={this.uploadBook}>
               <FloatingLabel
                 type="text"
-                placeholder="Title"
+                placeholder="Title of Textbook"
                 id="bookTitle"
                 onChange={this.formFieldInputHandler}
                 value={this.state.bookTitle}
@@ -137,7 +137,18 @@ class Sell extends Component {
                   Optional Picture of Book
                 </label>
               </div>
-              <button className={styles.submitButton} type="submit">
+              <button
+                className={styles.submitButton}
+                type="submit"
+                disabled={
+                  !this.state.bookTitle ||
+                  !this.state.bookAuthor ||
+                  !this.state.selectedProgram ||
+                  !this.state.bookTitle ||
+                  !this.state.courseLevel ||
+                  !this.state.bookPrice
+                }
+              >
                 Post Book!
               </button>
             </form>
