@@ -28,12 +28,15 @@ class Firebase {
 
   async register(email, password, { fullName, phone }) {
     await this.auth.createUserWithEmailAndPassword(email, password);
-    this.db.collection("users").add({
-      fullName,
-      email,
-      phone,
-      id: this.auth.currentUser.uid
-    });
+    this.db
+      .collection("users")
+      .doc(this.auth.currentUser.uid)
+      .set({
+        fullName,
+        email,
+        phone,
+        id: this.auth.currentUser.uid
+      });
 
     return this.auth.currentUser;
   }
@@ -62,8 +65,11 @@ class Firebase {
     });
   }
 
-  getCurrentUsername() {
-    return this.auth.currentUser && this.auth.currentUser.displayName;
+  getcurrentUserInfo() {
+    return this.db
+      .collection("users")
+      .doc(this.auth.currentUser.uid)
+      .get();
   }
 
   async getCurrentUserQuote() {

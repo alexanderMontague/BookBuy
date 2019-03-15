@@ -1,21 +1,22 @@
 import React from "react";
+import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-
 import styles from "./styles.scss";
-
+import { getUserStatus } from "../../actions/authActions";
 import firebase from "../../firebase";
 
-const NavBar = () => {
-  // const logOutUser = () => {
-  //   firebase.logout();
-  // };
+const NavBar = props => {
+  const logOutUser = () => {
+    firebase.logout();
+    props.getUserStatus();
+  };
 
-  // const isAuthenticated = firebase.isAuthenticated().then(val => val);
+  const { isAuthenticated } = props;
 
   return (
     <nav>
       <div className={styles.navContainer}>
-        <div className={styles.logoLink}>Textbook Trade</div>
+        <div className={styles.logoLink}>BookBuy.ca</div>
         <div className={styles.navLinks}>
           <Link className={styles.navItem} to="/">
             Home
@@ -26,7 +27,7 @@ const NavBar = () => {
           <Link className={styles.navItem} to="/sell">
             Sell Books
           </Link>
-          {false ? (
+          {isAuthenticated ? (
             <div className={styles.navItem} onClick={logOutUser}>
               Log Out
             </div>
@@ -41,4 +42,11 @@ const NavBar = () => {
   );
 };
 
-export default NavBar;
+const mapStateToProps = state => ({
+  isAuthenticated: state.authState.isAuthenticated
+});
+
+export default connect(
+  mapStateToProps,
+  { getUserStatus }
+)(NavBar);

@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from "react";
+import { connect } from "react-redux";
 import styles from "./styles.scss";
 
 import FloatingLabel, {
@@ -8,7 +9,7 @@ import FloatingLabel, {
   labelStyles
 } from "floating-label-react";
 import { ClipLoader } from "react-spinners";
-
+import { getUserStatus } from "../../actions/authActions";
 import firebase from "../../firebase";
 
 const inputStyle = {
@@ -51,7 +52,9 @@ class Auth extends Component {
     regLoading: false,
 
     loginEmail: "",
-    loginPassword: ""
+    loginPassword: "",
+    loginError: false,
+    loginLoading: false
   };
 
   authButtonClickHandler = event => {
@@ -69,15 +72,15 @@ class Auth extends Component {
     this.setState({ regLoading: true });
 
     try {
-      const regResponse = await firebase.register(regEmail, regPasswordOne, {
+      await firebase.register(regEmail, regPasswordOne, {
         fullName: regName,
         phone: regPhone
       });
-      console.log("res", regResponse);
     } catch (error) {
       this.setState({ regError: error.message });
     } finally {
       this.setState({ regLoading: false });
+      this.props.getUserStatus();
     }
   };
 
@@ -108,8 +111,18 @@ class Auth extends Component {
     return this.setState({ regError: null });
   };
 
-  loginHandler = () => {
-    console.log(this.state);
+  loginHandler = async () => {
+    const { loginEmail, loginPassword } = this.state;
+    this.setState({ loginLoading: true });
+
+    try {
+      await firebase.login(loginEmail, loginPassword);
+    } catch (error) {
+      this.setState({ loginError: error.message });
+    } finally {
+      this.setState({ loginLoading: false });
+      this.props.getUserStatus();
+    }
   };
 
   render() {
@@ -143,7 +156,9 @@ class Auth extends Component {
               ? "Register For Free!"
               : "Welcome Back!"}
           </div>
-          <div className={styles.errorMessage}>{this.state.regError}</div>
+          <div className={styles.errorMessage}>
+            {this.state.regError || this.state.loginError}
+          </div>
           <Fragment>
             {selectedAuth === "register" ? (
               <form
@@ -228,6 +243,7 @@ class Auth extends Component {
                 className={styles.form}
                 onSubmit={this.loginHandler}
                 key="loginForm"
+                style={{ marginTop: 65 }}
               >
                 <FloatingLabel
                   styles={inputStyle}
@@ -245,9 +261,33 @@ class Auth extends Component {
                   onChange={this.formFieldInputHandler}
                   value={this.state.loginPassword}
                 />
-                <button className={styles.submitButton} type="submit">
-                  Log In
-                </button>
+                {this.state.loginLoading ? (
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      marginTop: 50
+                    }}
+                  >
+                    <ClipLoader
+                      sizeUnit={"px"}
+                      size={50}
+                      color={"#0069d9"}
+                      loading={this.state.loginLoading}
+                    />
+                  </div>
+                ) : (
+                  <button
+                    className={styles.submitButton}
+                    type="submit"
+                    disabled={
+                      !this.state.loginEmail || !this.state.loginPassword
+                    }
+                    style={{ marginTop: 50 }}
+                  >
+                    Log In
+                  </button>
+                )}
               </form>
             )}
           </Fragment>
@@ -257,4 +297,7 @@ class Auth extends Component {
   }
 }
 
-export default Auth;
+export default connect(
+  null,
+  { getUserStatus }
+)(Auth);

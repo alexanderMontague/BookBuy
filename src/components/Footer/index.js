@@ -4,8 +4,7 @@ import { Link } from "react-router-dom";
 import styles from "./styles.scss";
 
 const Footer = props => {
-  const darkFooter =
-    window.location.hash === "#/" || window.location.hash === "#/postings";
+  const darkFooter = window.location.hash === "#/postings";
 
   return (
     <div

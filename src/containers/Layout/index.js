@@ -1,33 +1,56 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import NavBar from "../../components/NavBar";
 import Footer from "../../components/Footer";
 
 import firebase from "../../firebase";
 
 import styles from "./styles.scss";
+import { getUserStatus } from "../../actions/authActions";
 import { ClipLoader } from "react-spinners";
 
 class Layout extends Component {
-  async componentDidMount() {
-    console.log("initialized", await firebase.isAuthenticated());
-    // console.log("username", await firebase.getCurrentUsername());
+  componentDidMount() {
+    this.props.getUserStatus();
   }
 
   render() {
+    const { authLoading } = this.props;
+
     return (
-      <div className={styles.layout}>
+      <div className={authLoading && styles.loadingOverlay}>
         <NavBar />
-        {/* <ClipLoader
-          sizeUnit={"px"}
-          size={150}
-          color={"#0069d9"}
-          loading={true}
-        /> */}
-        <div className={styles.contentContainer}>{this.props.children}</div>
+        <div className={styles.contentContainer}>
+          {authLoading ? (
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center"
+              }}
+            >
+              <ClipLoader
+                sizeUnit={"px"}
+                size={150}
+                color={"#0069d9"}
+                loading={true}
+              />
+            </div>
+          ) : (
+            this.props.children
+          )}
+        </div>
         <Footer />
       </div>
     );
   }
 }
 
-export default Layout;
+const mapStateToProps = state => ({
+  authLoading: state.authLoading
+});
+
+export default connect(
+  mapStateToProps,
+  { getUserStatus }
+)(Layout);

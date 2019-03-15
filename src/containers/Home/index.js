@@ -3,7 +3,8 @@ import styles from "./styles.scss";
 
 import InputWrapper from "../../components/InputWrapper";
 import Select from "react-select";
-import { FaBook, FaRegCheckCircle, FaSearchDollar } from "react-icons/fa";
+import { Link } from "react-router-dom";
+import { FaRecycle, FaRegCheckCircle, FaSearchDollar } from "react-icons/fa";
 
 import {
   schoolDropdownValues,
@@ -39,7 +40,7 @@ class Home extends Component {
         {/* SEARCH PANEL */}
         <div className={styles.searchPanel}>
           <div className={styles.searchHeader}>
-            Find the textbook you need, for cheap.
+            Search hundreds of textbooks now
           </div>
           <div className={styles.searchForm}>
             <form onSubmit={this.searchForTextbook}>
@@ -104,22 +105,24 @@ class Home extends Component {
         {/* FEATURES PANEL */}
         <div className={styles.featuresPanel}>
           <div className={styles.feature}>
-            <FaBook className={styles.icon} />
-            <div className={styles.featureHeader}>Find Textbooks</div>
+            <FaRecycle className={styles.icon} />
+            <div className={styles.featureHeader}>Environmentally Friendly</div>
             <div className={styles.featureDesc}>
-              Come up with some creative shit here
+              Save trees, recycle your books!
             </div>
           </div>
           <div className={styles.feature}>
             <FaRegCheckCircle className={styles.icon} />
             <div className={styles.featureHeader}>Easy to Use</div>
-            <div className={styles.featureDesc}>say how easy it is nicky</div>
+            <div className={styles.featureDesc}>
+              Connect with students across Ontario and find your books today
+            </div>
           </div>
           <div className={styles.feature}>
             <FaSearchDollar className={styles.icon} />
             <div className={styles.featureHeader}>Find the Lowest Prices</div>
             <div className={styles.featureDesc}>
-              one more time, hit me with some magic
+              Instantly compare prices from hundreds of books!
             </div>
           </div>
         </div>
@@ -128,30 +131,42 @@ class Home extends Component {
         <div className={styles.infoPanel}>
           <div className={styles.infoRow}>
             <div className={styles.textBlock}>
-              <div className={styles.textTitle}>About Textbook Trade</div>
-              <div className={styles.textDesc}>Blah blah blah</div>
+              <div className={styles.textTitle}>About Book Buy</div>
+              <div className={styles.textDesc}>
+                <p>
+                  Book Buy offers students a simple way of finding, buying and
+                  selling their textbooks
+                </p>
+                <p>
+                  Book Buy instantly connects students from all across Ontario
+                  with the textbooks they’re looking for.
+                </p>
+              </div>
             </div>
             <div className={[styles.pictureBlock, styles.books].join(" ")} />
           </div>
-          <div className={[styles.infoRow, styles.reverseCol].join(" ")}>
+          {/* <div className={[styles.infoRow, styles.reverseCol].join(" ")}>
             <div className={[styles.pictureBlock, styles.money].join(" ")} />
             <div className={styles.textBlock}>
-              <div className={styles.textTitle}>This is what we do...</div>
-              <div className={styles.textDesc}>Blah blah blah</div>
+              <div className={styles.textTitle}>This is what we do</div>
+              <div className={styles.textDesc}>
+                Textbook trade instantly connects students from all across
+                Ontario with the textbooks they’re looking for.
+              </div>
             </div>
-          </div>
+          </div> */}
         </div>
 
         {/* ADD A POSTING PANEL */}
         <div className={styles.addPostingPanel}>
-          <div className={styles.postingTitle}>
-            Ready to sell your old books?
-          </div>
-          <div className={styles.postingButton}>Make Money Now!</div>
+          <div className={styles.postingTitle}>Ready to sell your books?</div>
+          <Link className={styles.postingButton} to="/auth">
+            Register Now!
+          </Link>
         </div>
 
         {/* REVIEWS PANEL */}
-        <div className={styles.reviewsPanel}>
+        {/* <div className={styles.reviewsPanel}>
           <div className={styles.reviewTitle}>What people are saying...</div>
           <div className={styles.reviewContainer}>
             <div className={styles.review}>
@@ -172,7 +187,7 @@ class Home extends Component {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     );
   }
