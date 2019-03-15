@@ -5,7 +5,7 @@ import InputWrapper from "../../components/InputWrapper";
 import Select from "react-select";
 import Post from "../../components/Post";
 import ReactPaginate from "react-paginate";
-
+import firebase from "../../firebase";
 import {
   schoolDropdownValues,
   programDropdownValues
@@ -18,6 +18,10 @@ class Postings extends Component {
     courseLevel: "",
     mainBookInput: ""
   };
+
+  async componentDidMount() {
+    console.log(await firebase.getAllPostings());
+  }
 
   schoolSelector = option => {
     this.setState({ selectedSchool: option });
@@ -36,9 +40,7 @@ class Postings extends Component {
       <div className={styles.postingsContainer}>
         {/* SEARCH PANEL */}
         <div className={styles.searchPanel}>
-          <div className={styles.searchHeader}>
-            Search thousands of postings
-          </div>
+          <div className={styles.searchHeader}>Search hundreds of postings</div>
           <div className={styles.searchForm}>
             <form onSubmit={this.searchForTextbook}>
               <div className={styles.inputRow}>

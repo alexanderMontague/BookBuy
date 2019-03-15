@@ -21,6 +21,7 @@
     "floating-label-react": "^0.3.0",
     "gh-pages": "^2.0.1",
     "install": "^0.12.1",
+    "moment": "^2.24.0",
     "prop-types": "^15.6.2",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",

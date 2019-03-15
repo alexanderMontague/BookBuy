@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import styles from "./styles.scss";
-
+import moment from "moment";
 import FloatingLabel, {
   floatingStyles,
   focusStyles,
@@ -74,13 +74,14 @@ class Sell extends Component {
       selectedProgram,
       courseLevel,
       bookPrice,
+      datePosted: moment().unix(),
       userInfo: {
         ...this.props.user
       }
     });
 
     if (postingId) {
-      firebase.storage.child(`postings/${postingId}`).put(bookPic);
+      !!bookPic && firebase.storage.child(`postings/${postingId}`).put(bookPic);
       this.setState({ addingPost: false, addPostSuccessful: true });
     }
   };

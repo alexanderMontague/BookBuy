@@ -20,6 +20,12 @@ class Firebase {
     this.storage = app.storage().ref();
   }
 
+  async isAuthenticated() {
+    return new Promise(resolve => {
+      this.auth.onAuthStateChanged(resolve);
+    });
+  }
+
   login(email, password) {
     return this.auth.signInWithEmailAndPassword(email, password);
   }
@@ -46,7 +52,6 @@ class Firebase {
     if (!this.auth.currentUser) {
       return;
     }
-
     return this.db
       .collection("postings")
       .add({
@@ -58,12 +63,6 @@ class Firebase {
       });
   }
 
-  async isAuthenticated() {
-    return new Promise(resolve => {
-      this.auth.onAuthStateChanged(resolve);
-    });
-  }
-
   getcurrentUserInfo() {
     return this.db
       .collection("users")
@@ -71,11 +70,9 @@ class Firebase {
       .get();
   }
 
-  async getCurrentUserQuote() {
-    const quote = await this.db
-      .doc(`users_codedamn_video/${this.auth.currentUser.uid}`)
-      .get();
-    return quote.get("quote");
+  async getAllPostings() {
+    const allPostings = await this.db.collection("postings").get();
+    return allPostings.docs.map(doc => doc.data());
   }
 }
 
