@@ -10,8 +10,10 @@ import FloatingLabel, {
 } from "floating-label-react";
 import InputWrapper from "../../components/InputWrapper";
 import Select from "react-select";
+import { ClipLoader } from "react-spinners";
 import { programDropdownValues } from "../../assets/dropdownValues";
-import { FaUpload, FaRegCommentDots } from "react-icons/fa";
+import { FaUpload } from "react-icons/fa";
+import firebase from "../../firebase";
 
 const inputStyle = isDouble => ({
   floating: {
@@ -48,12 +50,39 @@ class Sell extends Component {
     selectedProgram: "",
     courseLevel: "",
     bookPrice: "",
-    bookPic: ""
+    bookPic: "",
+
+    addingPost: false,
+    addPostSuccessful: false
   };
 
-  uploadBook = event => {
+  uploadBook = async event => {
     event.preventDefault();
-    console.log(this.state);
+    this.setState({ addingPost: true });
+    const {
+      bookTitle,
+      bookAuthor,
+      selectedProgram,
+      courseLevel,
+      bookPrice,
+      bookPic
+    } = this.state;
+
+    const postingId = await firebase.addPosting({
+      bookTitle,
+      bookAuthor,
+      selectedProgram,
+      courseLevel,
+      bookPrice,
+      userInfo: {
+        ...this.props.user
+      }
+    });
+
+    if (postingId) {
+      firebase.storage.child(`postings/${postingId}`).put(bookPic);
+      this.setState({ addingPost: false, addPostSuccessful: true });
+    }
   };
 
   formFieldInputHandler = event => {
@@ -66,6 +95,7 @@ class Sell extends Component {
 
   render() {
     const { isAuthenticated } = this.props;
+    const { addingPost, addPostSuccessful } = this.state;
 
     return (
       <div className={styles.sellContainer}>
@@ -74,87 +104,134 @@ class Sell extends Component {
         </div>
         <div className={styles.sellForm}>
           {isAuthenticated ? (
-            <form className={styles.form} onSubmit={this.uploadBook}>
-              <FloatingLabel
-                type="text"
-                placeholder="Title of Textbook"
-                id="bookTitle"
-                onChange={this.formFieldInputHandler}
-                value={this.state.bookTitle}
-                styles={inputStyle(false)}
-              />
-              <FloatingLabel
-                type="text"
-                placeholder="Author"
-                id="bookAuthor"
-                onChange={this.formFieldInputHandler}
-                value={this.state.bookAuthor}
-                styles={inputStyle(false)}
-              />
-              <div className={styles.row}>
-                <InputWrapper
-                  color="#333333"
-                  label="Program"
-                  inputStyle={{
-                    width: window.innerWidth <= 550 ? "100%" : "auto"
-                  }}
-                >
-                  <Select
-                    value={this.state.selectedProgram}
-                    onChange={this.programSelector}
-                    options={programDropdownValues}
-                    className={styles.schoolInput}
-                    placeholder="Select a Program"
+            !addPostSuccessful ? (
+              <form className={styles.form} onSubmit={this.uploadBook}>
+                <FloatingLabel
+                  type="text"
+                  placeholder="Title of Textbook"
+                  id="bookTitle"
+                  onChange={this.formFieldInputHandler}
+                  value={this.state.bookTitle}
+                  styles={inputStyle(false)}
+                />
+                <FloatingLabel
+                  type="text"
+                  placeholder="Author"
+                  id="bookAuthor"
+                  onChange={this.formFieldInputHandler}
+                  value={this.state.bookAuthor}
+                  styles={inputStyle(false)}
+                />
+                <div className={styles.row}>
+                  <InputWrapper
+                    color="#333333"
+                    label="Program"
+                    inputStyle={{
+                      width: window.innerWidth <= 550 ? "100%" : "auto"
+                    }}
+                  >
+                    <Select
+                      value={this.state.selectedProgram}
+                      onChange={this.programSelector}
+                      options={programDropdownValues}
+                      className={styles.schoolInput}
+                      placeholder="Select a Program"
+                    />
+                  </InputWrapper>
+                  <FloatingLabel
+                    type="number"
+                    placeholder="Course Level"
+                    id="courseLevel"
+                    onChange={this.formFieldInputHandler}
+                    value={this.state.courseLevel}
+                    styles={inputStyle(true)}
                   />
-                </InputWrapper>
-                <FloatingLabel
-                  type="number"
-                  placeholder="Course Level"
-                  id="courseLevel"
-                  onChange={this.formFieldInputHandler}
-                  value={this.state.courseLevel}
-                  styles={inputStyle(true)}
-                />
-              </div>
-              <div className={styles.row}>
-                <FloatingLabel
-                  type="number"
-                  placeholder="Price $"
-                  id="bookPrice"
-                  onChange={this.formFieldInputHandler}
-                  value={this.state.bookPrice}
-                  styles={inputStyle(true)}
-                />
-                <input
-                  type="file"
-                  id="bookPic"
-                  onChange={this.formFieldInputHandler}
-                  className={styles.fileUpload}
-                  accept="image/png, image/jpeg"
-                />
-                <label htmlFor="bookPic" className={styles.fileLabel}>
-                  <FaUpload />
-                  Optional Picture of Book
-                </label>
-              </div>
-              <button
-                className={styles.submitButton}
-                type="submit"
-                disabled={
-                  !this.state.bookTitle ||
-                  !this.state.bookAuthor ||
-                  !this.state.selectedProgram ||
-                  !this.state.bookTitle ||
-                  !this.state.courseLevel ||
-                  !this.state.bookPrice
-                }
-              >
-                Post Book!
-              </button>
-            </form>
+                </div>
+                <div className={styles.row}>
+                  <FloatingLabel
+                    type="number"
+                    placeholder="Price $"
+                    id="bookPrice"
+                    onChange={this.formFieldInputHandler}
+                    value={this.state.bookPrice}
+                    styles={inputStyle(true)}
+                  />
+                  <input
+                    type="file"
+                    id="bookPic"
+                    onChange={e =>
+                      this.setState({ bookPic: e.target.files[0] })
+                    }
+                    className={styles.fileUpload}
+                    accept="image/png, image/jpeg"
+                  />
+                  <label htmlFor="bookPic" className={styles.fileLabel}>
+                    <FaUpload />
+                    {this.state.bookPic
+                      ? this.state.bookPic.name
+                      : "Optional Picture of Book"}
+                  </label>
+                </div>
+                {addingPost ? (
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      marginTop: 10
+                    }}
+                  >
+                    <ClipLoader
+                      sizeUnit={"px"}
+                      size={50}
+                      color={"#0069d9"}
+                      loading={addingPost}
+                    />
+                  </div>
+                ) : (
+                  <button
+                    className={styles.submitButton}
+                    type="submit"
+                    disabled={
+                      !this.state.bookTitle ||
+                      !this.state.bookAuthor ||
+                      !this.state.selectedProgram ||
+                      !this.state.bookTitle ||
+                      !this.state.courseLevel ||
+                      !this.state.bookPrice
+                    }
+                  >
+                    Post Book!
+                  </button>
+                )}
+              </form>
+            ) : (
+              <Fragment>
+                <p style={{ fontSize: "25px", color: "#0069d9" }}>
+                  Your posting was added successfully!
+                </p>
+                <button
+                  className={styles.submitButton}
+                  onClick={() =>
+                    this.setState({
+                      addPostSuccessful: false,
+                      bookTitle: "",
+                      bookAuthor: "",
+                      selectedProgram: "",
+                      courseLevel: "",
+                      bookPrice: "",
+                      bookPic: ""
+                    })
+                  }
+                >
+                  Add Another Posting!
+                </button>
+              </Fragment>
+            )
           ) : (
             <Fragment>
-              <p>You must register to create a book posting!</p>
+              <p style={{ fontSize: "25px", color: "#0069d9" }}>
+                You must register to create a book posting!
+              </p>
               <button
                 className={styles.submitButton}
                 onClick={() => (window.location.hash = "#/auth")}
@@ -170,7 +247,8 @@ class Sell extends Component {
 }
 
 const mapStateToProps = state => ({
-  isAuthenticated: state.authState.isAuthenticated
+  isAuthenticated: state.authState.isAuthenticated,
+  user: state.authState.user
 });
 
 export default connect(mapStateToProps)(Sell);

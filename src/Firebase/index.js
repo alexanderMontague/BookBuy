@@ -1,6 +1,7 @@
 import app from "firebase/app";
 import "firebase/auth";
 import "firebase/firebase-firestore";
+import "firebase/storage";
 
 const config = {
   apiKey: "AIzaSyDC_bRxWyf3dHFkreGgJavlgIR290xe5hw",
@@ -16,6 +17,7 @@ class Firebase {
     app.initializeApp(config);
     this.auth = app.auth();
     this.db = app.firestore();
+    this.storage = app.storage().ref();
   }
 
   login(email, password) {
@@ -46,15 +48,13 @@ class Firebase {
     }
 
     return this.db
-      .doc(`users_codedamn_video/${this.auth.currentUser.uid}`)
-      .set({
-        quote
+      .collection("postings")
+      .add({
+        ...posting
       })
-      .then(docRef => {
-        console.log("Document written with ID: ", docRef.id);
-      })
+      .then(docRef => docRef.id)
       .catch(error => {
-        console.error("Error adding document: ", error);
+        console.error("Error adding posting document: ", error);
       });
   }
 
