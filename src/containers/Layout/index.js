@@ -18,7 +18,7 @@ class Layout extends Component {
     const { authLoading } = this.props;
 
     return (
-      <div className={authLoading && styles.loadingOverlay}>
+      <div className={authLoading ? styles.loadingOverlay : ""}>
         <NavBar />
         <div className={styles.contentContainer}>
           {authLoading ? (
@@ -47,7 +47,7 @@ class Layout extends Component {
 }
 
 const mapStateToProps = state => ({
-  authLoading: state.authLoading
+  authLoading: state.authState.authLoading
 });
 
 export default connect(

@@ -27,7 +27,11 @@
     min-height: 400px;
     width: 550px;
     background: #f8f9fa;
-    padding-top: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
     @media (max-width: 550px) {
       width: 100%;
       height: auto;

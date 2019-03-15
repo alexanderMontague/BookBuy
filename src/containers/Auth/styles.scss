@@ -36,6 +36,15 @@
       }
     }
 
+    .authSuccess {
+      display: flex;
+      justify-content: center;
+      align-content: center;
+      font-size: 25px;
+      color: #007bff;
+      text-align: center;
+    }
+
     .authTitle {
       color: #333333;
       font-size: 30px;

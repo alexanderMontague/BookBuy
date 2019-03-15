@@ -1,4 +1,5 @@
 import React from "react";
+import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
 import styles from "./styles.scss";
@@ -24,9 +25,15 @@ const Footer = props => {
           Contact
         </a>
         <div style={{ color: "grey", margin: "auto 0" }}>&#8226;</div>
-        <Link className={styles.footerLink} to="/auth">
-          Sign Up!
-        </Link>
+        {props.isAuthenticated ? (
+          <Link className={styles.footerLink} to="/profile">
+            Profile
+          </Link>
+        ) : (
+          <Link className={styles.footerLink} to="/auth">
+            Sign Up!
+          </Link>
+        )}
       </div>
       <div className={styles.disclaimer}>
         © Textbook Trade {new Date().getFullYear()}. All Rights Reserved.
@@ -35,4 +42,8 @@ const Footer = props => {
   );
 };
 
-export default Footer;
+const mapStateToProps = state => ({
+  isAuthenticated: state.authState.isAuthenticated
+});
+
+export default connect(mapStateToProps)(Footer);
