@@ -84,19 +84,24 @@ class Firebase {
       });
   }
 
-  async getQueriedPostings(queries) {
-    let fullQueryLine = "this.db.collection('postings')";
-
-    for (let i = 0; i < queries.length; i++) {
-      fullQueryLine = fullQueryLine.concat(
-        `.where('${queries[i][0]}', '${queries[i][1]}', '${queries[i][2]}')`
-      );
+  // query a collection
+  async getDocsFromCollection(collection, queries) {
+    if (!this.auth.currentUser) {
+      return;
     }
 
-    console.log(fullQueryLine);
+    let fullQueryLine = `this.db.collection('${collection}')`;
 
-    const filteredQueries = eval(fullQueryLine);
-    console.log((await filteredQueries.get().then(res => res)).data());
+    for (let i = 0; i < queries.length; i++) {
+      if (!!queries[i][2]) {
+        fullQueryLine = fullQueryLine.concat(
+          `.where('${queries[i][0]}', '${queries[i][1]}', '${queries[i][2]}')`
+        );
+      }
+    }
+
+    let filteredQueries = await eval(fullQueryLine).get();
+    return filteredQueries.docs.map(doc => doc.data());
   }
 }
 

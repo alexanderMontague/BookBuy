@@ -71,7 +71,7 @@ class Sell extends Component {
     const postingId = await firebase.addPosting({
       bookTitle,
       bookAuthor,
-      selectedProgram,
+      program: selectedProgram,
       courseLevel,
       bookPrice,
       datePosted: moment().unix(),

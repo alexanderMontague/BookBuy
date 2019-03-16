@@ -18,15 +18,19 @@ class Postings extends Component {
     selectedProgram: null,
     courseLevel: "",
     mainBookInput: "",
+    postsLoading: true,
 
-    filteredPostings: []
+    filteredPostings: [],
+    allPostings: []
   };
 
   async componentDidMount() {
     const allPostings = await firebase.getAllPostings();
-    console.log(allPostings);
-
-    this.setState({ filteredPostings: allPostings });
+    this.setState({
+      filteredPostings: allPostings,
+      allPostings,
+      postsLoading: false
+    });
   }
 
   schoolSelector = option => {
@@ -37,9 +41,9 @@ class Postings extends Component {
     this.setState({ selectedProgram: option });
   };
 
-  searchForTextbook = event => {
+  searchForTextbook = async event => {
     event.preventDefault();
-    console.log(this.state);
+    this.setState({ filteredPostings: [], postsLoading: true });
 
     const {
       selectedSchool,
@@ -48,9 +52,24 @@ class Postings extends Component {
       mainBookInput
     } = this.state;
 
-    firebase.getQueriedPostings([
-      ["selectedProgram.label", "==", selectedProgram.label]
+    // get docs from firebase that match input
+    let filteredPostings = await firebase.getDocsFromCollection("postings", [
+      ["userInfo.school.label", "==", selectedSchool.label],
+      ["program.label", "==", selectedProgram.label],
+      ["courseLevel", "==", courseLevel]
     ]);
+
+    // if there is title/author input, query that too
+    if (!!mainBookInput) {
+      filteredPostings = filteredPostings.filter(post => {
+        return (
+          post.bookTitle.toLowerCase().includes(mainBookInput.toLowerCase()) ||
+          post.bookAuthor.toLowerCase().includes(mainBookInput.toLowerCase())
+        );
+      });
+    }
+
+    this.setState({ filteredPostings, postsLoading: false });
   };
 
   renderPostings = () => {
@@ -66,6 +85,15 @@ class Postings extends Component {
           isGrey={isGrey}
         />
       );
+    });
+  };
+
+  resetForm = () => {
+    this.setState({
+      selectedProgram: null,
+      courseLevel: "",
+      mainBookInput: "",
+      filteredPostings: this.state.allPostings
     });
   };
 
@@ -131,6 +159,9 @@ class Postings extends Component {
                   </button>
                 </InputWrapper>
               </div>
+              <div className={styles.resetButton} onClick={this.resetForm}>
+                Reset
+              </div>
             </form>
           </div>
         </div>
@@ -157,7 +188,7 @@ class Postings extends Component {
                 Price
               </div>
             </div>
-            {this.state.filteredPostings.length === 0 && (
+            {this.state.postsLoading && (
               <div
                 style={{
                   display: "flex",

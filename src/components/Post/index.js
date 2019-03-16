@@ -9,7 +9,7 @@ const Post = props => {
     bookTitle,
     courseLevel,
     datePosted,
-    selectedProgram,
+    program,
     userInfo,
     isGrey
   } = props;
@@ -24,13 +24,13 @@ const Post = props => {
         {moment.unix(datePosted).format("MMM Do YYYY")}
       </div>
       <div className={[styles.postHeaderItem, styles.program].join(" ")}>
-        {selectedProgram.label}
+        {program.label}
       </div>
       <div className={[styles.postHeaderItem, styles.course].join(" ")}>
         {courseLevel}
       </div>
       <div className={[styles.postHeaderItem, styles.name].join(" ")}>
-        {bookAuthor}
+        {bookTitle}
       </div>
       <div className={[styles.postHeaderItem, styles.price].join(" ")}>
         ${bookPrice}
