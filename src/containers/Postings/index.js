@@ -10,17 +10,23 @@ import {
   schoolDropdownValues,
   programDropdownValues
 } from "../../assets/dropdownValues";
+import { ClipLoader } from "react-spinners";
 
 class Postings extends Component {
   state = {
     selectedSchool: { label: "University of Guelph", value: "UofG" },
     selectedProgram: null,
     courseLevel: "",
-    mainBookInput: ""
+    mainBookInput: "",
+
+    filteredPostings: []
   };
 
   async componentDidMount() {
-    console.log(await firebase.getAllPostings());
+    const allPostings = await firebase.getAllPostings();
+    console.log(allPostings);
+
+    this.setState({ filteredPostings: allPostings });
   }
 
   schoolSelector = option => {
@@ -33,6 +39,17 @@ class Postings extends Component {
 
   searchForTextbook = event => {
     event.preventDefault();
+  };
+
+  renderPostings = () => {
+    return this.state.filteredPostings.map(posting => (
+      <Post
+        key={`${JSON.stringify(posting.userInto)}${posting.bookAuthor}${
+          posting.bookTitle
+        }`}
+        {...posting}
+      />
+    ));
   };
 
   render() {
@@ -123,10 +140,23 @@ class Postings extends Component {
                 Price
               </div>
             </div>
-            <Post />
-            <Post />
-            <Post />
-            {/* RENDER POSTS HERE */}
+            {this.state.filteredPostings.length === 0 && (
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  marginTop: 10
+                }}
+              >
+                <ClipLoader
+                  sizeUnit={"px"}
+                  size={70}
+                  color={"#0069d9"}
+                  loading={true}
+                />
+              </div>
+            )}
+            {this.renderPostings()}
           </div>
           <div className={styles.pageNavContainer}>
             <ReactPaginate

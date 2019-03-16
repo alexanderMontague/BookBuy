@@ -1,22 +1,35 @@
 import React from "react";
 import styles from "./styles.scss";
+import moment from "moment";
 
 const Post = props => {
+  const {
+    bookAuthor,
+    bookPrice,
+    bookTitle,
+    courseLevel,
+    datePosted,
+    selectedProgram,
+    userInfo
+  } = props;
+
   return (
     <div className={styles.postContainer}>
       <div className={[styles.postHeaderItem, styles.date].join(" ")}>
-        02/22/2019
+        {moment.unix(datePosted).format("MMM Do YYYY")}
       </div>
       <div className={[styles.postHeaderItem, styles.program].join(" ")}>
-        CIS (Computing and Information Sciences)
+        {selectedProgram.label}
       </div>
       <div className={[styles.postHeaderItem, styles.course].join(" ")}>
-        1500
+        {courseLevel}
       </div>
       <div className={[styles.postHeaderItem, styles.name].join(" ")}>
-        Change By Design, Design Cool Shit!
+        {bookAuthor}
       </div>
-      <div className={[styles.postHeaderItem, styles.price].join(" ")}>$70</div>
+      <div className={[styles.postHeaderItem, styles.price].join(" ")}>
+        ${bookPrice}
+      </div>
     </div>
   );
 };
