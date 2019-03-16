@@ -10,11 +10,16 @@ const Post = props => {
     courseLevel,
     datePosted,
     selectedProgram,
-    userInfo
+    userInfo,
+    isGrey
   } = props;
 
   return (
-    <div className={styles.postContainer}>
+    <div
+      className={[styles.postContainer, isGrey ? styles.isGrey : null].join(
+        " "
+      )}
+    >
       <div className={[styles.postHeaderItem, styles.date].join(" ")}>
         {moment.unix(datePosted).format("MMM Do YYYY")}
       </div>

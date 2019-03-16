@@ -48,6 +48,7 @@ class Firebase {
     return this.auth.currentUser;
   }
 
+  // protected because adding a post
   addPosting(posting) {
     if (!this.auth.currentUser) {
       return;
@@ -63,6 +64,7 @@ class Firebase {
       });
   }
 
+  // public as called on refresh
   getcurrentUserInfo() {
     return this.db
       .collection("users")
@@ -70,6 +72,7 @@ class Firebase {
       .get();
   }
 
+  // public
   async getAllPostings() {
     const allPostings = await this.db.collection("postings").get();
     return allPostings.docs
@@ -79,6 +82,21 @@ class Firebase {
         else if (postA.datePosted > postB.datePosted) return -1;
         return 0;
       });
+  }
+
+  async getQueriedPostings(queries) {
+    let fullQueryLine = "this.db.collection('postings')";
+
+    for (let i = 0; i < queries.length; i++) {
+      fullQueryLine = fullQueryLine.concat(
+        `.where('${queries[i][0]}', '${queries[i][1]}', '${queries[i][2]}')`
+      );
+    }
+
+    console.log(fullQueryLine);
+
+    const filteredQueries = eval(fullQueryLine);
+    console.log((await filteredQueries.get().then(res => res)).data());
   }
 }
 

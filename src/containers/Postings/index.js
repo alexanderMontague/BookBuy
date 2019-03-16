@@ -39,17 +39,34 @@ class Postings extends Component {
 
   searchForTextbook = event => {
     event.preventDefault();
+    console.log(this.state);
+
+    const {
+      selectedSchool,
+      selectedProgram,
+      courseLevel,
+      mainBookInput
+    } = this.state;
+
+    firebase.getQueriedPostings([
+      ["selectedProgram.label", "==", selectedProgram.label]
+    ]);
   };
 
   renderPostings = () => {
-    return this.state.filteredPostings.map(posting => (
-      <Post
-        key={`${JSON.stringify(posting.userInto)}${posting.bookAuthor}${
-          posting.bookTitle
-        }`}
-        {...posting}
-      />
-    ));
+    return this.state.filteredPostings.map((posting, index) => {
+      const isGrey = index % 2 === 0;
+
+      return (
+        <Post
+          key={`${JSON.stringify(posting.userInto)}${posting.bookAuthor}${
+            posting.bookTitle
+          }`}
+          {...posting}
+          isGrey={isGrey}
+        />
+      );
+    });
   };
 
   render() {
@@ -134,7 +151,7 @@ class Postings extends Component {
                 Course Code
               </div>
               <div className={[styles.postHeaderItem, styles.name].join(" ")}>
-                Name
+                Book Title
               </div>
               <div className={[styles.postHeaderItem, styles.price].join(" ")}>
                 Price
