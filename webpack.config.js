@@ -60,7 +60,8 @@ module.exports = () => {
     },
     devServer: {
       publicPath: "/",
-      historyApiFallback: true
+      historyApiFallback: true,
+      contentBase: "./"
     },
     plugins: [
       new HtmlWebpackPlugin({

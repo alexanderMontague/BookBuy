@@ -73,7 +73,9 @@ class Postings extends Component {
   };
 
   renderPostings = () => {
-    return this.state.filteredPostings.map((posting, index) => {
+    const { filteredPostings } = this.state;
+
+    return filteredPostings.map((posting, index) => {
       const isGrey = index % 2 === 0;
 
       return (
@@ -95,6 +97,7 @@ class Postings extends Component {
       mainBookInput: "",
       filteredPostings: this.state.allPostings
     });
+    this.setState({ test: true });
   };
 
   render() {

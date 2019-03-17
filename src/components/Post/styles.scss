@@ -1,7 +1,5 @@
 .postContainer {
-  height: 70px;
-  display: flex;
-  //padding-right: 16px;
+  min-height: 70px;
 }
 .postContainer:hover {
   cursor: pointer;
@@ -33,4 +31,18 @@
 }
 .price {
   width: 10%;
+}
+
+.drawerContainer {
+  background: #f8f9fa;
+
+  .drawerInfo {
+    min-height: 300px;
+    width: 80%;
+    background: #333333;
+    margin: auto;
+    border-radius: 0 0 10px 10px;
+    box-shadow: 0 3px 10px 0 #000000;
+    margin-bottom: 25px;
+  }
 }

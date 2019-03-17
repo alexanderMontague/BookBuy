@@ -86,10 +86,6 @@ class Firebase {
 
   // query a collection
   async getDocsFromCollection(collection, queries) {
-    if (!this.auth.currentUser) {
-      return;
-    }
-
     let fullQueryLine = `this.db.collection('${collection}')`;
 
     for (let i = 0; i < queries.length; i++) {

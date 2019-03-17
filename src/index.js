@@ -4,18 +4,11 @@ import { Provider } from "react-redux";
 import store from "./store";
 
 import Routes from "./routes";
-import { Router } from "react-router";
-import createHashHistory from "history/createHashHistory";
-
-// Styles
-
-const hashHistory = createHashHistory({ basename: process.env.PUBLIC_URL });
+import { BrowserRouter as Router, browserHistory } from "react-router-dom";
 
 ReactDOM.render(
   <Provider store={store}>
-    <Router history={hashHistory} basename={process.env.PUBLIC_URL}>
-      {Routes}
-    </Router>
+    <Router history={browserHistory}>{Routes}</Router>
   </Provider>,
   document.getElementById("app")
 );
