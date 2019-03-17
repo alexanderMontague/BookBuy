@@ -76,7 +76,7 @@ class Postings extends Component {
     const { filteredPostings } = this.state;
 
     return filteredPostings.map((posting, index) => {
-      const isGrey = index % 2 === 0;
+      const isGrey = index % 2 !== 0;
 
       return (
         <Post
@@ -105,7 +105,7 @@ class Postings extends Component {
       <div className={styles.postingsContainer}>
         {/* SEARCH PANEL */}
         <div className={styles.searchPanel}>
-          <div className={styles.searchHeader}>Search hundreds of postings</div>
+          <div className={styles.searchHeader}>Find the book you need</div>
           <div className={styles.searchForm}>
             <form onSubmit={this.searchForTextbook}>
               <div className={styles.inputRow}>

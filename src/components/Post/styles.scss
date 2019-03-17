@@ -1,5 +1,8 @@
 .postContainer {
   min-height: 70px;
+  // border: 2px solid #333333;
+  // border-top: none;
+  // border-radius: 5px;
 }
 .postContainer:hover {
   cursor: pointer;
@@ -35,6 +38,7 @@
 
 .drawerContainer {
   background: #f8f9fa;
+  height: 100%;
 
   .drawerInfo {
     min-height: 300px;
@@ -44,5 +48,33 @@
     border-radius: 0 0 10px 10px;
     box-shadow: 0 3px 10px 0 #000000;
     margin-bottom: 25px;
+    color: #f8f8f8;
+
+    .bookTitle {
+      font-size: 22px;
+      text-align: center;
+    }
+
+    .assetContainer {
+      display: flex;
+      justify-content: space-evenly;
+
+      .infoContainer {
+        width: 45%;
+
+        .row {
+          display: flex;
+
+          .label {
+          }
+          .value {
+          }
+        }
+      }
+
+      .picture {
+        width: 45%;
+      }
+    }
   }
 }

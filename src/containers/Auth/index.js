@@ -64,7 +64,7 @@ class Auth extends Component {
   };
 
   componentDidMount() {
-    this.props.isAuthenticated ? (window.location.hash = "#/profile") : null;
+    this.props.isAuthenticated ? (window.location.pathname = "/profile") : null;
   }
 
   authButtonClickHandler = event => {
@@ -77,7 +77,8 @@ class Auth extends Component {
     });
   };
 
-  registerHandler = async () => {
+  registerHandler = async event => {
+    event.preventDefault();
     const {
       regEmail,
       regPasswordOne,
@@ -94,7 +95,7 @@ class Auth extends Component {
         school: regSchool
       });
       this.setState({ regSuccess: true });
-      setTimeout(() => (window.location.hash = "#/sell"), 3000);
+      setTimeout(() => (window.location.pathname = "/sell"), 3000);
     } catch (error) {
       this.setState({ regError: error.message });
     } finally {
@@ -130,14 +131,15 @@ class Auth extends Component {
     return this.setState({ regError: null });
   };
 
-  loginHandler = async () => {
+  loginHandler = async event => {
+    event.preventDefault();
     const { loginEmail, loginPassword } = this.state;
     this.setState({ loginLoading: true });
 
     try {
       await firebase.login(loginEmail, loginPassword);
       this.setState({ loginSuccess: true });
-      setTimeout(() => (window.location.hash = "#/sell"), 3000);
+      setTimeout(() => (window.location.pathname = "/sell"), 3000);
     } catch (error) {
       this.setState({ loginError: error.message });
     } finally {

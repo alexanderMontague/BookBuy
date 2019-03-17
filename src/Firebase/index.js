@@ -53,6 +53,7 @@ class Firebase {
     if (!this.auth.currentUser) {
       return;
     }
+
     return this.db
       .collection("postings")
       .add({

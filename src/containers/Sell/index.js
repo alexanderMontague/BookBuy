@@ -235,7 +235,7 @@ class Sell extends Component {
               </p>
               <button
                 className={styles.submitButton}
-                onClick={() => (window.location.hash = "#/auth")}
+                onClick={() => (window.location.pathname = "/auth")}
               >
                 Register Now!
               </button>

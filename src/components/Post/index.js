@@ -22,9 +22,10 @@ const Post = props => {
 
   return (
     <div
-      className={[styles.postContainer, isGrey ? styles.isGrey : null].join(
-        " "
-      )}
+      className={[
+        styles.postContainer,
+        isGrey || isDrawerOpen ? styles.isGrey : null
+      ].join(" ")}
       onClick={drawerToggle}
     >
       <div style={{ display: "flex", alignItems: "center", height: 70 }}>
@@ -46,7 +47,38 @@ const Post = props => {
       </div>
       {isDrawerOpen && (
         <div className={styles.drawerContainer}>
-          <div className={styles.drawerInfo}>Drawer</div>
+          <div className={styles.drawerInfo}>
+            <div className={styles.bookTitle}>Title</div>
+            <div className={styles.assetContainer}>
+              <div className={styles.infoContainer}>
+                <div className={styles.row}>
+                  <div className={styles.label}>Label</div>
+                  <div className={styles.value}>Info</div>
+                </div>
+                <div className={styles.row}>
+                  <div className={styles.label}>Label</div>
+                  <div className={styles.value}>Info</div>
+                </div>
+                <div className={styles.row}>
+                  <div className={styles.label}>Label</div>
+                  <div className={styles.value}>Info</div>
+                </div>
+                <div className={styles.row}>
+                  <div className={styles.label}>Label</div>
+                  <div className={styles.value}>Info</div>
+                </div>
+                <div className={styles.row}>
+                  <div className={styles.label}>Label</div>
+                  <div className={styles.value}>Info</div>
+                </div>
+                <div className={styles.row}>
+                  <div className={styles.label}>Label</div>
+                  <div className={styles.value}>Info</div>
+                </div>
+              </div>
+              <div className={styles.picture}>Image</div>
+            </div>
+          </div>
         </div>
       )}
     </div>
