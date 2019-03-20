@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import "./styles.scss";
 import styles from "./styles.scss";
 import moment from "moment";
+import { Transition } from "react-transition-group";
 
 const Post = props => {
   const {
@@ -21,14 +23,14 @@ const Post = props => {
   };
 
   return (
-    <div
-      className={[
-        styles.postContainer,
-        isGrey || isDrawerOpen ? styles.isGrey : null
-      ].join(" ")}
-      onClick={drawerToggle}
-    >
-      <div style={{ display: "flex", alignItems: "center", height: 70 }}>
+    <div className={[styles.postContainer].join(" ")}>
+      <div
+        className={[
+          styles.postHeader,
+          isGrey || isDrawerOpen ? styles.isGrey : null
+        ].join(" ")}
+        onClick={drawerToggle}
+      >
         <div className={[styles.postHeaderItem, styles.date].join(" ")}>
           {moment.unix(datePosted).format("MMM Do YYYY")}
         </div>
@@ -45,42 +47,51 @@ const Post = props => {
           ${bookPrice}
         </div>
       </div>
-      {isDrawerOpen && (
-        <div className={styles.drawerContainer}>
-          <div className={styles.drawerInfo}>
-            <div className={styles.bookTitle}>Title</div>
-            <div className={styles.assetContainer}>
-              <div className={styles.infoContainer}>
-                <div className={styles.row}>
-                  <div className={styles.label}>Label</div>
-                  <div className={styles.value}>Info</div>
-                </div>
-                <div className={styles.row}>
-                  <div className={styles.label}>Label</div>
-                  <div className={styles.value}>Info</div>
-                </div>
-                <div className={styles.row}>
-                  <div className={styles.label}>Label</div>
-                  <div className={styles.value}>Info</div>
-                </div>
-                <div className={styles.row}>
-                  <div className={styles.label}>Label</div>
-                  <div className={styles.value}>Info</div>
-                </div>
-                <div className={styles.row}>
-                  <div className={styles.label}>Label</div>
-                  <div className={styles.value}>Info</div>
-                </div>
-                <div className={styles.row}>
-                  <div className={styles.label}>Label</div>
-                  <div className={styles.value}>Info</div>
+      <Transition
+        in={isDrawerOpen}
+        appear={isDrawerOpen}
+        timeout={500}
+        classNames={{ ...styles }}
+      >
+        {state =>
+          isDrawerOpen && (
+            <div className={styles.drawerContainer}>
+              <div className={styles.drawerInfo}>
+                <div className={styles.bookTitle}>Title</div>
+                <div className={styles.assetContainer}>
+                  <div className={styles.infoContainer}>
+                    <div className={styles.row}>
+                      <div className={styles.label}>Label</div>
+                      <div className={styles.value}>Info</div>
+                    </div>
+                    <div className={styles.row}>
+                      <div className={styles.label}>Label</div>
+                      <div className={styles.value}>Info</div>
+                    </div>
+                    <div className={styles.row}>
+                      <div className={styles.label}>Label</div>
+                      <div className={styles.value}>Info</div>
+                    </div>
+                    <div className={styles.row}>
+                      <div className={styles.label}>Label</div>
+                      <div className={styles.value}>Info</div>
+                    </div>
+                    <div className={styles.row}>
+                      <div className={styles.label}>Label</div>
+                      <div className={styles.value}>Info</div>
+                    </div>
+                    <div className={styles.row}>
+                      <div className={styles.label}>Label</div>
+                      <div className={styles.value}>Info</div>
+                    </div>
+                  </div>
+                  <div className={styles.picture}>Image</div>
                 </div>
               </div>
-              <div className={styles.picture}>Image</div>
             </div>
-          </div>
-        </div>
-      )}
+          )
+        }
+      </Transition>
     </div>
   );
 };

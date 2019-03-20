@@ -1,17 +1,24 @@
 .postContainer {
-  min-height: 70px;
   // border: 2px solid #333333;
   // border-top: none;
   // border-radius: 5px;
 }
-.postContainer:hover {
-  cursor: pointer;
-  color: #ffffff;
-  background: #007bff;
-}
 
 .isGrey {
   background: #c7c7c7;
+}
+
+.postHeader {
+  display: flex;
+  align-items: center;
+  height: 80px;
+  border-radius: 5px;
+}
+.postHeader:hover {
+  cursor: pointer;
+  color: #ffffff;
+  background: #007bff;
+  // box-shadow: 0 0 24px 0 rgba(0, 0, 0, 0.2);
 }
 
 .postHeaderItem {
@@ -35,6 +42,29 @@
 .price {
   width: 10%;
 }
+
+.enter {
+  height: 0px;
+}
+.enter.enter-active {
+  height: 100px;
+  transition: height 0.3s ease;
+}
+// .leave {
+//   opacity: 1;
+//   transition: opacity 1.5s ease-out;
+// }
+.leave.leave-active {
+  height: 0px;
+  transition: height 0.3s ease;
+}
+// .appear {
+//   opacity: 0.01;
+// }
+// .appear.appear-active {
+//   opacity: 1;
+//   transition: opacity 1.5s ease-in;
+// }
 
 .drawerContainer {
   background: #f8f9fa;
