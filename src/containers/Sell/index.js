@@ -74,6 +74,7 @@ class Sell extends Component {
       program: selectedProgram,
       courseLevel,
       bookPrice,
+      hasPicture: !!bookPic,
       datePosted: moment().unix(),
       userInfo: {
         ...this.props.user

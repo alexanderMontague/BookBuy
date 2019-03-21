@@ -1,11 +1,8 @@
 .postContainer {
-  // border: 2px solid #333333;
+  // background: #333333;
   // border-top: none;
   // border-radius: 5px;
-}
-
-.isGrey {
-  background: #c7c7c7;
+  margin: 5px 0;
 }
 
 .postHeader {
@@ -13,12 +10,17 @@
   align-items: center;
   height: 80px;
   border-radius: 5px;
+  background: #f8f8f8;
 }
 .postHeader:hover {
   cursor: pointer;
   color: #ffffff;
   background: #007bff;
   // box-shadow: 0 0 24px 0 rgba(0, 0, 0, 0.2);
+}
+
+.isGrey {
+  background: #c7c7c7;
 }
 
 .postHeaderItem {
@@ -83,6 +85,7 @@
     .bookTitle {
       font-size: 22px;
       text-align: center;
+      font-weight: bold;
     }
 
     .assetContainer {
@@ -90,20 +93,43 @@
       justify-content: space-evenly;
 
       .infoContainer {
-        width: 45%;
+        width: 50%;
+        padding: 10px 0;
+
+        .infoSection {
+          padding-bottom: 10px;
+        }
+
+        .infoTitle {
+          font-size: 18px;
+          font-weight: bold;
+          text-decoration: underline;
+        }
 
         .row {
           display: flex;
+          font-size: 15px;
 
           .label {
+            font-weight: bold;
+            min-width: 27%;
           }
           .value {
+            font-weight: lighter;
+            min-width: 73%;
           }
         }
       }
 
       .picture {
         width: 45%;
+        padding: 15px 0;
+        text-align: center;
+
+        .asset {
+          max-width: 300px;
+          max-height: 275px;
+        }
       }
     }
   }

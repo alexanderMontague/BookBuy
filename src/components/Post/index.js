@@ -3,6 +3,7 @@ import "./styles.scss";
 import styles from "./styles.scss";
 import moment from "moment";
 import { Transition } from "react-transition-group";
+import placeholder from "../../assets/noPic.jpg";
 
 const Post = props => {
   const {
@@ -12,6 +13,7 @@ const Post = props => {
     courseLevel,
     datePosted,
     program,
+    hasPicture,
     userInfo,
     isGrey
   } = props;
@@ -57,35 +59,58 @@ const Post = props => {
           isDrawerOpen && (
             <div className={styles.drawerContainer}>
               <div className={styles.drawerInfo}>
-                <div className={styles.bookTitle}>Title</div>
+                <div className={styles.bookTitle}>{bookTitle}</div>
                 <div className={styles.assetContainer}>
                   <div className={styles.infoContainer}>
-                    <div className={styles.row}>
-                      <div className={styles.label}>Label</div>
-                      <div className={styles.value}>Info</div>
+                    <div className={styles.infoSection}>
+                      <div className={styles.infoTitle}>Book Information</div>
+                      <div className={styles.row}>
+                        <div className={styles.label}>Book Title: </div>
+                        <div className={styles.value}>{bookTitle}</div>
+                      </div>
+                      <div className={styles.row}>
+                        <div className={styles.label}>Book Author: </div>
+                        <div className={styles.value}>{bookAuthor}</div>
+                      </div>
+                      <div className={styles.row}>
+                        <div className={styles.label}>Book Program: </div>
+                        <div className={styles.value}>{program.label}</div>
+                      </div>
+                      <div className={styles.row}>
+                        <div className={styles.label}>Course Level: </div>
+                        <div className={styles.value}>{courseLevel}</div>
+                      </div>
                     </div>
-                    <div className={styles.row}>
-                      <div className={styles.label}>Label</div>
-                      <div className={styles.value}>Info</div>
-                    </div>
-                    <div className={styles.row}>
-                      <div className={styles.label}>Label</div>
-                      <div className={styles.value}>Info</div>
-                    </div>
-                    <div className={styles.row}>
-                      <div className={styles.label}>Label</div>
-                      <div className={styles.value}>Info</div>
-                    </div>
-                    <div className={styles.row}>
-                      <div className={styles.label}>Label</div>
-                      <div className={styles.value}>Info</div>
-                    </div>
-                    <div className={styles.row}>
-                      <div className={styles.label}>Label</div>
-                      <div className={styles.value}>Info</div>
+                    <div className={styles.infoSection}>
+                      <div className={styles.infoTitle}>
+                        Contact Information
+                      </div>
+                      <div className={styles.row}>
+                        <div className={styles.label}>Contact Name: </div>
+                        <div className={styles.value}>{userInfo.fullName}</div>
+                      </div>
+                      <div className={styles.row}>
+                        <div className={styles.label}>Contact Email: </div>
+                        <div className={styles.value}>{userInfo.email}</div>
+                      </div>
+                      <div className={styles.row}>
+                        <div className={styles.label}>Contact Phone: </div>
+                        <div className={styles.value}>{userInfo.phone}</div>
+                      </div>
+                      <div className={styles.row}>
+                        <div className={styles.label}>Date Posted: </div>
+                        <div className={styles.value}>
+                          {moment.unix(datePosted).format("MMMM Do YYYY")}
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <div className={styles.picture}>Image</div>
+                  <div className={styles.picture}>
+                    <img
+                      className={styles.asset}
+                      src={hasPicture ? null : placeholder}
+                    />
+                  </div>
                 </div>
               </div>
             </div>
