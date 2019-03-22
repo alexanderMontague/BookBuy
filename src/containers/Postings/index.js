@@ -127,6 +127,9 @@ class Postings extends Component {
       mainBookInput: "",
       filteredPostings: this.state.allPostings
     });
+    this.props.history.push({
+      search: ""
+    });
     this.setState({ test: true });
   };
 

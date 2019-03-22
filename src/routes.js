@@ -13,7 +13,7 @@ const DefaultComponent = ({ component: Component, ...rest }) => {
     <Route
       {...rest}
       render={componentProps => (
-        <Layout {...componentProps}>
+        <Layout {...componentProps} {...rest}>
           <Component {...componentProps} />
         </Layout>
       )}
@@ -26,7 +26,7 @@ const routes = (
     <DefaultComponent exact path={"/"} component={Home} />
     <DefaultComponent path={"/postings"} component={Postings} />
     <DefaultComponent path={"/auth"} component={Auth} />
-    <DefaultComponent path={"/profile"} component={Profile} />
+    <DefaultComponent path={"/profile"} component={Profile} isProtected />
     <DefaultComponent path={"/sell"} component={Sell} />
   </Switch>
 );

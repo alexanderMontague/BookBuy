@@ -15,11 +15,16 @@ class Layout extends Component {
   }
 
   render() {
-    const { authLoading } = this.props;
+    const { authLoading, isProtected, isAuthenticated } = this.props;
+    if (isProtected && isAuthenticated === false) {
+      this.props.history.push({
+        pathname: "/"
+      });
+    }
 
     return (
       <div className={authLoading ? styles.loadingOverlay : ""}>
-        <NavBar />
+        <NavBar {...this.props} />
         <div className={styles.contentContainer}>
           {authLoading ? (
             <div
@@ -40,14 +45,15 @@ class Layout extends Component {
             this.props.children
           )}
         </div>
-        <Footer />
+        <Footer {...this.props} />
       </div>
     );
   }
 }
 
 const mapStateToProps = state => ({
-  authLoading: state.authState.authLoading
+  authLoading: state.authState.authLoading,
+  isAuthenticated: state.authState.isAuthenticated
 });
 
 export default connect(

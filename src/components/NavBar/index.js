@@ -9,6 +9,7 @@ const NavBar = props => {
   const logOutUser = () => {
     firebase.logout();
     props.getUserStatus();
+    setTimeout(() => alert("Logout Successful"), 100);
   };
 
   const { isAuthenticated } = props;
@@ -28,8 +29,20 @@ const NavBar = props => {
             Sell Books
           </Link>
           {isAuthenticated ? (
-            <div className={styles.navItem} onClick={logOutUser}>
-              Log Out
+            <div className={styles.specialNavItem}>
+              <div
+                className={styles.hover}
+                onClick={() =>
+                  props.history.push({
+                    pathname: "/profile"
+                  })
+                }
+              >
+                Profile
+              </div>
+              <div className={styles.hover} onClick={logOutUser}>
+                Logout
+              </div>
             </div>
           ) : (
             <Link className={styles.navItem} to="/auth">

@@ -54,6 +54,7 @@
         border-radius: 5px;
         font-size: 16px;
         color: #333333;
+        font-family: "Overpass";
       }
       .input:focus {
         outline: none;
@@ -77,6 +78,10 @@
       .saveButton:hover {
         cursor: pointer;
         background: #0069d9;
+      }
+      .saveButton:disabled {
+        background: grey;
+        cursor: not-allowed;
       }
 
       .postHeader {
@@ -139,6 +144,7 @@
   .postItemDelete {
     font-size: 20px;
     margin: auto;
+    padding-right: 10px;
   }
   .postItemDelete:hover {
     cursor: pointer;

@@ -96,6 +96,7 @@ class Firebase {
         );
       }
     }
+    console.log(fullQueryLine);
 
     let filteredQueries = await eval(fullQueryLine).get();
     return filteredQueries.docs.map(doc => doc.data());

@@ -74,6 +74,7 @@ class Auth extends Component {
   formFieldInputHandler = event => {
     this.setState({ [event.target.id]: event.target.value }, () => {
       this.registerPasswordValidate();
+      this.phoneValidate();
     });
   };
 
@@ -95,7 +96,7 @@ class Auth extends Component {
         school: regSchool
       });
       this.setState({ regSuccess: true });
-      setTimeout(() => (window.location.pathname = "/sell"), 3000);
+      setTimeout(() => (window.location.pathname = "/sell"), 2000);
     } catch (error) {
       this.setState({ regError: error.message });
     } finally {
@@ -131,6 +132,19 @@ class Auth extends Component {
     return this.setState({ regError: null });
   };
 
+  phoneValidate() {
+    const { regPhone, regError } = this.state;
+
+    if (!!regPhone && regPhone.length < 10) {
+      return this.setState({ regError: "Phone number must be valid!" });
+    }
+
+    return (
+      regError === "Phone number must be valid!" &&
+      this.setState({ regError: null })
+    );
+  }
+
   loginHandler = async event => {
     event.preventDefault();
     const { loginEmail, loginPassword } = this.state;
@@ -139,7 +153,7 @@ class Auth extends Component {
     try {
       await firebase.login(loginEmail, loginPassword);
       this.setState({ loginSuccess: true });
-      setTimeout(() => (window.location.pathname = "/sell"), 3000);
+      setTimeout(() => (window.location.pathname = "/sell"), 1500);
     } catch (error) {
       this.setState({ loginError: error.message });
     } finally {
@@ -221,7 +235,7 @@ class Auth extends Component {
                     <FloatingLabel
                       styles={inputStyle}
                       type="text"
-                      placeholder="Full Name"
+                      placeholder="Full Name (This will be shown on your posts)"
                       id="regName"
                       onChange={this.formFieldInputHandler}
                       value={this.state.regName}
