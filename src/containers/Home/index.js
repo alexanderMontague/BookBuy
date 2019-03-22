@@ -32,6 +32,24 @@ class Home extends Component {
 
   searchForTextbook = event => {
     event.preventDefault();
+    const {
+      selectedSchool,
+      selectedProgram,
+      courseLevel,
+      mainBookInput
+    } = this.state;
+
+    const searchInfo = {
+      selectedSchool,
+      selectedProgram,
+      courseLevel,
+      mainBookInput
+    };
+
+    this.props.history.push({
+      pathname: "/postings",
+      search: `?params=${btoa(JSON.stringify(searchInfo))}`
+    });
   };
 
   render() {

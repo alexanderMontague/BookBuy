@@ -100,6 +100,23 @@ class Firebase {
     let filteredQueries = await eval(fullQueryLine).get();
     return filteredQueries.docs.map(doc => doc.data());
   }
+
+  // update a document
+  async updateDocument(collection, document, updatedValues) {
+    const collectionRef = this.db.collection(collection).doc(document);
+    const isSuccessful = await collectionRef.update(updatedValues);
+
+    return isSuccessful;
+  }
+
+  // fetch a document from a collection
+  async getBookPicture(key) {
+    const bookURL = await this.storage
+      .child(`postings/${key}`)
+      .getDownloadURL();
+
+    return bookURL;
+  }
 }
 
 export default new Firebase();

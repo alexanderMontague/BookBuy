@@ -2,7 +2,7 @@
   // background: #333333;
   // border-top: none;
   // border-radius: 5px;
-  margin: 5px 0;
+  margin: 20px 0;
 }
 
 .postHeader {
@@ -11,6 +11,7 @@
   height: 80px;
   border-radius: 5px;
   background: #f8f8f8;
+  border: 1px solid #333333;
 }
 .postHeader:hover {
   cursor: pointer;
@@ -28,6 +29,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
+
+  @media (max-width: 678px) {
+    font-size: 12px;
+  }
 }
 .date {
   width: 10%;
@@ -86,15 +91,28 @@
       font-size: 22px;
       text-align: center;
       font-weight: bold;
+
+      @media (max-width: 678px) {
+        font-size: 18px;
+      }
     }
 
     .assetContainer {
       display: flex;
       justify-content: space-evenly;
 
+      @media (max-width: 678px) {
+        flex-direction: column;
+        align-items: center;
+      }
+
       .infoContainer {
         width: 50%;
         padding: 10px 0;
+
+        @media (max-width: 678px) {
+          width: auto;
+        }
 
         .infoSection {
           padding-bottom: 10px;
@@ -104,19 +122,25 @@
           font-size: 18px;
           font-weight: bold;
           text-decoration: underline;
+
+          @media (max-width: 678px) {
+            text-align: center;
+          }
         }
 
         .row {
           display: flex;
           font-size: 15px;
+          padding: 5px 0;
 
           .label {
             font-weight: bold;
-            min-width: 27%;
+            min-width: 35%;
+            font-style: italic;
           }
           .value {
             font-weight: lighter;
-            min-width: 73%;
+            min-width: 65%;
           }
         }
       }
@@ -125,6 +149,7 @@
         width: 45%;
         padding: 15px 0;
         text-align: center;
+        margin: auto 0;
 
         .asset {
           max-width: 300px;

@@ -30,7 +30,8 @@
   }
 
   .searchForm {
-    width: 45%;
+    width: 642px;
+
     @media (max-width: 1000px) {
       width: auto;
     }
@@ -50,7 +51,7 @@
       align-items: center;
       margin-top: 10px;
 
-      @media (max-width: 768px) {
+      @media (max-width: 1000px) {
         flex-direction: column;
       }
 
@@ -127,7 +128,7 @@
   .postings {
     min-height: 300px;
     width: 80%;
-    margin: 25px 0;
+    margin-bottom: 25px;
 
     @media (max-width: 1000px) {
       width: 90%;
@@ -138,6 +139,11 @@
     display: flex;
     border-bottom: 2px solid #333333;
     height: 50px;
+    background: #f8f8f8;
+
+    @media (max-width: 678px) {
+      font-size: 12px;
+    }
 
     .postHeaderItem {
       text-align: center;
@@ -159,6 +165,18 @@
     }
     .price {
       width: 10%;
+    }
+  }
+
+  .sticky {
+    position: fixed;
+    top: 0;
+    left: 10%;
+    right: 10%;
+
+    @media (max-width: 1000px) {
+      left: 5%;
+      right: 5%;
     }
   }
 }

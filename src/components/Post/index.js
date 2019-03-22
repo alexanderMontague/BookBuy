@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./styles.scss";
 import styles from "./styles.scss";
 import moment from "moment";
 import { Transition } from "react-transition-group";
 import placeholder from "../../assets/noPic.jpg";
+import { ClipLoader } from "react-spinners";
+import firebase from "../../firebase";
 
 const Post = props => {
   const {
@@ -15,10 +17,24 @@ const Post = props => {
     program,
     hasPicture,
     userInfo,
+    postId,
     isGrey
   } = props;
 
   const [isDrawerOpen, drawerToggleHandler] = useState(false);
+  const [bookURL, updateBookURL] = useState("");
+
+  useEffect(() => {
+    async function getBookPicture() {
+      const bookURL = await firebase.getBookPicture(postId);
+      updateBookURL(bookURL);
+    }
+
+    // check if book has picture, and if so fetch it
+    if (hasPicture) {
+      getBookPicture();
+    }
+  }, []);
 
   const drawerToggle = () => {
     drawerToggleHandler(!isDrawerOpen);
@@ -27,10 +43,7 @@ const Post = props => {
   return (
     <div className={[styles.postContainer].join(" ")}>
       <div
-        className={[
-          styles.postHeader,
-          isGrey || isDrawerOpen ? styles.isGrey : null
-        ].join(" ")}
+        className={[styles.postHeader, isGrey ? styles.isGrey : null].join(" ")}
         onClick={drawerToggle}
       >
         <div className={[styles.postHeaderItem, styles.date].join(" ")}>
@@ -108,7 +121,7 @@ const Post = props => {
                   <div className={styles.picture}>
                     <img
                       className={styles.asset}
-                      src={hasPicture ? null : placeholder}
+                      src={hasPicture ? bookURL : placeholder}
                     />
                   </div>
                 </div>

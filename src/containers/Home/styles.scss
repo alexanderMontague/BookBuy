@@ -26,7 +26,8 @@
   }
 
   .searchForm {
-    width: 45%;
+    width: 642px;
+
     @media (max-width: 1000px) {
       width: auto;
     }
@@ -37,7 +38,7 @@
       align-items: center;
       margin-top: 10px;
 
-      @media (max-width: 768px) {
+      @media (max-width: 1000px) {
         flex-direction: column;
       }
 

@@ -68,7 +68,7 @@ class Sell extends Component {
       bookPic
     } = this.state;
 
-    const postingId = await firebase.addPosting({
+    const postId = await firebase.addPosting({
       bookTitle,
       bookAuthor,
       program: selectedProgram,
@@ -81,8 +81,12 @@ class Sell extends Component {
       }
     });
 
-    if (postingId) {
-      !!bookPic && firebase.storage.child(`postings/${postingId}`).put(bookPic);
+    if (postId) {
+      // add picture if there is one
+      !!bookPic && firebase.storage.child(`postings/${postId}`).put(bookPic);
+      // add posting id to own object for reference
+      firebase.updateDocument("postings", postId, { postId });
+      // update spinners and show success message
       this.setState({ addingPost: false, addPostSuccessful: true });
     }
   };

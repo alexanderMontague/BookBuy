@@ -12,6 +12,27 @@ import {
 } from "../../assets/dropdownValues";
 import { ClipLoader } from "react-spinners";
 
+let hasScrolled = false;
+let startingHeaderOffset = 0;
+window.onscroll = () => {
+  const header = document.getElementById("postHeader");
+  if (header) {
+    if (!hasScrolled) {
+      startingHeaderOffset = header.offsetTop;
+      hasScrolled = true;
+    }
+    const currHeaderOffset = header.offsetTop;
+    if (
+      window.pageYOffset > currHeaderOffset &&
+      window.pageYOffset > startingHeaderOffset
+    ) {
+      header.classList.add(styles.sticky);
+    } else {
+      header.classList.remove(styles.sticky);
+    }
+  }
+};
+
 class Postings extends Component {
   state = {
     selectedSchool: { label: "University of Guelph", value: "UofG" },
@@ -25,7 +46,16 @@ class Postings extends Component {
   };
 
   async componentDidMount() {
+    if (!!window.location.search) {
+      const rawParams = new URLSearchParams(window.location.search).get(
+        "params"
+      );
+      const searchParams = JSON.parse(atob(rawParams));
+      this.setState({ ...searchParams }, () => this.searchForTextbook());
+    }
+
     const allPostings = await firebase.getAllPostings();
+
     this.setState({
       filteredPostings: allPostings,
       allPostings,
@@ -42,7 +72,7 @@ class Postings extends Component {
   };
 
   searchForTextbook = async event => {
-    event.preventDefault();
+    event && event.preventDefault();
     this.setState({ filteredPostings: [], postsLoading: true });
 
     const {
@@ -172,7 +202,7 @@ class Postings extends Component {
         {/* POSTINGS SECTION */}
         <div className={styles.postContainer}>
           <div className={styles.postings}>
-            <div className={styles.postHeader}>
+            <div className={styles.postHeader} id="postHeader">
               <div className={[styles.postHeaderItem, styles.date].join(" ")}>
                 Date Posted
               </div>
