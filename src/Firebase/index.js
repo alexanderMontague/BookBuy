@@ -96,7 +96,6 @@ class Firebase {
         );
       }
     }
-    console.log(fullQueryLine);
 
     let filteredQueries = await eval(fullQueryLine).get();
     return filteredQueries.docs.map(doc => doc.data());
@@ -110,13 +109,21 @@ class Firebase {
     return isSuccessful;
   }
 
-  // fetch a document from a collection
+  // fetch a book picture based on its id
   async getBookPicture(key) {
     const bookURL = await this.storage
       .child(`postings/${key}`)
       .getDownloadURL();
 
     return bookURL;
+  }
+
+  // delete a document from a collection
+  async deleteDocument(collection, document) {
+    const deleteDoc = await this.db
+      .collection(collection)
+      .doc(document)
+      .delete();
   }
 }
 

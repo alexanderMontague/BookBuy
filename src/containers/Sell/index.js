@@ -240,7 +240,11 @@ class Sell extends Component {
               </p>
               <button
                 className={styles.submitButton}
-                onClick={() => (window.location.pathname = "/auth")}
+                onClick={() =>
+                  this.props.history.push({
+                    pathname: "/auth"
+                  })
+                }
               >
                 Register Now!
               </button>

@@ -1,16 +1,44 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import { connect } from "react-redux";
 import styles from "./styles.scss";
 import firebase from "../../firebase";
 import { FaTimesCircle } from "react-icons/fa";
+import moment from "moment";
 
 const PostItem = props => {
+  const { deletePost, datePosted, program, bookTitle, postId } = props;
+
+  const [showDrawer, toggleDrawer] = useState(false);
+
   return (
-    <div className={styles.postItemContainer}>
-      <div className={styles.postItemDate}>21/04/2019</div>
-      <div className={styles.postItemProgram}>CIS</div>
-      <div className={styles.postItemTitle}>Fundamentals of Computing</div>
-      <FaTimesCircle className={styles.postItemDelete} color="red" />
+    <div className={styles.itemContainer}>
+      <div
+        className={[styles.postItemContainer, showDrawer && styles.isBlue].join(
+          " "
+        )}
+      >
+        <div className={styles.postItemDate}>
+          {moment.unix(datePosted).format("DD/MM/YYYY")}
+        </div>
+        <div className={styles.postItemProgram}>{program.value}</div>
+        <div className={styles.postItemTitle}>{bookTitle}</div>
+        <FaTimesCircle
+          className={styles.postItemDelete}
+          color="red"
+          onClick={() => toggleDrawer(!showDrawer)}
+        />
+      </div>
+      {showDrawer && (
+        <div className={styles.confirmDrawer}>
+          <div>Really delete this post?</div>
+          <div
+            className={styles.confirmButton}
+            onClick={() => deletePost(postId)}
+          >
+            YES
+          </div>
+        </div>
+      )}
     </div>
   );
 };
@@ -21,21 +49,58 @@ class Profile extends Component {
     phone: this.props.user.phone,
     email: this.props.user.email,
     passOld: "",
-    passNew: ""
+    passNew: "",
+    userPostings: []
   };
 
   async componentDidMount() {
     const { user } = this.props;
 
-    let filteredPostings = await firebase.getDocsFromCollection("postings", [
+    const userPostings = await firebase.getDocsFromCollection("postings", [
       ["userInfo.id", "==", user.id]
     ]);
 
-    console.log(filteredPostings);
+    userPostings.sort((postA, postB) => {
+      if (postA.datePosted < postB.datePosted) return 1;
+      else if (postA.datePosted > postB.datePosted) return -1;
+      return 0;
+    });
+
+    this.setState({ userPostings });
   }
 
   inputChangeHandler = e => {
     this.setState({ [e.target.id]: e.target.value });
+  };
+
+  deletePost = async postId => {
+    await firebase.deleteDocument("postings", postId);
+
+    const userPostings = await firebase.getDocsFromCollection("postings", [
+      ["userInfo.id", "==", this.props.user.id]
+    ]);
+
+    userPostings.sort((postA, postB) => {
+      if (postA.datePosted < postB.datePosted) return 1;
+      else if (postA.datePosted > postB.datePosted) return -1;
+      return 0;
+    });
+
+    this.setState({ userPostings });
+  };
+
+  renderUserPosts = () => {
+    const { userPostings } = this.state;
+
+    return userPostings.map(post => {
+      return (
+        <PostItem
+          key={`${post.bookTitle}${post.datePosted}`}
+          {...post}
+          deletePost={this.deletePost}
+        />
+      );
+    });
   };
 
   render() {
@@ -108,16 +173,7 @@ class Profile extends Component {
               <div className={styles.fillerItem} />
             </div>
             <div className={styles.postsContainer}>
-              <PostItem />
-              <PostItem />
-              <PostItem />
-              <PostItem />
-              <PostItem />
-              <PostItem />
-              <PostItem />
-              <PostItem />
-              <PostItem />
-              <PostItem />
+              {this.renderUserPosts()}
             </div>
           </div>
         </div>

@@ -64,7 +64,11 @@ class Auth extends Component {
   };
 
   componentDidMount() {
-    this.props.isAuthenticated ? (window.location.pathname = "/profile") : null;
+    if (this.props.isAuthenticated) {
+      this.props.history.push({
+        pathname: "/profile"
+      });
+    }
   }
 
   authButtonClickHandler = event => {
@@ -96,7 +100,13 @@ class Auth extends Component {
         school: regSchool
       });
       this.setState({ regSuccess: true });
-      setTimeout(() => (window.location.pathname = "/sell"), 2000);
+      setTimeout(
+        () =>
+          this.props.history.push({
+            pathname: "/sell"
+          }),
+        2000
+      );
     } catch (error) {
       this.setState({ regError: error.message });
     } finally {
@@ -153,7 +163,13 @@ class Auth extends Component {
     try {
       await firebase.login(loginEmail, loginPassword);
       this.setState({ loginSuccess: true });
-      setTimeout(() => (window.location.pathname = "/sell"), 1500);
+      setTimeout(
+        () =>
+          this.props.history.push({
+            pathname: "/sell"
+          }),
+        1500
+      );
     } catch (error) {
       this.setState({ loginError: error.message });
     } finally {
