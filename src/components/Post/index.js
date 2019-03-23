@@ -108,16 +108,7 @@ const Post = props => {
                       </div>
                       <div className={styles.row}>
                         <div className={styles.label}>Contact Phone: </div>
-                        <div className={styles.value}>{`(${userInfo.phone.slice(
-                          0,
-                          3
-                        )})-${userInfo.phone.slice(
-                          3,
-                          6
-                        )}-${userInfo.phone.slice(
-                          6,
-                          userInfo.phone.length
-                        )}`}</div>
+                        <div className={styles.value}>{userInfo.phone}</div>
                       </div>
                       <div className={styles.row}>
                         <div className={styles.label}>Date Posted: </div>
