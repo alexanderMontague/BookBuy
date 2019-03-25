@@ -11,7 +11,7 @@ const authReducer = (prevState = initialState, { type, payload }) => {
         return {
           ...prevState,
           isAuthenticated: false,
-          user: null,
+          user: {},
           authLoading: false
         };
       }

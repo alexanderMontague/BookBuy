@@ -4,6 +4,7 @@ import styles from "./styles.scss";
 import firebase from "../../firebase";
 import { FaTimesCircle } from "react-icons/fa";
 import moment from "moment";
+import { getUserStatus } from "../../actions/authActions";
 
 const PostItem = props => {
   const { deletePost, datePosted, program, bookTitle, postId } = props;
@@ -48,8 +49,8 @@ class Profile extends Component {
     name: this.props.user.fullName,
     phone: this.props.user.phone,
     email: this.props.user.email,
-    passOld: "",
-    passNew: "",
+    passNew1: "",
+    passNew2: "",
     userPostings: []
   };
 
@@ -103,8 +104,40 @@ class Profile extends Component {
     });
   };
 
+  updateUserInformation = async () => {
+    const { name, email, phone, passNew1, passNew2 } = this.state;
+
+    await firebase.updateDocument("users", this.props.user.id, {
+      fullName: name,
+      email,
+      phone
+    });
+
+    this.props.getUserStatus();
+
+    if (email !== this.props.user.email) {
+      await firebase.userObject().updateEmail(email);
+    }
+
+    if (
+      !!passNew1 &&
+      !!passNew2 &&
+      passNew1 === passNew2 &&
+      passNew1.length >= 6 &&
+      passNew2.length >= 6
+    ) {
+      try {
+        await firebase.userObject().updatePassword(passNew1);
+        this.setState({ passNew1: "", passNew2: "" });
+      } catch (error) {
+        alert(error.message);
+      }
+    }
+  };
+
   render() {
-    const { isAuthenticated } = this.props;
+    const { isAuthenticated, user } = this.props;
+
     return (
       <div className={styles.profileContainer}>
         <div className={styles.infoContainer}>
@@ -141,26 +174,41 @@ class Profile extends Component {
               />
             </label>
             <label className={styles.inputLabel}>
-              Old Password:
-              <input
-                className={styles.input}
-                type="password"
-                value={this.state.passOld}
-                onChange={this.inputChangeHandler}
-                id="passOld"
-              />
-            </label>
-            <label className={styles.inputLabel}>
               New Password:
               <input
                 className={styles.input}
                 type="password"
-                value={this.state.passNew}
+                value={this.state.passNew1}
                 onChange={this.inputChangeHandler}
-                id="passNew"
+                id="passNew1"
+                placeholder="At least 6 letters long"
               />
             </label>
-            <div className={styles.saveButton}>Save Changes</div>
+            <label className={styles.inputLabel}>
+              Retype New Password:
+              <input
+                className={styles.input}
+                type="password"
+                value={this.state.passNew2}
+                onChange={this.inputChangeHandler}
+                id="passNew2"
+              />
+            </label>
+            <button
+              className={styles.saveButton}
+              disabled={
+                (this.state.name === user.fullName &&
+                  this.state.phone === user.phone &&
+                  this.state.email === user.email &&
+                  (!this.state.passNew1 || !this.state.passNew2)) ||
+                this.state.passNew1 !== this.state.passNew2 ||
+                this.state.passNew1.length < 6 ||
+                this.state.passNew2.length < 6
+              }
+              onClick={this.updateUserInformation}
+            >
+              Save Changes
+            </button>
           </div>
         </div>
         <div className={styles.infoContainer}>
@@ -187,4 +235,7 @@ const mapStateToProps = state => ({
   isAuthenticated: state.authState.isAuthenticated
 });
 
-export default connect(mapStateToProps)(Profile);
+export default connect(
+  mapStateToProps,
+  { getUserStatus }
+)(Profile);

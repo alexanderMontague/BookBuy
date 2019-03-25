@@ -48,6 +48,10 @@ class Firebase {
     return this.auth.currentUser;
   }
 
+  userObject() {
+    return this.auth.currentUser;
+  }
+
   // protected because adding a post
   addPosting(posting) {
     if (!this.auth.currentUser) {
