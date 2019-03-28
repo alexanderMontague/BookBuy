@@ -3,7 +3,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #333333;
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url("../../assets/sellLaptop.png") no-repeat center;
+  background-size: 100%;
   flex-direction: column;
   padding: 25px 0;
 

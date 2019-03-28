@@ -138,7 +138,7 @@ class Postings extends Component {
       <div className={styles.postingsContainer}>
         {/* SEARCH PANEL */}
         <div className={styles.searchPanel}>
-          <div className={styles.searchHeader}>Find the book you need</div>
+          <div className={styles.searchHeader}>Find the Textbooks You Need</div>
           <div className={styles.searchForm}>
             <form onSubmit={this.searchForTextbook}>
               <div className={styles.inputRow}>

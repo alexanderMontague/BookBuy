@@ -58,7 +58,7 @@ class Home extends Component {
         {/* SEARCH PANEL */}
         <div className={styles.searchPanel}>
           <div className={styles.searchHeader}>
-            Search hundreds of textbooks now
+            Search Hundreds of Textbooks Now
           </div>
           <div className={styles.searchForm}>
             <form onSubmit={this.searchForTextbook}>
@@ -157,7 +157,7 @@ class Home extends Component {
                 </p>
                 <p>
                   Book Buy instantly connects students from all across Ontario
-                  with the textbooks they’re looking for.
+                  with the textbooks they’re looking for!
                 </p>
               </div>
             </div>
