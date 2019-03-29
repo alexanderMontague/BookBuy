@@ -209,6 +209,9 @@ class Postings extends Component {
               <div className={[styles.postHeaderItem, styles.date].join(" ")}>
                 Date Posted
               </div>
+              <div className={[styles.postHeaderItem, styles.name].join(" ")}>
+                Book Title
+              </div>
               <div
                 className={[styles.postHeaderItem, styles.program].join(" ")}
               >
@@ -216,9 +219,6 @@ class Postings extends Component {
               </div>
               <div className={[styles.postHeaderItem, styles.code].join(" ")}>
                 Course Code
-              </div>
-              <div className={[styles.postHeaderItem, styles.name].join(" ")}>
-                Book Title
               </div>
               <div className={[styles.postHeaderItem, styles.price].join(" ")}>
                 Price

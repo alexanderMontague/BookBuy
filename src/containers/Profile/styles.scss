@@ -1,9 +1,11 @@
 .profileContainer {
   display: flex;
   justify-content: space-evenly;
-  min-height: 500px;
+  min-height: 660px;
   width: 100%;
-  background: #333333;
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url("../../assets/profile.png") no-repeat center;
+  background-size: cover;
   color: #ffffff;
   padding: 25px 0;
 
@@ -14,6 +16,7 @@
 
   .infoContainer {
     width: 40%;
+    height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -179,7 +182,7 @@
       color: #ffffff;
       background: #007bff;
       height: 25px;
-      width: 75%;
+      width: 35%;
       border: none;
       border-radius: 5px;
       display: flex;

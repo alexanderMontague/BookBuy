@@ -49,14 +49,14 @@ const Post = props => {
         <div className={[styles.postHeaderItem, styles.date].join(" ")}>
           {moment.unix(datePosted).format("MMM Do YYYY")}
         </div>
+        <div className={[styles.postHeaderItem, styles.name].join(" ")}>
+          {bookTitle}
+        </div>
         <div className={[styles.postHeaderItem, styles.program].join(" ")}>
           {program.label}
         </div>
         <div className={[styles.postHeaderItem, styles.course].join(" ")}>
           {courseLevel}
-        </div>
-        <div className={[styles.postHeaderItem, styles.name].join(" ")}>
-          {bookTitle}
         </div>
         <div className={[styles.postHeaderItem, styles.price].join(" ")}>
           ${bookPrice}
@@ -122,6 +122,7 @@ const Post = props => {
                     <img
                       className={styles.asset}
                       src={hasPicture ? bookURL : placeholder}
+                      alt="Textbook Picture"
                     />
                   </div>
                 </div>

@@ -32,11 +32,19 @@ const PostItem = props => {
       {showDrawer && (
         <div className={styles.confirmDrawer}>
           <div>Really delete this post?</div>
-          <div
-            className={styles.confirmButton}
-            onClick={() => deletePost(postId)}
-          >
-            YES
+          <div style={{ display: "flex" }}>
+            <span
+              className={styles.confirmButton}
+              onClick={() => deletePost(postId)}
+            >
+              YES
+            </span>
+            <span
+              className={styles.confirmButton}
+              onClick={() => toggleDrawer()}
+            >
+              NO
+            </span>
           </div>
         </div>
       )}
@@ -197,13 +205,13 @@ class Profile extends Component {
             <button
               className={styles.saveButton}
               disabled={
-                (this.state.name === user.fullName &&
-                  this.state.phone === user.phone &&
-                  this.state.email === user.email &&
-                  (!this.state.passNew1 || !this.state.passNew2)) ||
-                this.state.passNew1 !== this.state.passNew2 ||
-                this.state.passNew1.length < 6 ||
-                this.state.passNew2.length < 6
+                this.state.name === user.fullName &&
+                this.state.phone === user.phone &&
+                this.state.email === user.email &&
+                ((!this.state.passNew1 && !this.state.passNew2) ||
+                  ((this.state.passNew1 !== this.state.passNew2 &&
+                    this.state.passNew1.length < 6) ||
+                    this.state.passNew2.length < 6))
               }
               onClick={this.updateUserInformation}
             >

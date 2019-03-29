@@ -47,10 +47,12 @@ class Sell extends Component {
   state = {
     bookTitle: "",
     bookAuthor: "",
+    bookEdition: "",
     selectedProgram: "",
     courseLevel: "",
     bookPrice: "",
     bookPic: "",
+    bookQuality: "",
 
     addingPost: false,
     addPostSuccessful: false
@@ -65,7 +67,9 @@ class Sell extends Component {
       selectedProgram,
       courseLevel,
       bookPrice,
-      bookPic
+      bookPic,
+      bookEdition,
+      bookQuality
     } = this.state;
 
     const postId = await firebase.addPosting({
@@ -74,6 +78,8 @@ class Sell extends Component {
       program: selectedProgram,
       courseLevel,
       bookPrice,
+      bookQuality,
+      bookEdition,
       hasPicture: !!bookPic,
       datePosted: moment().unix(),
       userInfo: {
@@ -99,6 +105,10 @@ class Sell extends Component {
     this.setState({ selectedProgram: option });
   };
 
+  checkboxHandler = quality => {
+    this.setState({ bookQuality: quality });
+  };
+
   render() {
     const { isAuthenticated } = this.props;
     const { addingPost, addPostSuccessful } = this.state;
@@ -106,7 +116,7 @@ class Sell extends Component {
     return (
       <div className={styles.sellContainer}>
         <div className={styles.title}>
-          {isAuthenticated ? "Sell your old textbooks Now!" : ""}
+          {isAuthenticated ? "Sell Your Old Textbooks Now!" : ""}
         </div>
         <div className={styles.sellForm}>
           {isAuthenticated ? (
@@ -122,10 +132,18 @@ class Sell extends Component {
                 />
                 <FloatingLabel
                   type="text"
-                  placeholder="Author"
+                  placeholder="Author(s) or Publisher(s)"
                   id="bookAuthor"
                   onChange={this.formFieldInputHandler}
                   value={this.state.bookAuthor}
+                  styles={inputStyle(false)}
+                />
+                <FloatingLabel
+                  type="text"
+                  placeholder="Edition (optional)"
+                  id="bookEdition"
+                  onChange={this.formFieldInputHandler}
+                  value={this.state.bookEdition}
                   styles={inputStyle(false)}
                 />
                 <div className={styles.row}>
@@ -178,6 +196,62 @@ class Sell extends Component {
                       : "Optional Picture of Book"}
                   </label>
                 </div>
+                <InputWrapper
+                  color="#333333"
+                  label="Condition"
+                  inputStyle={{ paddingTop: "20px" }}
+                >
+                  <div className={styles.row} style={{ paddingTop: "5px" }}>
+                    <label
+                      className={styles.checkboxLabel}
+                      onClick={() => this.checkboxHandler("excellent")}
+                    >
+                      <span>Excellent</span>
+                      <input type="checkbox" style={{ display: "none" }} />
+                      <div className={styles.checkbox}>
+                        <div
+                          className={
+                            this.state.bookQuality === "excellent"
+                              ? styles.checkActive
+                              : null
+                          }
+                        />
+                      </div>
+                    </label>
+                    <label
+                      className={styles.checkboxLabel}
+                      onClick={() => this.checkboxHandler("good")}
+                    >
+                      <span>Good</span>
+                      <input type="checkbox" style={{ display: "none" }} />
+                      <div className={styles.checkbox}>
+                        <div
+                          className={
+                            this.state.bookQuality === "good"
+                              ? styles.checkActive
+                              : null
+                          }
+                        />
+                      </div>
+                    </label>
+                    <label
+                      className={styles.checkboxLabel}
+                      onClick={() => this.checkboxHandler("worn")}
+                    >
+                      <span>Worn</span>
+                      <input type="checkbox" style={{ display: "none" }} />
+                      <div className={styles.checkbox}>
+                        <div
+                          className={
+                            this.state.bookQuality === "worn"
+                              ? styles.checkActive
+                              : null
+                          }
+                        />
+                      </div>
+                    </label>
+                  </div>
+                </InputWrapper>
                 {addingPost ? (
                   <div
                     style={{
