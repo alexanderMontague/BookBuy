@@ -2,26 +2,22 @@
   // background: #333333;
   // border-top: none;
   // border-radius: 5px;
-  margin: 20px 0;
+  // margin: 20px 0;
 }
 
 .postHeader {
   display: flex;
   align-items: center;
   height: 80px;
-  border-radius: 5px;
-  background: #f8f8f8;
-  border: 1px solid #333333;
+  // border-radius: 5px;
+  background: #ffffff;
+  border-bottom: 1px solid #333333;
 }
 .postHeader:hover {
   cursor: pointer;
   color: #ffffff;
   background: #007bff;
   // box-shadow: 0 0 24px 0 rgba(0, 0, 0, 0.2);
-}
-
-.isGrey {
-  background: #c7c7c7;
 }
 
 .postHeaderItem {
@@ -79,12 +75,12 @@
 
   .drawerInfo {
     min-height: 300px;
-    width: 80%;
+    width: 100%;
     // background: #333333;
     background: #ffffff;
     margin: auto;
     border-radius: 0 0 10px 10px;
-    box-shadow: 0 3px 10px 0 #000000;
+    // box-shadow: 0 2px 5px 0 #000000;
     margin-bottom: 25px;
     // color: #f8f8f8;
     color: #333333;
@@ -161,4 +157,9 @@
       }
     }
   }
+}
+
+.isGrey {
+  // background: #c7c7c7;
+  background: #d6dce0;
 }

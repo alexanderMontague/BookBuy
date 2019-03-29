@@ -71,7 +71,10 @@ const Post = props => {
         {state =>
           isDrawerOpen && (
             <div className={styles.drawerContainer}>
-              <div className={styles.drawerInfo}>
+              <div
+                className={styles.drawerInfo}
+                style={{ background: isGrey ? "#d6dce0" : null }}
+              >
                 <div className={styles.bookTitle}>{bookTitle}</div>
                 <div className={styles.assetContainer}>
                   <div className={styles.infoContainer}>
