@@ -47,7 +47,7 @@ const Post = props => {
         onClick={drawerToggle}
       >
         <div className={[styles.postHeaderItem, styles.date].join(" ")}>
-          {moment.unix(datePosted).format("MMM Do YYYY")}
+          {moment.unix(datePosted).format("MMMM Do YYYY")}
         </div>
         <div className={[styles.postHeaderItem, styles.name].join(" ")}>
           {bookTitle}
