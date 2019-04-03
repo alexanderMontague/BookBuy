@@ -163,16 +163,16 @@ class Home extends Component {
             </div>
             <div className={[styles.pictureBlock, styles.books].join(" ")} />
           </div>
-          {/* <div className={[styles.infoRow, styles.reverseCol].join(" ")}>
+          <div className={[styles.infoRow, styles.reverseCol].join(" ")}>
             <div className={[styles.pictureBlock, styles.money].join(" ")} />
             <div className={styles.textBlock}>
-              <div className={styles.textTitle}>This is what we do</div>
+              <div className={styles.textTitle}>How it Works</div>
               <div className={styles.textDesc}>
                 Textbook trade instantly connects students from all across
                 Ontario with the textbooks they’re looking for.
               </div>
             </div>
-          </div> */}
+          </div>
         </div>
 
         {/* ADD A POSTING PANEL */}

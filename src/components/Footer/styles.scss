@@ -12,6 +12,10 @@
   justify-content: space-around;
   width: 50%;
   margin: 0 20px;
+
+  @media (max-width: 600px) {
+    width: 90%;
+  }
 }
 
 .footerLink {
