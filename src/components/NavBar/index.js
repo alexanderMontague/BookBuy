@@ -39,26 +39,52 @@ const NavBar = props => {
                 mobileNav ? styles.showMenu : null
               ].join(" ")}
             >
-              <Link className={styles.mobileLink} to="/">
+              <Link
+                className={styles.mobileLink}
+                to="/"
+                onClick={() => toggleMobileNav(!mobileNav)}
+              >
                 Home
               </Link>
-              <Link className={styles.mobileLink} to="/postings">
+              <Link
+                className={styles.mobileLink}
+                to="/postings"
+                onClick={() => toggleMobileNav(!mobileNav)}
+              >
                 Postings
               </Link>
-              <Link className={styles.mobileLink} to="/sell">
+              <Link
+                className={styles.mobileLink}
+                to="/sell"
+                onClick={() => toggleMobileNav(!mobileNav)}
+              >
                 Sell Books
               </Link>
               {isAuthenticated ? (
                 <Fragment>
-                  <Link className={styles.mobileLink} to="/profile">
+                  <Link
+                    className={styles.mobileLink}
+                    to="/profile"
+                    onClick={() => toggleMobileNav(!mobileNav)}
+                  >
                     Profile
                   </Link>
-                  <div className={styles.mobileLink} onClick={logOutUser}>
+                  <div
+                    className={styles.mobileLink}
+                    onClick={() => {
+                      logOutUser();
+                      toggleMobileNav(!mobileNav);
+                    }}
+                  >
                     Logout
                   </div>
                 </Fragment>
               ) : (
-                <Link className={styles.mobileLink} to="/auth">
+                <Link
+                  className={styles.mobileLink}
+                  to="/auth"
+                  onClick={() => toggleMobileNav(!mobileNav)}
+                >
                   Register & Log In
                 </Link>
               )}
