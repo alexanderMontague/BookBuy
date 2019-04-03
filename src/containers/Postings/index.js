@@ -176,7 +176,7 @@ class Postings extends Component {
                   <input
                     type="text"
                     className={styles.searchInputTwo}
-                    placeholder="Enter keywords, book title, or author name"
+                    placeholder="Enter keywords, book title or author name"
                     value={this.state.mainBookInput}
                     onChange={e =>
                       this.setState({ mainBookInput: e.target.value })

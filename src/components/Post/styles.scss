@@ -46,32 +46,11 @@
   width: 10%;
 }
 
-.enter {
-  height: 0px;
-}
-.enter.enter-active {
-  height: 100px;
-  transition: height 0.3s ease;
-}
-// .leave {
-//   opacity: 1;
-//   transition: opacity 1.5s ease-out;
-// }
-.leave.leave-active {
-  height: 0px;
-  transition: height 0.3s ease;
-}
-// .appear {
-//   opacity: 0.01;
-// }
-// .appear.appear-active {
-//   opacity: 1;
-//   transition: opacity 1.5s ease-in;
-// }
-
 .drawerContainer {
   background: #f8f9fa;
-  height: 100%;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.26s ease;
 
   .drawerInfo {
     min-height: 300px;
@@ -145,7 +124,7 @@
       }
 
       .picture {
-        width: 45%;
+        width: 40%;
         padding: 15px 0;
         text-align: center;
         margin: auto 0;
@@ -162,4 +141,8 @@
 .isGrey {
   // background: #c7c7c7;
   background: #d6dce0;
+}
+
+.slideAnimation {
+  max-height: 550px;
 }

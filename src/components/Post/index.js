@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./styles.scss";
 import styles from "./styles.scss";
 import moment from "moment";
-import { Transition } from "react-transition-group";
-import placeholder from "../../assets/noPic.jpg";
+import placeholder from "../../assets/noPic.png";
 import { ClipLoader } from "react-spinners";
 import firebase from "../../firebase";
 
@@ -12,6 +11,8 @@ const Post = props => {
     bookAuthor,
     bookPrice,
     bookTitle,
+    bookEdition,
+    bookQuality,
     courseLevel,
     datePosted,
     program,
@@ -24,20 +25,13 @@ const Post = props => {
   const [isDrawerOpen, drawerToggleHandler] = useState(false);
   const [bookURL, updateBookURL] = useState("");
 
-  useEffect(() => {
-    async function getBookPicture() {
+  const drawerToggle = async () => {
+    drawerToggleHandler(!isDrawerOpen);
+
+    if (bookURL === "" && hasPicture) {
       const bookURL = await firebase.getBookPicture(postId);
       updateBookURL(bookURL);
     }
-
-    // check if book has picture, and if so fetch it
-    if (hasPicture) {
-      getBookPicture();
-    }
-  }, []);
-
-  const drawerToggle = () => {
-    drawerToggleHandler(!isDrawerOpen);
   };
 
   return (
@@ -62,78 +56,106 @@ const Post = props => {
           ${bookPrice}
         </div>
       </div>
-      <Transition
-        in={isDrawerOpen}
-        appear={isDrawerOpen}
-        timeout={500}
-        classNames={{ ...styles }}
-      >
-        {state =>
-          isDrawerOpen && (
-            <div className={styles.drawerContainer}>
-              <div
-                className={styles.drawerInfo}
-                style={{ background: isGrey ? "#d6dce0" : null }}
-              >
-                <div className={styles.bookTitle}>{bookTitle}</div>
-                <div className={styles.assetContainer}>
-                  <div className={styles.infoContainer}>
-                    <div className={styles.infoSection}>
-                      <div className={styles.infoTitle}>Book Information</div>
-                      <div className={styles.row}>
-                        <div className={styles.label}>Book Title: </div>
-                        <div className={styles.value}>{bookTitle}</div>
-                      </div>
-                      <div className={styles.row}>
-                        <div className={styles.label}>Book Author: </div>
-                        <div className={styles.value}>{bookAuthor}</div>
-                      </div>
-                      <div className={styles.row}>
-                        <div className={styles.label}>Book Program: </div>
-                        <div className={styles.value}>{program.label}</div>
-                      </div>
-                      <div className={styles.row}>
-                        <div className={styles.label}>Course Level: </div>
-                        <div className={styles.value}>{courseLevel}</div>
-                      </div>
+      {true && (
+        <div
+          className={[
+            styles.drawerContainer,
+            isDrawerOpen ? styles.slideAnimation : null
+          ].join(" ")}
+        >
+          <div
+            className={styles.drawerInfo}
+            style={{ background: isGrey ? "#d6dce0" : null }}
+          >
+            <div className={styles.bookTitle}>{bookTitle}</div>
+            <div className={styles.assetContainer}>
+              <div className={styles.infoContainer}>
+                <div className={styles.infoSection}>
+                  <div className={styles.infoTitle}>Book Information</div>
+                  <div className={styles.row}>
+                    <div className={styles.label}>Book Title: </div>
+                    <div className={styles.value}>{bookTitle}</div>
+                  </div>
+                  <div className={styles.row}>
+                    <div className={styles.label}>
+                      Book Author or Publisher:
                     </div>
-                    <div className={styles.infoSection}>
-                      <div className={styles.infoTitle}>
-                        Contact Information
-                      </div>
-                      <div className={styles.row}>
-                        <div className={styles.label}>Contact Name: </div>
-                        <div className={styles.value}>{userInfo.fullName}</div>
-                      </div>
-                      <div className={styles.row}>
-                        <div className={styles.label}>Contact Email: </div>
-                        <div className={styles.value}>{userInfo.email}</div>
-                      </div>
-                      <div className={styles.row}>
-                        <div className={styles.label}>Contact Phone: </div>
-                        <div className={styles.value}>{userInfo.phone}</div>
-                      </div>
-                      <div className={styles.row}>
-                        <div className={styles.label}>Date Posted: </div>
-                        <div className={styles.value}>
-                          {moment.unix(datePosted).format("MMMM Do YYYY")}
-                        </div>
-                      </div>
+                    <div className={styles.value}>{bookAuthor}</div>
+                  </div>
+                  {!!bookEdition && (
+                    <div className={styles.row}>
+                      <div className={styles.label}>Book Edition: </div>
+                      <div className={styles.value}>{bookEdition}</div>
+                    </div>
+                  )}
+                  <div className={styles.row}>
+                    <div className={styles.label}>Book Program: </div>
+                    <div className={styles.value}>{program.label}</div>
+                  </div>
+                  <div className={styles.row}>
+                    <div className={styles.label}>Course Level: </div>
+                    <div className={styles.value}>{courseLevel}</div>
+                  </div>
+                  <div className={styles.row}>
+                    <div className={styles.label}>Book Quality: </div>
+                    <div className={styles.value}>
+                      {!!bookQuality
+                        ? bookQuality.charAt(0).toUpperCase() +
+                          bookQuality.slice(1)
+                        : "Not Given"}
                     </div>
                   </div>
-                  <div className={styles.picture}>
-                    <img
-                      className={styles.asset}
-                      src={hasPicture ? bookURL : placeholder}
-                      alt="Textbook Picture"
-                    />
+                </div>
+                <div className={styles.infoSection}>
+                  <div className={styles.infoTitle}>Contact Information</div>
+                  <div className={styles.row}>
+                    <div className={styles.label}>Contact Name: </div>
+                    <div className={styles.value}>{userInfo.fullName}</div>
+                  </div>
+                  <div className={styles.row}>
+                    <div className={styles.label}>Contact Email: </div>
+                    <div className={styles.value}>{userInfo.email}</div>
+                  </div>
+                  <div className={styles.row}>
+                    <div className={styles.label}>Contact Phone: </div>
+                    <div className={styles.value}>{userInfo.phone}</div>
+                  </div>
+                  <div className={styles.row}>
+                    <div className={styles.label}>Date Posted: </div>
+                    <div className={styles.value}>
+                      {moment.unix(datePosted).format("MMMM Do YYYY")}
+                    </div>
                   </div>
                 </div>
               </div>
+              <div className={styles.picture}>
+                {bookURL === "" && hasPicture ? (
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      marginTop: 10
+                    }}
+                  >
+                    <ClipLoader
+                      sizeUnit={"px"}
+                      size={70}
+                      color={"#0069d9"}
+                      loading={true}
+                    />
+                  </div>
+                ) : (
+                  <img
+                    className={styles.asset}
+                    src={hasPicture ? bookURL : placeholder}
+                    alt="Textbook Picture"
+                  />
+                )}
+              </div>
             </div>
-          )
-        }
-      </Transition>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
