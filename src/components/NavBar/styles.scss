@@ -74,11 +74,15 @@
 
   .hamburgerMenu {
     height: 100%;
-    max-width: 150px;
+    width: 150px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 40px;
+
+    @media (max-width: 360px) {
+      width: 100px;
+    }
   }
   .hamburgerMenu:hover {
     cursor: pointer;
