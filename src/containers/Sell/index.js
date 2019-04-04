@@ -201,7 +201,10 @@ class Sell extends Component {
                   label="Condition"
                   inputStyle={{ paddingTop: "20px" }}
                 >
-                  <div className={styles.row} style={{ paddingTop: "5px" }}>
+                  <div
+                    className={styles.checkboxRow}
+                    style={{ paddingTop: "5px" }}
+                  >
                     <label
                       className={styles.checkboxLabel}
                       onClick={() => this.checkboxHandler("excellent")}

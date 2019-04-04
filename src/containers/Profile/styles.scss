@@ -59,6 +59,11 @@
         font-size: 16px;
         color: #333333;
         font-family: "Overpass";
+
+        @media (max-width: 505px) {
+          width: 190px;
+          max-width: 190px;
+        }
       }
       .input:focus {
         outline: none;
@@ -106,11 +111,13 @@
           width: 20%;
           text-align: center;
           padding: 10px;
+          margin: auto 0;
         }
         .titleCol {
           width: 50%;
           text-align: center;
           padding: 10px;
+          margin: auto 0;
         }
       }
 
