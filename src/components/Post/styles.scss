@@ -94,6 +94,10 @@
 
         .infoSection {
           padding-bottom: 10px;
+
+          @media (max-width: 678px) {
+            margin: 0 30px;
+          }
         }
 
         .infoTitle {
@@ -115,10 +119,18 @@
             font-weight: bold;
             min-width: 35%;
             font-style: italic;
+
+            @media (max-width: 678px) {
+              min-width: 40%;
+            }
           }
           .value {
             font-weight: lighter;
             min-width: 65%;
+
+            @media (max-width: 678px) {
+              text-align: right;
+            }
           }
         }
       }
@@ -128,6 +140,10 @@
         padding: 15px 0;
         text-align: center;
         margin: auto 0;
+
+        @media (max-width: 678px) {
+          width: 90%;
+        }
 
         .asset {
           max-width: 300px;
@@ -145,4 +161,8 @@
 
 .slideAnimation {
   max-height: 550px;
+
+  @media (max-width: 678px) {
+    max-height: 950px;
+  }
 }

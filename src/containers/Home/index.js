@@ -10,9 +10,6 @@ import {
   schoolDropdownValues,
   programDropdownValues
 } from "../../assets/dropdownValues";
-import review1 from "../../assets/head1.jpg";
-import review2 from "../../assets/head2.jpg";
-import review3 from "../../assets/head3.jpg";
 
 class Home extends Component {
   state = {
@@ -168,8 +165,18 @@ class Home extends Component {
             <div className={styles.textBlock}>
               <div className={styles.textTitle}>How it Works</div>
               <div className={styles.textDesc}>
-                Textbook trade instantly connects students from all across
-                Ontario with the textbooks they’re looking for.
+                <p>
+                  BookBuy provides two unique services for students to utilize:
+                </p>
+                <p>
+                  1) Search for cheap, used books using the 'Postings' section
+                  and contact a seller
+                </p>
+                <p>
+                  2) Create a posting to sell your old book for cash using the
+                  'Sell Books' section
+                </p>
+                <p>Find your book now or create an account to start selling!</p>
               </div>
             </div>
           </div>
