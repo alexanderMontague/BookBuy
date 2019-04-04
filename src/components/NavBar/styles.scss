@@ -6,12 +6,22 @@
 }
 
 .logoLink {
-  display: flex;
-  align-items: center;
-  font-size: 1.35rem;
-  font-weight: bolder;
-  padding-left: 3%;
-  min-width: 200px;
+  // display: flex;
+  // align-items: center;
+  // font-size: 1.35rem;
+  // font-weight: bolder;
+  // padding-left: 3%;
+  // min-width: 200px;
+
+  .img {
+    height: 100%;
+    width: 50%;
+
+    @media (max-width: 450px) {
+      height: 100%;
+      width: 100%;
+    }
+  }
 }
 
 .navLinks {

@@ -3,9 +3,8 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import styles from "./styles.scss";
 import { getUserStatus } from "../../actions/authActions";
-import { SlideDown } from "react-slidedown";
-import "react-slidedown/lib/slidedown.css";
 import { FaBars } from "react-icons/fa";
+import logo from "../../assets/BookBuy.png";
 import firebase from "../../firebase";
 
 const NavBar = props => {
@@ -24,7 +23,9 @@ const NavBar = props => {
   return (
     <nav>
       <div className={styles.navContainer}>
-        <div className={styles.logoLink}>BookBuy.ca</div>
+        <div className={styles.logoLink}>
+          <img className={styles.img} src={logo} />
+        </div>
         {isMobile ? (
           <div className={styles.mobileNav}>
             <div
