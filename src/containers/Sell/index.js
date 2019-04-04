@@ -87,6 +87,8 @@ class Sell extends Component {
       }
     });
 
+    console.log("sell", postId, bookPic);
+
     if (postId) {
       // add picture if there is one
       !!bookPic && firebase.storage.child(`postings/${postId}`).put(bookPic);
@@ -302,7 +304,9 @@ class Sell extends Component {
                       selectedProgram: "",
                       courseLevel: "",
                       bookPrice: "",
-                      bookPic: ""
+                      bookPic: "",
+                      bookEdition: "",
+                      bookQuality: ""
                     })
                   }
                 >

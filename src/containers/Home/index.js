@@ -123,14 +123,14 @@ class Home extends Component {
             <FaRecycle className={styles.icon} />
             <div className={styles.featureHeader}>Environmentally Friendly</div>
             <div className={styles.featureDesc}>
-              Save trees, recycle your books!
+              Reduce waste by reusing and recycling books!
             </div>
           </div>
           <div className={styles.feature}>
             <FaRegCheckCircle className={styles.icon} />
             <div className={styles.featureHeader}>Easy to Use</div>
             <div className={styles.featureDesc}>
-              Connect with students across Ontario and find your books today
+              Connect with students across Ontario to find your books today
             </div>
           </div>
           <div className={styles.feature}>
