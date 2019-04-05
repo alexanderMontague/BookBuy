@@ -62,6 +62,65 @@
       }
     }
 
+    .row2 {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 10px;
+    }
+
+    .isbnContainer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 55%;
+
+      .isbnInfoPanel {
+        display: none;
+        position: absolute;
+        width: 250px;
+        height: 150px;
+        z-index: 100;
+        top: 17%;
+        right: 30%;
+        background: #ffffff;
+        box-shadow: 0 0 24px 0 rgba(0, 0, 0, 0.2);
+        border-radius: 10px;
+      }
+      .isbnInfoPanel:hover {
+        display: block;
+        cursor: pointer;
+      }
+
+      .isbnInfo {
+        height: 25px;
+        width: 25px;
+      }
+      .isbnInfo:hover + .isbnInfoPanel {
+        cursor: pointer;
+        display: block;
+      }
+    }
+
+    .searchButton {
+      height: 50px;
+      width: 35%;
+      font-size: 20px;
+      font-family: "Overpass";
+      background: #007bff;
+      border: none;
+      color: #ffffff;
+      transition: 0.3s;
+    }
+    .searchButton:hover {
+      cursor: pointer;
+      background: #0069d9;
+    }
+    .searchButton:disabled {
+      cursor: not-allowed;
+      background: grey;
+    }
+
     .checkboxRow {
       display: flex;
       justify-content: space-between;

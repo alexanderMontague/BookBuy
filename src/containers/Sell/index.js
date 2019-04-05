@@ -12,7 +12,9 @@ import InputWrapper from "../../components/InputWrapper";
 import Select from "react-select";
 import { ClipLoader } from "react-spinners";
 import { programDropdownValues } from "../../assets/dropdownValues";
-import { FaUpload } from "react-icons/fa";
+import { FaUpload, FaQuestionCircle } from "react-icons/fa";
+import isbnLocation from "../../assets/isbnLocation.png";
+import { getBookInfo } from "../../helpers/requests";
 import firebase from "../../firebase";
 
 const inputStyle = isDouble => ({
@@ -53,9 +55,11 @@ class Sell extends Component {
     bookPrice: "",
     bookPic: "",
     bookQuality: "",
+    bookISBN: "",
 
     addingPost: false,
-    addPostSuccessful: false
+    addPostSuccessful: false,
+    statusMessage: ""
   };
 
   uploadBook = async event => {
@@ -87,8 +91,6 @@ class Sell extends Component {
       }
     });
 
-    console.log("sell", postId, bookPic);
-
     if (postId) {
       // add picture if there is one
       !!bookPic && firebase.storage.child(`postings/${postId}`).put(bookPic);
@@ -97,6 +99,28 @@ class Sell extends Component {
       // update spinners and show success message
       this.setState({ addingPost: false, addPostSuccessful: true });
     }
+  };
+
+  getBookInfo = async () => {
+    const cleanISBN = this.state.bookISBN.replace(/-/g, "");
+    const bookInfo = await getBookInfo(cleanISBN);
+    let salePrice = "";
+
+    if (bookInfo.totalItems === 0) {
+      this.setState({
+        statusMessage: "Book could not be found. Please manually input info!"
+      });
+      return;
+    }
+
+    if (bookInfo.items[0].saleInfo.saleability !== "NOT_FOR_SALE") {
+      salePrice = bookInfo.items[0].saleInfo.listPrice.amount;
+    }
+
+    this.setState({
+      bookTitle: bookInfo.items[0].volumeInfo.title,
+      bookAuthor: bookInfo.items[0].volumeInfo.authors.join(", ")
+    });
   };
 
   formFieldInputHandler = event => {
@@ -124,6 +148,43 @@ class Sell extends Component {
           {isAuthenticated ? (
             !addPostSuccessful ? (
               <form className={styles.form} onSubmit={this.uploadBook}>
+                <div>{this.state.statusMessage}</div>
+                {/* <div className={styles.row2}>
+                  <div className={styles.isbnContainer}>
+                    <FloatingLabel
+                      type="text"
+                      placeholder="Enter ISBN to save time!"
+                      id="bookISBN"
+                      onChange={this.formFieldInputHandler}
+                      value={this.state.bookTitle}
+                      styles={inputStyle(false)}
+                    />
+                    <div className={styles.isbnInfo}>
+                      <FaQuestionCircle />
+                    </div>
+                    <div className={styles.isbnInfoPanel}>
+                      Enter the ISBN on the barcode to auto-complete
+                      information!
+                      <br />
+                      <img
+                        src={isbnLocation}
+                        style={{
+                          height: "60%",
+                          width: "70%",
+                          marginTop: "10px"
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <button
+                    className={styles.searchButton}
+                    type="button"
+                    onClick={this.getBookInfo}
+                    disabled={!this.state.bookISBN}
+                  >
+                    Search
+                  </button>
+                </div> */}
                 <FloatingLabel
                   type="text"
                   placeholder="Title of Textbook"
