@@ -4,7 +4,6 @@ import styles from "./styles.scss";
 import InputWrapper from "../../components/InputWrapper";
 import Select from "react-select";
 import Post from "../../components/Post";
-import ReactPaginate from "react-paginate";
 import firebase from "../../firebase";
 import {
   schoolDropdownValues,
@@ -243,18 +242,7 @@ class Postings extends Component {
             {this.renderPostings()}
           </div>
           <div className={styles.pageNavContainer}>
-            <ReactPaginate
-              previousLabel={"Previous"}
-              nextLabel={"Next"}
-              breakLabel={"..."}
-              breakClassName={"break-me"}
-              pageCount={20}
-              marginPagesDisplayed={2}
-              pageRangeDisplayed={5}
-              onPageChange={null}
-              containerClassName={styles.paginationContainer}
-              activeClassName={styles.active}
-            />
+            {/* Add expand more posts... */}
           </div>
         </div>
       </div>
