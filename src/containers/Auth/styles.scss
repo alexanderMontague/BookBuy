@@ -91,3 +91,47 @@
     }
   }
 }
+
+.forgotPassword {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 15px;
+}
+.forgotPassword:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.forgotButton {
+  height: 50px;
+  font-size: 20px;
+  font-family: "Overpass";
+  background: #007bff;
+  border: none;
+  color: #ffffff;
+  transition: 0.3s;
+  margin: 0 auto;
+  margin-top: 30px;
+}
+.forgotButton:hover {
+  cursor: pointer;
+  background: #0069d9;
+}
+.forgotButton:disabled {
+  cursor: not-allowed;
+  background: grey;
+}
+.forgotMessage {
+  font-size: 15px;
+  margin: 15px 0;
+  color: #007bff;
+}
+
+.backButton {
+  font-size: 12px;
+  text-decoration: underline;
+  margin: 15px 0;
+}
+.backButton:hover {
+  cursor: pointer;
+}

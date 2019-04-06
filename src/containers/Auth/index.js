@@ -13,6 +13,7 @@ import Select from "react-select";
 import { getUserStatus } from "../../actions/authActions";
 import firebase from "../../firebase";
 import { schoolDropdownValues } from "../../assets/dropdownValues";
+import Modal from "react-modal";
 
 const inputStyle = {
   floating: {
@@ -38,9 +39,25 @@ const inputStyle = {
     marginTop: ".5em",
     width: "100%",
     color: "grey",
-    fontFamily: "Overpass"
+    fontFamily: "Overpass",
+    zIndex: "0"
   }
 };
+
+const modalStyles = {
+  content: {
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    marginRight: "-50%",
+    transform: "translate(-50%, -50%)",
+    minWidth: "300px"
+  }
+};
+
+// accessability stuff?
+Modal.setAppElement("#app");
 
 class Auth extends Component {
   state = {
@@ -60,7 +77,11 @@ class Auth extends Component {
     loginPassword: "",
     loginError: false,
     loginLoading: false,
-    loginSuccess: false
+    loginSuccess: false,
+
+    forgotEmail: "",
+    forgotFeedback: "",
+    isForgotModalOpen: false
   };
 
   componentDidMount() {
@@ -182,6 +203,24 @@ class Auth extends Component {
     this.setState({ selectedSchool: option });
   };
 
+  forgotPasswordHandler = () => {
+    const { forgotEmail } = this.state;
+
+    firebase.auth
+      .sendPasswordResetEmail(forgotEmail)
+      .then(() => {
+        this.setState({
+          forgotFeedback: "Password reset sent successfully. Check your email!"
+        });
+      })
+      .catch(err => {
+        this.setState({
+          forgotFeedback:
+            "Email is incorrect. Make sure you have registered an account!"
+        });
+      });
+  };
+
   render() {
     const { selectedAuth } = this.state;
 
@@ -191,6 +230,48 @@ class Auth extends Component {
 
     return (
       <div className={styles.authSection}>
+        <Modal
+          isOpen={this.state.isForgotModalOpen}
+          onRequestClose={() => this.setState({ isForgotModalOpen: false })}
+          style={modalStyles}
+          contentLabel="Forgot Password"
+        >
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center"
+            }}
+          >
+            <div className={styles.forgotMessage}>
+              {this.state.forgotFeedback}
+            </div>
+            <FloatingLabel
+              styles={inputStyle}
+              type="text"
+              placeholder="Enter the email used for your account"
+              id="forgotEmail"
+              onChange={this.formFieldInputHandler}
+              value={this.state.forgotEmail}
+            />
+            <button
+              className={styles.forgotButton}
+              type="button"
+              disabled={!this.state.forgotEmail}
+              style={{ marginTop: 50 }}
+              onClick={this.forgotPasswordHandler}
+            >
+              Send Reset Email
+            </button>
+            <div
+              className={styles.backButton}
+              onClick={() => this.setState({ isForgotModalOpen: false })}
+            >
+              Back
+            </div>
+          </div>
+        </Modal>
         <div className={styles.authContainer}>
           {this.state.regSuccess || this.state.loginSuccess ? (
             <div className={styles.authSuccess}>
@@ -343,6 +424,12 @@ class Auth extends Component {
                       onChange={this.formFieldInputHandler}
                       value={this.state.loginPassword}
                     />
+                    <div
+                      className={styles.forgotPassword}
+                      onClick={() => this.setState({ isForgotModalOpen: true })}
+                    >
+                      Forgot Password?
+                    </div>
                     {this.state.loginLoading ? (
                       <div
                         style={{
