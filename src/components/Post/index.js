@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import "./styles.scss";
 import styles from "./styles.scss";
 import moment from "moment";
@@ -19,7 +19,9 @@ const Post = props => {
     hasPicture,
     userInfo,
     postId,
-    isGrey
+    isGrey,
+    isExpandPost,
+    expandMorePosts
   } = props;
 
   const [isDrawerOpen, drawerToggleHandler] = useState(false);
@@ -35,10 +37,19 @@ const Post = props => {
   };
 
   return (
-    <div className={[styles.postContainer].join(" ")}>
+    <Fragment>
+      {isExpandPost && (
+        <div className={styles.expandText} onClick={expandMorePosts}>
+          Expand more posts!
+        </div>
+      )}
       <div
-        className={[styles.postHeader, isGrey ? styles.isGrey : null].join(" ")}
-        onClick={drawerToggle}
+        className={[
+          styles.postHeader,
+          isGrey ? styles.isGrey : null,
+          isExpandPost ? styles.expandPosts : null
+        ].join(" ")}
+        onClick={isExpandPost ? () => expandMorePosts() : drawerToggle}
       >
         <div className={[styles.postHeaderItem, styles.date].join(" ")}>
           {moment.unix(datePosted).format("MMMM Do YYYY")}
@@ -105,6 +116,10 @@ const Post = props => {
                         : "Not Given"}
                     </div>
                   </div>
+                  <div className={styles.row}>
+                    <div className={styles.label}>Price: </div>
+                    <div className={styles.value}>${bookPrice}</div>
+                  </div>
                 </div>
                 <div className={styles.infoSection}>
                   <div className={styles.infoTitle}>Contact Information</div>
@@ -156,7 +171,7 @@ const Post = props => {
           </div>
         </div>
       )}
-    </div>
+    </Fragment>
   );
 };
 

@@ -40,6 +40,7 @@ class Postings extends Component {
     mainBookInput: "",
     postsLoading: true,
 
+    shownPosts: 20,
     filteredPostings: [],
     allPostings: []
   };
@@ -102,9 +103,9 @@ class Postings extends Component {
   };
 
   renderPostings = () => {
-    const { filteredPostings } = this.state;
+    const { filteredPostings, shownPosts } = this.state;
 
-    return filteredPostings.map((posting, index) => {
+    return filteredPostings.slice(0, shownPosts).map((posting, index) => {
       const isGrey = index % 2 !== 0;
 
       return (
@@ -132,7 +133,15 @@ class Postings extends Component {
     this.setState({ test: true });
   };
 
+  expandMorePosts = () => {
+    const { shownPosts } = this.state;
+
+    this.setState({ shownPosts: shownPosts + 10 }, () => this.renderPostings());
+  };
+
   render() {
+    const { allPostings, shownPosts } = this.state;
+
     return (
       <div className={styles.postingsContainer}>
         {/* SEARCH PANEL */}
@@ -240,9 +249,15 @@ class Postings extends Component {
               </div>
             )}
             {this.renderPostings()}
-          </div>
-          <div className={styles.pageNavContainer}>
-            {/* Add expand more posts... */}
+            {/* Expand more posts section */}
+            {allPostings.length !== 0 &&
+              allPostings[shownPosts + 1] !== undefined && (
+                <Post
+                  {...allPostings[shownPosts + 1]}
+                  isExpandPost
+                  expandMorePosts={this.expandMorePosts}
+                />
+              )}
           </div>
         </div>
       </div>
