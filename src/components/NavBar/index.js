@@ -5,59 +5,87 @@ import styles from "./styles.scss";
 import { getUserStatus } from "../../actions/authActions";
 import { FaBars } from "react-icons/fa";
 import logo from "../../assets/BookBuy.png";
+import Modal from "react-modal";
 import firebase from "../../firebase";
+
+const modalStyles = {
+  content: {
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    marginRight: "-50%",
+    transform: "translate(-50%, -50%)",
+    minWidth: "300px"
+  }
+};
 
 const NavBar = props => {
   const isMobile = window.innerWidth <= 810 ? true : false;
 
-  const [mobileNav, toggleMobileNav] = useState(false);
+  const [isMobileNav, toggleMobileNav] = useState(false);
+  const [isLogoutModalOpen, toggleLogoutModal] = useState(false);
 
   const logOutUser = () => {
     firebase.logout();
     props.getUserStatus();
-    setTimeout(() => alert("Logout Successful"), 100);
+    setTimeout(toggleLogoutModal(true), 100);
   };
 
   const { isAuthenticated } = props;
 
   return (
     <nav>
+      <Modal
+        isOpen={isLogoutModalOpen}
+        onRequestClose={() => toggleLogoutModal(false)}
+        style={modalStyles}
+        contentLabel="Logout Successful"
+      >
+        <div className={styles.logoutModalText}>Logout Successful!</div>
+        <div
+          className={styles.backButton}
+          onClick={() => toggleLogoutModal(false)}
+        >
+          Back
+        </div>
+      </Modal>
       <div className={styles.navContainer}>
         <div className={styles.logoLink}>
           <img className={styles.img} src={logo} />
         </div>
         {isMobile ? (
-          <div className={styles.mobileNav}>
+          <div className={styles.isMobileNav}>
             <div
               className={styles.hamburgerMenu}
-              onClick={() => toggleMobileNav(!mobileNav)}
+              onClick={() => toggleMobileNav(!isMobileNav)}
             >
               <FaBars />
             </div>
             <div
               className={[
                 styles.mobileSlideContainer,
-                mobileNav ? styles.showMenu : null
+                isMobileNav ? styles.showMenu : null
               ].join(" ")}
             >
               <Link
                 className={styles.mobileLink}
                 to="/"
-                onClick={() => toggleMobileNav(!mobileNav)}
+                onClick={() => toggleMobileNav(!isMobileNav)}
               >
                 Home
               </Link>
               <Link
                 className={styles.mobileLink}
                 to="/postings"
-                onClick={() => toggleMobileNav(!mobileNav)}
+                onClick={() => toggleMobileNav(!isMobileNav)}
               >
                 Postings
               </Link>
               <Link
                 className={styles.mobileLink}
                 to="/sell"
-                onClick={() => toggleMobileNav(!mobileNav)}
+                onClick={() => toggleMobileNav(!isMobileNav)}
               >
                 Sell Books
               </Link>
@@ -66,7 +94,7 @@ const NavBar = props => {
                   <Link
                     className={styles.mobileLink}
                     to="/profile"
-                    onClick={() => toggleMobileNav(!mobileNav)}
+                    onClick={() => toggleMobileNav(!isMobileNav)}
                   >
                     Profile
                   </Link>
@@ -74,7 +102,7 @@ const NavBar = props => {
                     className={styles.mobileLink}
                     onClick={() => {
                       logOutUser();
-                      toggleMobileNav(!mobileNav);
+                      toggleMobileNav(!isMobileNav);
                     }}
                   >
                     Logout
@@ -84,7 +112,7 @@ const NavBar = props => {
                 <Link
                   className={styles.mobileLink}
                   to="/auth"
-                  onClick={() => toggleMobileNav(!mobileNav)}
+                  onClick={() => toggleMobileNav(!isMobileNav)}
                 >
                   Register & Log In
                 </Link>

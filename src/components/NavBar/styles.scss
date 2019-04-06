@@ -122,3 +122,19 @@
     max-height: 200px;
   }
 }
+
+.logoutModalText {
+  text-align: center;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.backButton {
+  font-size: 12px;
+  text-decoration: underline;
+  margin: 15px 0;
+  text-align: center;
+}
+.backButton:hover {
+  cursor: pointer;
+}
