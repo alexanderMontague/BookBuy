@@ -110,9 +110,7 @@ class Postings extends Component {
 
       return (
         <Post
-          key={`${JSON.stringify(posting.userInto)}${posting.bookAuthor}${
-            posting.bookTitle
-          }`}
+          key={`${posting.userId}${posting.bookAuthor}${posting.bookTitle}`}
           {...posting}
           isGrey={isGrey}
         />

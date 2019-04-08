@@ -86,9 +86,7 @@ class Sell extends Component {
       bookEdition,
       hasPicture: !!bookPic,
       datePosted: moment().unix(),
-      userInfo: {
-        ...this.props.user
-      }
+      userId: this.props.user.id
     });
 
     if (postId) {

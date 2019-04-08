@@ -17,7 +17,8 @@ const Post = props => {
     datePosted,
     program,
     hasPicture,
-    userInfo,
+    // userInfo,
+    userId,
     postId,
     isGrey,
     isExpandPost,
@@ -26,10 +27,20 @@ const Post = props => {
 
   const [isDrawerOpen, drawerToggleHandler] = useState(false);
   const [bookURL, updateBookURL] = useState("");
+  const [userInfo, setUserInfo] = useState({});
 
   const drawerToggle = async () => {
     drawerToggleHandler(!isDrawerOpen);
 
+    // once post is opened get user info
+    if (Object.keys(userInfo).length === 0) {
+      const postUserInfo = await firebase.getDocsFromCollection("users", [
+        ["id", "==", userId]
+      ]);
+      setUserInfo(postUserInfo[0]);
+    }
+
+    // once post is opened get picture if one
     if (bookURL === "" && hasPicture) {
       const bookURL = await firebase.getBookPicture(postId);
       updateBookURL(bookURL);

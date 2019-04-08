@@ -66,7 +66,7 @@ class Profile extends Component {
     const { user } = this.props;
 
     const userPostings = await firebase.getDocsFromCollection("postings", [
-      ["userInfo.id", "==", user.id]
+      ["userId", "==", user.id]
     ]);
 
     userPostings.sort((postA, postB) => {
@@ -86,7 +86,7 @@ class Profile extends Component {
     await firebase.deleteDocument("postings", postId);
 
     const userPostings = await firebase.getDocsFromCollection("postings", [
-      ["userInfo.id", "==", this.props.user.id]
+      ["userId", "==", this.props.user.id]
     ]);
 
     userPostings.sort((postA, postB) => {
