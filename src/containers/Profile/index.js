@@ -65,17 +65,25 @@ class Profile extends Component {
   async componentDidMount() {
     const { user } = this.props;
 
+    // fetch user's posts
     const userPostings = await firebase.getDocsFromCollection("postings", [
       ["userId", "==", user.id]
     ]);
-
     userPostings.sort((postA, postB) => {
       if (postA.datePosted < postB.datePosted) return 1;
       else if (postA.datePosted > postB.datePosted) return -1;
       return 0;
     });
-
     this.setState({ userPostings });
+
+    // how to watch for liveupdates on a doc
+    // firebase.db
+    // .collection("postings")
+    // .doc("MTLD1lixkweSq3ZcrxlO")
+    // .onSnapshot(
+    //   snapshot => console.log("success", snapshot.data()),
+    //   err => console.log("error", err)
+    // );
   }
 
   inputChangeHandler = e => {
