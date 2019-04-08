@@ -188,7 +188,7 @@ class Profile extends Component {
               <div className={styles.postHeader}>
                 <div className={styles.postCol}>Date Posted</div>
                 <div className={styles.progCol}>Program</div>
-                <div className={styles.titleCol}>Title</div>
+                <div className={styles.titleCol}>Book Title</div>
                 <div className={styles.fillerItem} />
               </div>
               <div className={styles.postsContainer}>

@@ -1,0 +1,124 @@
+.mainChatContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 30px;
+
+  .header {
+    font-size: 1.2rem;
+    text-align: center;
+  }
+
+  .contentContainer {
+    display: flex;
+    background: #ffffff;
+    color: #333333;
+    width: 80%;
+    border-radius: 10px;
+    height: 500px;
+
+    @media (max-width: 768px) {
+      width: 90%;
+    }
+
+    .chatOverview {
+      width: 35%;
+      padding: 20px;
+      border-right: 1px solid lightgrey;
+
+      .chatsHeader {
+        font-size: 1.1rem;
+        font-weight: bold;
+        text-align: center;
+        padding-bottom: 20px;
+        border-bottom: 1px solid lightgrey;
+      }
+
+      .chatsContainer {
+        height: 430px;
+        overflow-y: scroll;
+
+        .chatPreview {
+          height: 85px;
+          border-bottom: 1px solid lightgrey;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          padding-left: 10px;
+
+          @media (max-width: 768px) {
+            padding-left: 0;
+          }
+
+          .chatUserName {
+            font-size: 1.05rem;
+            font-weight: bold;
+            padding-bottom: 5px;
+          }
+          .interestedIn {
+            font-style: italic;
+          }
+        }
+        .chatPreview:hover {
+          background: #d6d6d6;
+          cursor: pointer;
+        }
+        .selectedChat {
+          background: #d6d6d6;
+        }
+      }
+    }
+
+    .activeChat {
+      width: 65%;
+      padding: 20px;
+
+      .chatHeader {
+      }
+
+      .chatMessageArea {
+        height: 80%;
+      }
+
+      .chatInput {
+        height: 70px;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+
+        .chatInput {
+          width: 75%;
+          height: 40px;
+          padding: 0 10px;
+          border: solid 1px grey;
+          border-radius: 5px;
+          font-size: 16px;
+          color: #333333;
+          font-family: "Overpass";
+        }
+        .chatInput:focus {
+          outline: none;
+        }
+
+        .chatSendButton {
+          width: 15%;
+          height: 40px;
+          font-size: 15px;
+          font-family: "Overpass";
+          background: #007bff;
+          border: none;
+          color: #ffffff;
+          transition: 0.3s;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          border-radius: 5px;
+        }
+        .chatSendButton:hover {
+          cursor: pointer;
+          background: #0069d9;
+        }
+      }
+    }
+  }
+}

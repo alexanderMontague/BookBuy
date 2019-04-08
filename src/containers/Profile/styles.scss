@@ -1,7 +1,6 @@
 .profileContainer {
   display: flex;
   flex-direction: column;
-  // justify-content: space-evenly;
   background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
     url("../../assets/profile.png") no-repeat center;
   background-size: cover;
@@ -12,7 +11,7 @@
   .topContent {
     display: flex;
     justify-content: space-evenly;
-    min-height: 660px;
+    min-height: 500px;
     width: 100%;
 
     @media (max-width: 1000px) {
@@ -101,7 +100,7 @@
 
       .postHeader {
         display: flex;
-        margin: 5%;
+        margin: 5% 5% 2% 5%;
         border-bottom: 1px solid #333333;
 
         .fillerItem {
