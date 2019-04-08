@@ -1,0 +1,76 @@
+.itemContainer {
+  display: flex;
+  flex-direction: column;
+
+  .postItemContainer {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    min-height: 50px;
+    border: 1px solid #333333;
+    border-radius: 10px;
+
+    .postItemDate {
+      width: 30%;
+      text-align: center;
+      margin: auto 0;
+    }
+    .postItemProgram {
+      width: 20%;
+      text-align: center;
+      margin: auto 0;
+    }
+    .postItemTitle {
+      width: 50%;
+      text-align: center;
+      margin: auto 0;
+    }
+    .postItemDelete {
+      font-size: 20px;
+      margin: auto;
+      padding-right: 10px;
+    }
+    .postItemDelete:hover {
+      cursor: pointer;
+    }
+  }
+  .postItemContainer:hover {
+    background: #007bff;
+    color: #ffffff;
+  }
+
+  .isBlue {
+    background: #007bff;
+    color: #ffffff;
+  }
+
+  .confirmDrawer {
+    width: 90%;
+    min-height: 50px;
+    background: #333333;
+    border-radius: 0 0 10px 10px;
+    color: #ffffff;
+    margin: 0 auto;
+    text-align: center;
+    user-select: none;
+
+    .confirmButton {
+      color: #ffffff;
+      background: #007bff;
+      height: 25px;
+      width: 35%;
+      border: none;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+      transition: background-color 0.15s ease-in-out;
+      margin: 0 auto;
+    }
+    .confirmButton:hover {
+      cursor: pointer;
+      background: #0069d9;
+    }
+  }
+}
