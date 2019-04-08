@@ -55,12 +55,19 @@ const NavBar = props => {
           <img className={styles.img} src={logo} />
         </div>
         {isMobile ? (
-          <div className={styles.isMobileNav}>
+          <div className={styles.mobileNav}>
             <div
               className={styles.hamburgerMenu}
               onClick={() => toggleMobileNav(!isMobileNav)}
             >
-              <FaBars />
+              <div
+                className={[
+                  styles.hamburgerIcon,
+                  isMobileNav ? styles.rotate : null
+                ].join(" ")}
+              >
+                <FaBars />
+              </div>
             </div>
             <div
               className={[

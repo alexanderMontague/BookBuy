@@ -76,7 +76,14 @@
   background: #0069d9;
 }
 
-.slidedown {
+.hamburgerIcon {
+  height: 40px;
+  width: 40px;
+  transition: linear 0.2s;
+}
+.rotate {
+  transform: rotate(90deg);
+  padding-bottom: 10px;
 }
 
 .mobileNav {
