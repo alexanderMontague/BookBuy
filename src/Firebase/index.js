@@ -52,7 +52,7 @@ class Firebase {
     return this.auth.currentUser;
   }
 
-  // protected because adding a post
+  // add a posting
   addPosting(posting) {
     if (!this.auth.currentUser) {
       return;
@@ -128,6 +128,20 @@ class Firebase {
       .collection(collection)
       .doc(document)
       .delete();
+  }
+
+  // create or add to a chat
+  async createChat(messageData, isFirst) {
+    if (!this.auth.currentUser) {
+      return;
+    }
+
+    if (isFirst) {
+      this.db
+        .collection("messages")
+        .add(messageData)
+        .then(doc => console.log(doc));
+    }
   }
 }
 

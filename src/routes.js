@@ -8,12 +8,18 @@ import Auth from "./containers/Auth";
 import Profile from "./containers/Profile";
 import Sell from "./containers/Sell";
 
+const ScrollToTop = () => {
+  window.scrollTo(0, 0);
+  return null;
+};
+
 const DefaultComponent = ({ component: Component, ...rest }) => {
   return (
     <Route
       {...rest}
       render={componentProps => (
         <Layout {...componentProps} {...rest}>
+          {ScrollToTop()}
           <Component {...componentProps} />
         </Layout>
       )}

@@ -1,10 +1,12 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useState } from "react";
+import { connect } from "react-redux";
 import "./styles.scss";
 import styles from "./styles.scss";
 import moment from "moment";
 import placeholder from "../../assets/noPic.png";
 import { ClipLoader } from "react-spinners";
 import firebase from "../../firebase";
+import { withRouter } from "react-router";
 
 const Post = props => {
   const {
@@ -17,12 +19,14 @@ const Post = props => {
     datePosted,
     program,
     hasPicture,
-    // userInfo,
     userId,
     postId,
     isGrey,
     isExpandPost,
-    expandMorePosts
+    expandMorePosts,
+    isAuthenticated,
+    history,
+    user
   } = props;
 
   const [isDrawerOpen, drawerToggleHandler] = useState(false);
@@ -45,6 +49,21 @@ const Post = props => {
       const bookURL = await firebase.getBookPicture(postId);
       updateBookURL(bookURL);
     }
+  };
+
+  // send user to profile page with who to send first message to
+  const contantSeller = () => {
+    const sellerInfo = {
+      id: userInfo.id,
+      fullName: userInfo.fullName,
+      bookTitle,
+      postId
+    };
+
+    history.push({
+      pathname: "/profile",
+      search: `?send=${btoa(JSON.stringify(sellerInfo))}`
+    });
   };
 
   return (
@@ -138,20 +157,33 @@ const Post = props => {
                     <div className={styles.label}>Contact Name: </div>
                     <div className={styles.value}>{userInfo.fullName}</div>
                   </div>
-                  <div className={styles.row}>
+                  {/* <div className={styles.row}>
                     <div className={styles.label}>Contact Email: </div>
                     <div className={styles.value}>{userInfo.email}</div>
                   </div>
                   <div className={styles.row}>
                     <div className={styles.label}>Contact Phone: </div>
                     <div className={styles.value}>{userInfo.phone}</div>
-                  </div>
+                  </div> */}
                   <div className={styles.row}>
                     <div className={styles.label}>Date Posted: </div>
                     <div className={styles.value}>
                       {moment.unix(datePosted).format("MMMM Do YYYY")}
                     </div>
                   </div>
+                  {user.id !== userId && (
+                    <div className={styles.row}>
+                      <button
+                        className={styles.contactButton}
+                        onClick={isAuthenticated ? contantSeller : () => {}}
+                      >
+                        {isAuthenticated
+                          ? "Contact Seller!"
+                          : "Register to contact seller!"}
+                      </button>
+                    </div>
+                  )}
+                  <div />
                 </div>
               </div>
               <div className={styles.picture}>
@@ -186,4 +218,9 @@ const Post = props => {
   );
 };
 
-export default Post;
+const mapStateToProps = state => ({
+  isAuthenticated: state.authState.isAuthenticated,
+  user: state.authState.user
+});
+
+export default connect(mapStateToProps)(withRouter(Post));

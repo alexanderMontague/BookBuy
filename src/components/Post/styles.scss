@@ -179,3 +179,22 @@
   background: linear-gradient(#f8f9fa, grey);
   color: #000000;
 }
+
+.contactButton {
+  width: 50%;
+  height: 30px;
+  font-size: 15px;
+  font-family: "Overpass";
+  background: #007bff;
+  border: none;
+  color: #ffffff;
+  transition: 0.3s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+}
+.contactButton:hover {
+  cursor: pointer;
+  background: #0069d9;
+}

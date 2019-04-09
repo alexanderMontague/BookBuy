@@ -110,6 +110,7 @@ class Profile extends Component {
 
     return (
       <div className={styles.profileContainer}>
+        <Chat />
         <div className={styles.topContent}>
           <div className={styles.infoContainer}>
             <div className={styles.header}>Update Profile Info</div>
@@ -197,7 +198,6 @@ class Profile extends Component {
             </div>
           </div>
         </div>
-        <Chat />
       </div>
     );
   }

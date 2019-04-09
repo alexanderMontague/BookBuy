@@ -345,14 +345,14 @@ class Auth extends Component {
                       onChange={this.formFieldInputHandler}
                       value={this.state.regEmail}
                     />
-                    <FloatingLabel
+                    {/* <FloatingLabel
                       styles={inputStyle}
                       type="tel"
                       placeholder="Phone Number"
                       id="regPhone"
                       onChange={this.formFieldInputHandler}
                       value={this.state.regPhone}
-                    />
+                    /> */}
                     <FloatingLabel
                       styles={inputStyle}
                       type="password"
