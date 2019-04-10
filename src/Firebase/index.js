@@ -131,7 +131,7 @@ class Firebase {
   }
 
   // create or add to a chat
-  async createChat(messageData, isFirst) {
+  async createChat(messageData, isFirst, chatId = null) {
     if (!this.auth.currentUser) {
       return;
     }
@@ -142,6 +142,13 @@ class Firebase {
         .add(messageData)
         .then(doc => this.updateDocument("messages", doc.id, { id: doc.id }))
         .catch(err => console.error("error adding first post", err));
+    } else {
+      this.db
+        .collection("messages")
+        .doc(chatId)
+        .update({
+          messages: app.firestore.FieldValue.arrayUnion(messageData)
+        });
     }
   }
 

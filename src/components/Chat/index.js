@@ -70,13 +70,24 @@ const Chat = props => {
     const chatPreviewData = [...userSentChats, ...userReceivedChats];
     console.log("re render messages", chatPreviewData);
 
-    const chatPreviews = chatPreviewData.map(chat => (
-      <ChatPreview
-        chatData={chat}
-        chatClicked={chatPreviewClickHandler}
-        key={chat.id || "tempID"}
-      />
-    ));
+    const chatPreviews = chatPreviewData.map(chat => {
+      // re-render the chat's messages if we have new messages
+      if (
+        selectedChat &&
+        chat.id === selectedChat.id &&
+        JSON.stringify(chat) !== JSON.stringify(selectedChat)
+      ) {
+        selectChat(chat);
+      }
+
+      return (
+        <ChatPreview
+          chatData={chat}
+          chatClicked={chatPreviewClickHandler}
+          key={chat.id || "tempID"}
+        />
+      );
+    });
 
     if (isFirstMessage) {
       chatPreviews.unshift(
@@ -109,7 +120,7 @@ const Chat = props => {
             {
               content: currentMessage,
               createdAt: moment().unix(),
-              sentBy: props.user.id
+              sentBy: user.id
             }
           ]
         },
@@ -121,9 +132,23 @@ const Chat = props => {
       props.history.push({
         search: ""
       });
+    } else {
+      firebase.createChat(
+        {
+          content: currentMessage,
+          createdAt: moment().unix(),
+          sentBy: user.id
+        },
+        false,
+        selectedChat.id
+      );
     }
 
     updateCurrentMessage("");
+  };
+
+  const renderMessages = () => {
+    const { selectedChat } = props;
   };
 
   return (
@@ -136,7 +161,18 @@ const Chat = props => {
         </div>
         <div className={styles.activeChat}>
           <div className={styles.chatHeader}>Possible Meeting Spot ....</div>
-          <div className={styles.chatMessageArea}>Active chat area</div>
+          <div className={styles.chatMessageArea}>
+            {selectedChat &&
+              selectedChat.messages.map(message => {
+                return (
+                  <div>
+                    {message.content}
+                    {"sent at: " +
+                      moment.unix(message.createdAt).format("MMM DD, hh:mm")}
+                  </div>
+                );
+              })}
+          </div>
           <form className={styles.chatInput}>
             <input
               className={styles.chatInput}
