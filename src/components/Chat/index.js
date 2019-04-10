@@ -8,15 +8,28 @@ import firebase from "../../firebase";
 import moment from "moment";
 
 const Chat = props => {
+  const { selectChat, selectedChat, user } = props;
+  const [newMessage, updateNewMessage] = useState(null);
+  const [isFirstMessage, firstMessageHandler] = useState(false);
+  const [currentMessage, updateCurrentMessage] = useState("");
+  const [userSentChats, updateUserSentChats] = useState([]);
+  const [userReceivedChats, updateUserReceivedChats] = useState([]);
+  let isMounted = false;
+
   useEffect(() => {
+    isMounted = true;
+
     // if we are sending a first message
     if (!!window.location.search) {
       const rawSellerInfo = new URLSearchParams(window.location.search).get(
         "send"
       );
       const sellerInfo = JSON.parse(atob(rawSellerInfo));
-      props.selectChat(sellerInfo);
-      firstMessageHandler(true);
+      selectChat(sellerInfo);
+      if (isMounted) {
+        updateNewMessage(sellerInfo);
+        firstMessageHandler(true);
+      }
     }
 
     firebase.db
@@ -24,10 +37,12 @@ const Chat = props => {
       .where("sender", "==", user.id)
       .onSnapshot(
         snapshot =>
-          updateUserSentChats([
-            ...userSentChats,
-            ...snapshot.docs.map(doc => doc.data())
-          ]),
+          isMounted
+            ? updateUserSentChats([
+                ...userSentChats,
+                ...snapshot.docs.map(doc => doc.data())
+              ])
+            : null,
 
         err => console.log("sender error", err)
       );
@@ -37,40 +52,39 @@ const Chat = props => {
       .where("recipient", "==", user.id)
       .onSnapshot(
         snapshot =>
-          updateUserReceivedChats([
-            ...userReceivedChats,
-            ...snapshot.docs.map(doc => doc.data())
-          ]),
+          isMounted
+            ? updateUserReceivedChats([
+                ...userReceivedChats,
+                ...snapshot.docs.map(doc => doc.data())
+              ])
+            : null,
         err => console.log("receiver error", err)
       );
 
     console.log("in use effect");
+
+    return () => (isMounted = false);
   }, []);
 
-  const { selectedChat, user } = props;
-  const [isFirstMessage, firstMessageHandler] = useState(false);
-  const [currentMessage, updateCurrentMessage] = useState("");
-  const [userSentChats, updateUserSentChats] = useState([]);
-  const [userReceivedChats, updateUserReceivedChats] = useState([]);
-
   const renderChatPreviews = () => {
-    const chatPreviews = [...userSentChats, ...userReceivedChats].map(chat => {
-      return (
-        <ChatPreview
-          chatData={chat}
-          chatClicked={chatPreviewClickHandler}
-          key={chat.id || "tempID"}
-        />
-      );
-    });
+    const chatPreviewData = [...userSentChats, ...userReceivedChats];
+    console.log("re render messages", chatPreviewData);
+
+    const chatPreviews = chatPreviewData.map(chat => (
+      <ChatPreview
+        chatData={chat}
+        chatClicked={chatPreviewClickHandler}
+        key={chat.id || "tempID"}
+      />
+    ));
 
     if (isFirstMessage) {
       chatPreviews.unshift(
         <ChatPreview
           isFirst
-          chatData={selectedChat}
+          chatData={newMessage}
           chatClicked={chatPreviewClickHandler}
-          key={selectedChat.id}
+          key="newMessageTempKey"
         />
       );
     }
