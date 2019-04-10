@@ -1,0 +1,28 @@
+.chatPreview {
+  height: 85px;
+  border-bottom: 1px solid lightgrey;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 10px;
+
+  @media (max-width: 768px) {
+    padding-left: 0;
+  }
+
+  .chatUserName {
+    font-size: 1.05rem;
+    font-weight: bold;
+    padding-bottom: 5px;
+  }
+  .interestedIn {
+    font-style: italic;
+  }
+}
+.chatPreview:hover {
+  background: #d6d6d6;
+  cursor: pointer;
+}
+.selectedChat {
+  background: #d6d6d6;
+}

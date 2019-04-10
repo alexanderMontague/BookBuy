@@ -140,9 +140,12 @@ class Firebase {
       this.db
         .collection("messages")
         .add(messageData)
-        .then(doc => console.log(doc));
+        .then(doc => this.updateDocument("messages", doc.id, { id: doc.id }))
+        .catch(err => console.error("error adding first post", err));
     }
   }
+
+  // fetch all chats for a user
 }
 
 export default new Firebase();

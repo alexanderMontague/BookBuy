@@ -2,42 +2,14 @@ import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import styles from "./styles.scss";
 import { selectChat } from "../../actions/uiActions";
+import ChatPreview from "../ChatPreview";
+import { withRouter } from "react-router";
 import firebase from "../../firebase";
 import moment from "moment";
 
-const _chatPreview = props => {
-  const { isFirst, chatClicked, selectChat, selectedChat, chatData } = props;
-
-  const clickHandler = () => {
-    chatClicked();
-    selectChat(chatData);
-  };
-
-  return (
-    <div
-      className={[
-        styles.chatPreview,
-        selectedChat && selectedChat.fullName === chatData.fullName
-          ? styles.selectedChat
-          : null
-      ].join(" ")}
-      onClick={clickHandler}
-    >
-      <div className={styles.chatUserName}>
-        {isFirst ? `New Chat with ${chatData.fullName} ...` : chatData.fullName}
-      </div>
-      <div>
-        Interested in:&nbsp;&nbsp;
-        <span className={styles.interestedIn}>
-          Code Complete 3 this is a test
-        </span>
-      </div>
-    </div>
-  );
-};
-
 const Chat = props => {
   useEffect(() => {
+    // if we are sending a first message
     if (!!window.location.search) {
       const rawSellerInfo = new URLSearchParams(window.location.search).get(
         "send"
@@ -46,26 +18,48 @@ const Chat = props => {
       props.selectChat(sellerInfo);
       firstMessageHandler(true);
     }
+
+    firebase.db
+      .collection("messages")
+      .where("sender", "==", user.id)
+      .onSnapshot(
+        snapshot =>
+          updateUserSentChats([
+            ...userSentChats,
+            ...snapshot.docs.map(doc => doc.data())
+          ]),
+
+        err => console.log("sender error", err)
+      );
+
+    firebase.db
+      .collection("messages")
+      .where("recipient", "==", user.id)
+      .onSnapshot(
+        snapshot =>
+          updateUserReceivedChats([
+            ...userReceivedChats,
+            ...snapshot.docs.map(doc => doc.data())
+          ]),
+        err => console.log("receiver error", err)
+      );
+
+    console.log("in use effect");
   }, []);
 
-  const { selectedChat } = props;
+  const { selectedChat, user } = props;
   const [isFirstMessage, firstMessageHandler] = useState(false);
   const [currentMessage, updateCurrentMessage] = useState("");
+  const [userSentChats, updateUserSentChats] = useState([]);
+  const [userReceivedChats, updateUserReceivedChats] = useState([]);
 
   const renderChatPreviews = () => {
-    const chatPreviews = [
-      { fullName: "Alex Montague" },
-      { fullName: "Nick Boulton" },
-      { fullName: "Jay Ellul" },
-      { fullName: "Jay Ellul2" },
-      { fullName: "Jay Ellul3" },
-      { fullName: "Jay Ellul4" }
-    ].map(user => {
+    const chatPreviews = [...userSentChats, ...userReceivedChats].map(chat => {
       return (
         <ChatPreview
-          chatData={user}
+          chatData={chat}
           chatClicked={chatPreviewClickHandler}
-          key={user.fullName}
+          key={chat.id || "tempID"}
         />
       );
     });
@@ -76,7 +70,7 @@ const Chat = props => {
           isFirst
           chatData={selectedChat}
           chatClicked={chatPreviewClickHandler}
-          key={selectedChat.fullName}
+          key={selectedChat.id}
         />
       );
     }
@@ -94,7 +88,7 @@ const Chat = props => {
     if (isFirstMessage) {
       firebase.createChat(
         {
-          sender: props.user.id,
+          sender: user.id,
           recipient: selectedChat.id,
           post: selectedChat.postId,
           messages: [
@@ -107,7 +101,15 @@ const Chat = props => {
         },
         true
       );
+
+      // get rid of temp create message once sent
+      firstMessageHandler(false);
+      props.history.push({
+        search: ""
+      });
     }
+
+    updateCurrentMessage("");
   };
 
   return (
@@ -132,7 +134,7 @@ const Chat = props => {
             <button
               className={styles.chatSendButton}
               onClick={onChatSend}
-              disabled={!selectedChat}
+              disabled={!currentMessage}
             >
               Send
             </button>
@@ -148,12 +150,7 @@ const mapStateToProps = state => ({
   selectedChat: state.interfaceState.selectedChat
 });
 
-const ChatPreview = connect(
-  mapStateToProps,
-  { selectChat }
-)(_chatPreview);
-
 export default connect(
   mapStateToProps,
   { selectChat }
-)(Chat);
+)(withRouter(Chat));
