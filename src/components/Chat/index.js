@@ -149,6 +149,40 @@ const Chat = props => {
 
   const renderMessages = () => {
     const { selectedChat } = props;
+
+    if (selectedChat) {
+      const messageContainer = document.getElementById("chatMessageArea");
+      if (messageContainer)
+        // holy hack T_T
+        setTimeout(
+          () => (messageContainer.scrollTop = messageContainer.scrollHeight),
+          100
+        );
+
+      return selectedChat.messages.map(message => {
+        const wasSender = user.id === message.sentBy;
+        return (
+          <div
+            className={[
+              styles.singleChatContainer,
+              wasSender ? styles.senderPos : styles.receiverPos
+            ].join(" ")}
+          >
+            <div className={styles.dateContainer}>
+              {moment.unix(message.createdAt).format("MMMM DD, hh:mm A")}
+            </div>
+            <div
+              className={[
+                styles.messageContainer,
+                wasSender ? styles.sender : styles.receiver
+              ].join(" ")}
+            >
+              {message.content}
+            </div>
+          </div>
+        );
+      });
+    }
   };
 
   return (
@@ -161,17 +195,8 @@ const Chat = props => {
         </div>
         <div className={styles.activeChat}>
           <div className={styles.chatHeader}>Possible Meeting Spot ....</div>
-          <div className={styles.chatMessageArea}>
-            {selectedChat &&
-              selectedChat.messages.map(message => {
-                return (
-                  <div>
-                    {message.content}
-                    {"sent at: " +
-                      moment.unix(message.createdAt).format("MMM DD, hh:mm")}
-                  </div>
-                );
-              })}
+          <div className={styles.chatMessageArea} id="chatMessageArea">
+            {renderMessages()}
           </div>
           <form className={styles.chatInput}>
             <input

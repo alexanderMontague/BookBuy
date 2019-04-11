@@ -49,6 +49,7 @@
 
       .chatMessageArea {
         height: 80%;
+        overflow-y: scroll;
       }
 
       .chatInput {
@@ -95,4 +96,43 @@
       }
     }
   }
+}
+
+.singleChatContainer {
+  display: flex;
+  flex-direction: column;
+
+  .messageContainer {
+    min-height: 35px;
+    max-width: 250px;
+    color: #f8f9fa;
+    border-radius: 20px;
+    padding: 5px 10px;
+    display: flex;
+    align-items: center;
+    margin: 2px 0px;
+  }
+
+  .sender {
+    background: #007bff;
+  }
+
+  .receiver {
+    background: grey;
+  }
+
+  .dateContainer {
+    color: lightgrey;
+    display: flex;
+    align-items: center;
+    margin: 0 5px;
+    font-size: 12px;
+  }
+}
+.receiverPos {
+  align-items: flex-start;
+}
+
+.senderPos {
+  align-items: flex-end;
 }
