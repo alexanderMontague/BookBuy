@@ -5,14 +5,7 @@ import { selectChat } from "../../actions/uiActions";
 import firebase from "../../firebase";
 
 const ChatPreview = props => {
-  const {
-    isFirst,
-    chatClicked,
-    selectChat,
-    selectedChat,
-    chatData,
-    user
-  } = props;
+  const { isFirst, selectChat, selectedChat, chatData, user } = props;
   let isMounted = false;
   const [chatName, setChatName] = useState(". . .");
 
@@ -37,7 +30,6 @@ const ChatPreview = props => {
   }, []);
 
   const clickHandler = () => {
-    chatClicked();
     selectChat(chatData);
   };
 

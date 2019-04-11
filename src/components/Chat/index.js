@@ -14,6 +14,7 @@ const Chat = props => {
   const [currentMessage, updateCurrentMessage] = useState("");
   const [userSentChats, updateUserSentChats] = useState([]);
   const [userReceivedChats, updateUserReceivedChats] = useState([]);
+  const [chatHeader, setChatHeader] = useState("...");
   let isMounted = false;
 
   useEffect(() => {
@@ -61,17 +62,26 @@ const Chat = props => {
         err => console.log("receiver error", err)
       );
 
-    console.log("in use effect");
-
     return () => (isMounted = false);
   }, []);
 
+  // on chat change, fetch details about users
+
   const renderChatPreviews = () => {
-    const chatPreviewData = [...userSentChats, ...userReceivedChats];
-    console.log("re render messages", chatPreviewData);
+    // sort chats by most recent chat
+    let chatPreviewData = [...userSentChats, ...userReceivedChats];
+    chatPreviewData = chatPreviewData.sort((chatOne, chatTwo) => {
+      const chatOneMsg = [...chatOne.messages].pop();
+      const chatTwoMsg = [...chatTwo.messages].pop();
+
+      if (chatOneMsg.createdAt > chatTwoMsg.createdAt) return -1;
+      else if (chatOneMsg.createdAt < chatTwoMsg.createdAt) return 1;
+
+      return 0;
+    });
 
     const chatPreviews = chatPreviewData.map(chat => {
-      // re-render the chat's messages if we have new messages
+      // only re-render the chat's messages if we have new messages
       if (
         selectedChat &&
         chat.id === selectedChat.id &&
@@ -80,38 +90,23 @@ const Chat = props => {
         selectChat(chat);
       }
 
-      return (
-        <ChatPreview
-          chatData={chat}
-          chatClicked={chatPreviewClickHandler}
-          key={chat.id || "tempID"}
-        />
-      );
+      return <ChatPreview chatData={chat} key={chat.id || "tempID"} />;
     });
 
     if (isFirstMessage) {
       chatPreviews.unshift(
-        <ChatPreview
-          isFirst
-          chatData={newMessage}
-          chatClicked={chatPreviewClickHandler}
-          key="newMessageTempKey"
-        />
+        <ChatPreview isFirst chatData={newMessage} key="newMessageTempKey" />
       );
     }
 
     return chatPreviews;
   };
 
-  const chatPreviewClickHandler = () => {
-    console.log("hello");
-  };
-
-  const onChatSend = event => {
+  const onChatSend = async event => {
     event.preventDefault();
 
     if (isFirstMessage) {
-      firebase.createChat(
+      const newChat = await firebase.createChat(
         {
           sender: user.id,
           recipient: selectedChat.id,
@@ -132,6 +127,9 @@ const Chat = props => {
       props.history.push({
         search: ""
       });
+
+      // select the new chat
+      selectChat(newChat);
     } else {
       firebase.createChat(
         {
@@ -167,6 +165,7 @@ const Chat = props => {
               styles.singleChatContainer,
               wasSender ? styles.senderPos : styles.receiverPos
             ].join(" ")}
+            key={message.createdAt + message.sentBy}
           >
             <div className={styles.dateContainer}>
               {moment.unix(message.createdAt).format("MMMM DD, hh:mm A")}
@@ -194,7 +193,15 @@ const Chat = props => {
           <div className={styles.chatsContainer}>{renderChatPreviews()}</div>
         </div>
         <div className={styles.activeChat}>
-          <div className={styles.chatHeader}>Possible Meeting Spot ....</div>
+          {selectedChat ? (
+            <div className={styles.chatHeader}>
+              <div className={styles.chatName}>{`Chat with ${
+                selectedChat.fullName ? selectedChat.fullName : chatHeader
+              }`}</div>
+            </div>
+          ) : (
+            "No current chats"
+          )}
           <div className={styles.chatMessageArea} id="chatMessageArea">
             {renderMessages()}
           </div>

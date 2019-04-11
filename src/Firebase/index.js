@@ -130,17 +130,20 @@ class Firebase {
       .delete();
   }
 
-  // create or add to a chat
-  async createChat(messageData, isFirst, chatId = null) {
+  // create or add to a user chat
+  createChat(messageData, isFirst, chatId = null) {
     if (!this.auth.currentUser) {
       return;
     }
 
     if (isFirst) {
-      this.db
+      return this.db
         .collection("messages")
         .add(messageData)
-        .then(doc => this.updateDocument("messages", doc.id, { id: doc.id }))
+        .then(async doc => {
+          this.updateDocument("messages", doc.id, { id: doc.id });
+          return (await doc.get()).data();
+        })
         .catch(err => console.error("error adding first post", err));
     } else {
       this.db
@@ -151,8 +154,6 @@ class Firebase {
         });
     }
   }
-
-  // fetch all chats for a user
 }
 
 export default new Firebase();
