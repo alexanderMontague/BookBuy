@@ -2,9 +2,6 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import NavBar from "../../components/NavBar";
 import Footer from "../../components/Footer";
-
-import firebase from "../../firebase";
-
 import styles from "./styles.scss";
 import { getUserStatus } from "../../actions/authActions";
 import { ClipLoader } from "react-spinners";
