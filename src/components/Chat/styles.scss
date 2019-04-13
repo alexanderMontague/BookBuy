@@ -45,6 +45,16 @@
       padding: 20px;
 
       .chatHeader {
+        .meetingSpot {
+          border: 1px solid lightgrey;
+          width: 95%;
+          font-family: "Overpass";
+          border-radius: 5px;
+          padding: 0 10px;
+        }
+        .meetingSpot:focus {
+          outline: none;
+        }
       }
 
       .chatMessageArea {

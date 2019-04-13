@@ -198,6 +198,11 @@ const Chat = props => {
               <div className={styles.chatName}>{`Chat with ${
                 selectedChat.fullName ? selectedChat.fullName : chatHeader
               }`}</div>
+              <input
+                className={styles.meetingSpot}
+                type="text"
+                placeholder="Sugest a meeting place..."
+              />
             </div>
           ) : (
             "No current chats"
