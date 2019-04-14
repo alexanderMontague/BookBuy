@@ -1,5 +1,5 @@
 import { put, takeLatest, select } from "redux-saga/effects";
-import { userStatusResponse } from "../actions/authActions";
+import { updateUserChats } from "../actions/userActions";
 import firebase from "../firebase";
 
 // selectors
@@ -14,13 +14,11 @@ function* getUserChats() {
 
   const user = yield select(getUser);
 
-  console.log("saga user", user);
-
   yield firebase.db
     .collection("messages")
     .where("sender", "==", user.id)
     .onSnapshot(
-      snapshot => console.log(snapshot.docs.map(doc => doc.data())),
+      snapshot => put(updateUserChats(snapshot.docs.map(doc => doc.data()))),
       err => console.error("chat sender error", err)
     );
 
@@ -28,7 +26,7 @@ function* getUserChats() {
     .collection("messages")
     .where("recipient", "==", user.id)
     .onSnapshot(
-      snapshot => console.log(snapshot.docs.map(doc => doc.data())),
+      snapshot => put(updateUserChats(snapshot.docs.map(doc => doc.data()))),
       err => console.error("chat recipient error", err)
     );
 

@@ -4,7 +4,9 @@ import NavBar from "../../components/NavBar";
 import Footer from "../../components/Footer";
 import styles from "./styles.scss";
 import { getUserStatus } from "../../actions/authActions";
+import { updateUserChats } from "../../actions/userActions";
 import { ClipLoader } from "react-spinners";
+import firebase from "../../firebase";
 
 class Layout extends Component {
   componentDidMount() {
@@ -50,10 +52,11 @@ class Layout extends Component {
 
 const mapStateToProps = state => ({
   authLoading: state.authState.authLoading,
-  isAuthenticated: state.authState.isAuthenticated
+  isAuthenticated: state.authState.isAuthenticated,
+  user: state.authState.user
 });
 
 export default connect(
   mapStateToProps,
-  { getUserStatus }
+  { getUserStatus, updateUserChats }
 )(Layout);

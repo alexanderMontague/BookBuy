@@ -35,7 +35,10 @@
     "react-select": "^2.4.1",
     "react-spinners": "^0.5.3",
     "redux": "^4.0.0",
+    "redux-observable": "^1.1.0",
     "redux-saga": "^0.16.2",
+    "rxjs": "^6.4.0",
+    "rxjs-compat": "^6.4.0",
     "url-loader": "^1.0.1",
     "yarn": "^1.7.0"
   },
