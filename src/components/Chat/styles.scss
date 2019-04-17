@@ -81,6 +81,9 @@
         .chatInput:focus {
           outline: none;
         }
+        .chatInput:disabled {
+          opacity: 0.3;
+        }
 
         .chatSendButton {
           width: 15%;
@@ -102,6 +105,7 @@
         }
         .chatSendButton:disabled {
           background: grey;
+          cursor: not-allowed;
         }
       }
     }

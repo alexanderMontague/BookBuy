@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import styles from "./styles.scss";
 import { selectChat } from "../../actions/uiActions";
+import { seenChats } from "../../actions/userActions";
 import ChatPreview from "../ChatPreview";
 import { withRouter } from "react-router";
 import firebase from "../../firebase";
@@ -13,8 +14,10 @@ const Chat = props => {
     selectedChat,
     user,
     userSentChats,
-    userReceivedChats
+    userReceivedChats,
+    seenChats
   } = props;
+
   const [newMessage, updateNewMessage] = useState(null);
   const [isFirstMessage, firstMessageHandler] = useState(false);
   const [currentMessage, updateCurrentMessage] = useState("");
@@ -36,10 +39,14 @@ const Chat = props => {
         firstMessageHandler(true);
       }
     }
+
     return () => (isMounted = false);
   }, []);
 
   const renderChatPreviews = () => {
+    // clear global chat notif
+    seenChats();
+
     // sort chats by most recent chat
     let chatPreviewData = [...userSentChats, ...userReceivedChats];
     chatPreviewData = chatPreviewData.sort((chatOne, chatTwo) => {
@@ -156,14 +163,14 @@ const Chat = props => {
     }
   };
 
+  const numChats = [...userSentChats, ...userReceivedChats].length;
+
   return (
     <div className={styles.mainChatContainer}>
       <div className={styles.header}>Current Messages</div>
       <div className={styles.contentContainer}>
         <div className={styles.chatOverview}>
-          <div className={styles.chatsHeader}>{`${
-            [...userSentChats, ...userReceivedChats].length
-          } Active Chats`}</div>
+          <div className={styles.chatsHeader}>{`${numChats} Active Chats`}</div>
           <div className={styles.chatsContainer}>{renderChatPreviews()}</div>
         </div>
         <div className={styles.activeChat}>
@@ -179,7 +186,9 @@ const Chat = props => {
               />
             </div>
           ) : (
-            "No current chats"
+            <div style={{ textAlign: "center" }}>
+              {numChats === 0 ? "No current chats" : "Select a Chat!"}
+            </div>
           )}
           <div className={styles.chatMessageArea} id="chatMessageArea">
             {renderMessages()}
@@ -191,8 +200,10 @@ const Chat = props => {
               placeholder="Type your message here!"
               value={currentMessage}
               onChange={e => updateCurrentMessage(e.target.value)}
+              disabled={numChats === 0 || !selectedChat}
             />
             <button
+              type="submit"
               className={styles.chatSendButton}
               onClick={onChatSend}
               disabled={!currentMessage}
@@ -215,5 +226,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { selectChat }
+  { selectChat, seenChats }
 )(withRouter(Chat));

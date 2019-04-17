@@ -18,6 +18,9 @@ const userReducer = (prevState = initialState, { type, payload }) => {
         isFirstFetch: false
       };
 
+    case "CHATS_SEEN":
+      return { ...prevState, isNewMessage: false };
+
     default:
       return prevState;
   }
