@@ -1,6 +1,5 @@
 import { put, takeLatest } from "redux-saga/effects";
 import { userStatusResponse } from "../actions/authActions";
-import { getUserChats } from "../actions/userActions";
 import firebase from "../firebase";
 
 function* getUserStatus() {
@@ -13,7 +12,6 @@ function* getUserStatus() {
   const userData = (yield firebase.getcurrentUserInfo()).data();
 
   yield put(userStatusResponse({ ...userData }));
-  yield put(getUserChats());
 }
 
 export function* authSaga() {

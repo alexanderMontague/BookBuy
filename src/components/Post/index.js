@@ -26,7 +26,8 @@ const Post = props => {
     expandMorePosts,
     isAuthenticated,
     history,
-    user
+    user,
+    userSchool
   } = props;
 
   const [isDrawerOpen, drawerToggleHandler] = useState(false);
@@ -52,7 +53,7 @@ const Post = props => {
   };
 
   // send user to profile page with who to send first message to
-  const contantSeller = () => {
+  const contactSeller = () => {
     const sellerInfo = {
       id: userInfo.id,
       fullName: userInfo.fullName,
@@ -155,6 +156,10 @@ const Post = props => {
                 <div className={styles.infoSection}>
                   <div className={styles.infoTitle}>Contact Information</div>
                   <div className={styles.row}>
+                    <div className={styles.label}>School: </div>
+                    <div className={styles.value}>{userSchool.label}</div>
+                  </div>
+                  <div className={styles.row}>
                     <div className={styles.label}>Contact Name: </div>
                     <div className={styles.value}>{userInfo.fullName}</div>
                   </div>
@@ -172,18 +177,25 @@ const Post = props => {
                       {moment.unix(datePosted).format("MMMM Do YYYY")}
                     </div>
                   </div>
-                  {user.id !== userId && (
-                    <div className={styles.row}>
+                  <div className={styles.row}>
+                    {!user ? (
                       <button
                         className={styles.contactButton}
-                        onClick={isAuthenticated ? contantSeller : () => {}}
+                        onClick={isAuthenticated ? contactSeller : () => {}}
                       >
-                        {isAuthenticated
-                          ? "Contact Seller!"
-                          : "Register to contact seller!"}
+                        Register to contact seller!
                       </button>
-                    </div>
-                  )}
+                    ) : (
+                      user.id !== userId && (
+                        <button
+                          className={styles.contactButton}
+                          onClick={isAuthenticated ? contactSeller : () => {}}
+                        >
+                          Contact Seller!
+                        </button>
+                      )
+                    )}
+                  </div>
                   <div />
                 </div>
               </div>

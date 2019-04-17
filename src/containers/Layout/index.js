@@ -4,13 +4,48 @@ import NavBar from "../../components/NavBar";
 import Footer from "../../components/Footer";
 import styles from "./styles.scss";
 import { getUserStatus } from "../../actions/authActions";
-import { updateUserChats } from "../../actions/userActions";
+import {
+  updateUserSentChats,
+  updateUserReceivedChats,
+  firstMessages
+} from "../../actions/userActions";
 import { ClipLoader } from "react-spinners";
 import firebase from "../../firebase";
 
 class Layout extends Component {
   componentDidMount() {
     this.props.getUserStatus();
+  }
+
+  componentDidUpdate(prevProps) {
+    const {
+      user,
+      updateUserSentChats,
+      updateUserReceivedChats,
+      firstMessages
+    } = this.props;
+
+    // once we fetch the users info, create stream to get chats
+    if (prevProps.user === null && user) {
+      firebase.db
+        .collection("messages")
+        .where("sender", "==", user.id)
+        .onSnapshot(
+          snapshot => updateUserSentChats(snapshot.docs.map(doc => doc.data())),
+          err => console.error("chat sender error", err)
+        );
+
+      firebase.db
+        .collection("messages")
+        .where("recipient", "==", user.id)
+        .onSnapshot(
+          snapshot =>
+            updateUserReceivedChats(snapshot.docs.map(doc => doc.data())),
+          err => console.error("chat recipient error", err)
+        );
+
+      setTimeout(firstMessages, 200);
+    }
   }
 
   render() {
@@ -58,5 +93,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { getUserStatus, updateUserChats }
+  { getUserStatus, updateUserSentChats, updateUserReceivedChats, firstMessages }
 )(Layout);

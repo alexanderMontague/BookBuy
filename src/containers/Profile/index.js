@@ -29,15 +29,6 @@ class Profile extends Component {
       return 0;
     });
     this.setState({ userPostings });
-
-    // how to watch for liveupdates on a doc
-    // firebase.db
-    // .collection("postings")
-    // .doc("MTLD1lixkweSq3ZcrxlO")
-    // .onSnapshot(
-    //   snapshot => console.log("success", snapshot.data()),
-    //   err => console.log("error", err)
-    // );
   }
 
   inputChangeHandler = e => {
@@ -169,6 +160,7 @@ class Profile extends Component {
               <button
                 className={styles.saveButton}
                 disabled={
+                  user &&
                   this.state.name === user.fullName &&
                   this.state.phone === user.phone &&
                   this.state.email === user.email &&

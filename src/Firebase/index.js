@@ -80,13 +80,7 @@ class Firebase {
   // public
   async getAllPostings() {
     const allPostings = await this.db.collection("postings").get();
-    return allPostings.docs
-      .map(doc => doc.data())
-      .sort((postA, postB) => {
-        if (postA.datePosted < postB.datePosted) return 1;
-        else if (postA.datePosted > postB.datePosted) return -1;
-        return 0;
-      });
+    return allPostings.docs.map(doc => doc.data());
   }
 
   // query a collection

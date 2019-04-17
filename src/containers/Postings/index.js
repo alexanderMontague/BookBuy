@@ -54,6 +54,7 @@ class Postings extends Component {
       this.setState({ ...searchParams }, () => this.searchForTextbook());
     }
 
+    // TODO: Pagination with firebase when it gets to that
     const allPostings = await firebase.getAllPostings();
 
     this.setState({
@@ -82,12 +83,16 @@ class Postings extends Component {
       mainBookInput
     } = this.state;
 
+    console.log(this.state);
+
     // get docs from firebase that match input
     let filteredPostings = await firebase.getDocsFromCollection("postings", [
-      ["userInfo.school.label", "==", selectedSchool.label],
-      ["program.label", "==", selectedProgram.label],
+      ["userSchool.value", "==", selectedSchool.value],
+      ["program.value", "==", selectedProgram.value],
       ["courseLevel", "==", courseLevel]
     ]);
+
+    console.log("filter", filteredPostings);
 
     // if there is title/author input, query that too
     if (!!mainBookInput) {
@@ -104,6 +109,12 @@ class Postings extends Component {
 
   renderPostings = () => {
     const { filteredPostings, shownPosts } = this.state;
+
+    filteredPostings.sort((postA, postB) => {
+      if (postA.datePosted < postB.datePosted) return 1;
+      else if (postA.datePosted > postB.datePosted) return -1;
+      return 0;
+    });
 
     return filteredPostings.slice(0, shownPosts).map((posting, index) => {
       const isGrey = index % 2 !== 0;

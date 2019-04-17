@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import styles from "./styles.scss";
 import { getUserStatus } from "../../actions/authActions";
-import { FaBars } from "react-icons/fa";
+import { FaBars, FaComments } from "react-icons/fa";
 import logo from "../../assets/BookBuy.png";
 import Modal from "react-modal";
 import firebase from "../../firebase";
@@ -32,7 +32,7 @@ const NavBar = props => {
     setTimeout(toggleLogoutModal(true), 100);
   };
 
-  const { isAuthenticated } = props;
+  const { isAuthenticated, isNewMessage } = props;
 
   return (
     <nav>
@@ -148,6 +148,11 @@ const NavBar = props => {
                   }
                 >
                   Profile
+                  {isNewMessage && (
+                    <div style={{ paddingLeft: 10 }}>
+                      <FaComments color="#ff0000" height={15} width={15} />
+                    </div>
+                  )}
                 </div>
                 <div className={styles.hover} onClick={logOutUser}>
                   Logout
@@ -166,7 +171,8 @@ const NavBar = props => {
 };
 
 const mapStateToProps = state => ({
-  isAuthenticated: state.authState.isAuthenticated
+  isAuthenticated: state.authState.isAuthenticated,
+  isNewMessage: state.userState.isNewMessage
 });
 
 export default connect(

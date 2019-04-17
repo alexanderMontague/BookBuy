@@ -8,12 +8,16 @@ import firebase from "../../firebase";
 import moment from "moment";
 
 const Chat = props => {
-  const { selectChat, selectedChat, user } = props;
+  const {
+    selectChat,
+    selectedChat,
+    user,
+    userSentChats,
+    userReceivedChats
+  } = props;
   const [newMessage, updateNewMessage] = useState(null);
   const [isFirstMessage, firstMessageHandler] = useState(false);
   const [currentMessage, updateCurrentMessage] = useState("");
-  const [userSentChats, updateUserSentChats] = useState([]);
-  const [userReceivedChats, updateUserReceivedChats] = useState([]);
   const [chatHeader, setChatHeader] = useState("...");
   let isMounted = false;
 
@@ -32,40 +36,8 @@ const Chat = props => {
         firstMessageHandler(true);
       }
     }
-
-    firebase.db
-      .collection("messages")
-      .where("sender", "==", user.id)
-      .onSnapshot(
-        snapshot =>
-          isMounted
-            ? updateUserSentChats([
-                ...userSentChats,
-                ...snapshot.docs.map(doc => doc.data())
-              ])
-            : null,
-
-        err => console.log("sender error", err)
-      );
-
-    firebase.db
-      .collection("messages")
-      .where("recipient", "==", user.id)
-      .onSnapshot(
-        snapshot =>
-          isMounted
-            ? updateUserReceivedChats([
-                ...userReceivedChats,
-                ...snapshot.docs.map(doc => doc.data())
-              ])
-            : null,
-        err => console.log("receiver error", err)
-      );
-
     return () => (isMounted = false);
   }, []);
-
-  // on chat change, fetch details about users
 
   const renderChatPreviews = () => {
     // sort chats by most recent chat
@@ -189,7 +161,9 @@ const Chat = props => {
       <div className={styles.header}>Current Messages</div>
       <div className={styles.contentContainer}>
         <div className={styles.chatOverview}>
-          <div className={styles.chatsHeader}># Active Chats</div>
+          <div className={styles.chatsHeader}>{`${
+            [...userSentChats, ...userReceivedChats].length
+          } Active Chats`}</div>
           <div className={styles.chatsContainer}>{renderChatPreviews()}</div>
         </div>
         <div className={styles.activeChat}>
@@ -234,7 +208,9 @@ const Chat = props => {
 
 const mapStateToProps = state => ({
   user: state.authState.user,
-  selectedChat: state.interfaceState.selectedChat
+  selectedChat: state.interfaceState.selectedChat,
+  userSentChats: state.userState.userSentChats,
+  userReceivedChats: state.userState.userReceivedChats
 });
 
 export default connect(

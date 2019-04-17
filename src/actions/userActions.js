@@ -1,8 +1,14 @@
-export const getUserChats = () => ({
-  type: "GET_USER_CHATS"
+export const getUserChats = data => ({
+  type: "GET_USER_CHATS",
+  payload: data
 });
 
-export const updateUserChats = data => ({
-  type: "UPDATE_USER_CHATS",
+export const updateUserSentChats = data => ({
+  type: "UPDATE_USER_SENT_CHATS",
+  payload: data
+});
+
+export const updateUserReceivedChats = data => ({
+  type: "UPDATE_USER_RECEIVED_CHATS",
   payload: data
 });

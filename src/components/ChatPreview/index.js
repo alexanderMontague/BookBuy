@@ -8,20 +8,26 @@ const ChatPreview = props => {
   const { isFirst, selectChat, selectedChat, chatData, user } = props;
   let isMounted = false;
   const [chatName, setChatName] = useState(". . .");
+  const [bookInfo, setBookInfo] = useState(". . .");
+
+  const isSender = chatData.sender === user.id;
 
   useEffect(() => {
     isMounted = true;
 
     const fetchChatName = async () => {
       const chatName = await firebase.getDocsFromCollection("users", [
-        [
-          "id",
-          "==",
-          chatData.sender === user.id ? chatData.recipient : chatData.sender
-        ]
+        ["id", "==", isSender ? chatData.recipient : chatData.sender]
       ]);
 
-      if (isMounted) setChatName(chatName[0].fullName);
+      const bookInfo = await firebase.getDocsFromCollection("postings", [
+        ["postId", "==", chatData.post]
+      ]);
+
+      if (isMounted) {
+        setChatName(chatName[0].fullName);
+        setBookInfo(bookInfo[0]);
+      }
     };
 
     fetchChatName();
@@ -47,10 +53,9 @@ const ChatPreview = props => {
         {isFirst ? `New Chat with ${chatData.fullName} . . .` : chatName}
       </div>
       <div>
-        Interested in:&nbsp;&nbsp;
-        <span className={styles.interestedIn}>
-          Code Complete 3 this is a test
-        </span>
+        {`${isSender || isFirst ? "You are" : "They are"} interested in:`}
+        &nbsp;&nbsp;
+        <span className={styles.interestedIn}>{bookInfo.bookTitle}</span>
       </div>
     </div>
   );
