@@ -8,7 +8,11 @@ const initialState = {
 const userReducer = (prevState = initialState, { type, payload }) => {
   switch (type) {
     case "UPDATE_USER_SENT_CHATS":
-      return { ...prevState, userSentChats: [...payload] };
+      return {
+        ...prevState,
+        userSentChats: [...payload],
+        isNewMessage: prevState.isFirstFetch ? false : true
+      };
 
     case "UPDATE_USER_RECEIVED_CHATS":
       return {

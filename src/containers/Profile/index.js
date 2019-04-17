@@ -36,12 +36,15 @@ class Profile extends Component {
   };
 
   deletePost = async postId => {
+    // delete post
     await firebase.deleteDocument("postings", postId);
 
+    // get updated posts
     const userPostings = await firebase.getDocsFromCollection("postings", [
       ["userId", "==", this.props.user.id]
     ]);
 
+    // sort posts
     userPostings.sort((postA, postB) => {
       if (postA.datePosted < postB.datePosted) return 1;
       else if (postA.datePosted > postB.datePosted) return -1;
@@ -49,6 +52,14 @@ class Profile extends Component {
     });
 
     this.setState({ userPostings });
+
+    // delete all user chats referencing that post
+    const referencedChats = await firebase.getDocsFromCollection("messages", [
+      ["post", "==", postId]
+    ]);
+    referencedChats.forEach(async post => {
+      await firebase.deleteDocument("messages", post.id);
+    });
   };
 
   renderUserPosts = () => {

@@ -20,9 +20,19 @@ const ChatPreview = props => {
         ["id", "==", isSender ? chatData.recipient : chatData.sender]
       ]);
 
-      const bookInfo = await firebase.getDocsFromCollection("postings", [
-        ["postId", "==", chatData.post]
-      ]);
+      // get chat data if regular chat, or use passed data for new chat
+      let bookInfo = [];
+      if (!chatData.bookTitle) {
+        bookInfo = await firebase.getDocsFromCollection("postings", [
+          ["postId", "==", chatData.post]
+        ]);
+      } else {
+        bookInfo = [
+          {
+            ...chatData
+          }
+        ];
+      }
 
       if (isMounted) {
         setChatName(chatName[0].fullName);

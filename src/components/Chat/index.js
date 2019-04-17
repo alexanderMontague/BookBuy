@@ -85,6 +85,12 @@ const Chat = props => {
     event.preventDefault();
 
     if (isFirstMessage) {
+      // get rid of temp create message and URL spam
+      firstMessageHandler(false);
+      props.history.push({
+        search: ""
+      });
+
       const newChat = await firebase.createChat(
         {
           sender: user.id,
@@ -100,12 +106,6 @@ const Chat = props => {
         },
         true
       );
-
-      // get rid of temp create message once sent
-      firstMessageHandler(false);
-      props.history.push({
-        search: ""
-      });
 
       // select the new chat
       selectChat(newChat);
@@ -200,7 +200,7 @@ const Chat = props => {
               placeholder="Type your message here!"
               value={currentMessage}
               onChange={e => updateCurrentMessage(e.target.value)}
-              disabled={numChats === 0 || !selectedChat}
+              disabled={!selectedChat}
             />
             <button
               type="submit"
