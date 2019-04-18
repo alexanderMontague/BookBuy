@@ -100,7 +100,8 @@ const Chat = props => {
             {
               content: currentMessage,
               createdAt: moment().unix(),
-              sentBy: user.id
+              sentBy: user.id,
+              isUnread: true
             }
           ]
         },
