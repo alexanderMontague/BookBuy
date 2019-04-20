@@ -6,11 +6,18 @@ import firebase from "../../firebase";
 
 const ChatPreview = props => {
   const { isFirst, selectChat, selectedChat, chatData, user } = props;
-  let isMounted = false;
   const [chatName, setChatName] = useState(". . .");
   const [bookInfo, setBookInfo] = useState(". . .");
-
+  let isMounted = false;
+  let isUnread = false;
   const isSender = chatData.sender === user.id;
+
+  // if unread messages, toggle flag
+  chatData.messages.forEach(msg => {
+    if (msg.sentBy !== user.id && msg.isUnread === true) {
+      isUnread = true;
+    }
+  });
 
   useEffect(() => {
     isMounted = true;
@@ -47,6 +54,16 @@ const ChatPreview = props => {
 
   const clickHandler = () => {
     selectChat(chatData);
+
+    // set the new messages as read
+    let currDocument = chatData;
+    currDocument.messages = currDocument.messages.map(msg => {
+      return { ...msg, isUnread: false };
+    });
+
+    if (isUnread) {
+      firebase.updateDocument("messages", chatData.id, currDocument);
+    }
   };
 
   return (
@@ -59,14 +76,17 @@ const ChatPreview = props => {
       ].join(" ")}
       onClick={clickHandler}
     >
-      <div className={styles.chatUserName}>
-        {isFirst ? `New Chat with ${chatData.fullName} . . .` : chatName}
+      <div className={styles.previewContent}>
+        <div className={styles.chatUserName}>
+          {isFirst ? `New Chat with ${chatData.fullName} . . .` : chatName}
+        </div>
+        <div>
+          {`${isSender || isFirst ? "You are" : "They are"} interested in:`}
+          &nbsp;&nbsp;
+          <span className={styles.interestedIn}>{bookInfo.bookTitle}</span>
+        </div>
       </div>
-      <div>
-        {`${isSender || isFirst ? "You are" : "They are"} interested in:`}
-        &nbsp;&nbsp;
-        <span className={styles.interestedIn}>{bookInfo.bookTitle}</span>
-      </div>
+      {isUnread && <div className={styles.unread} />}
     </div>
   );
 };
