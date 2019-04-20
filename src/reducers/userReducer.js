@@ -17,7 +17,7 @@ const userReducer = (prevState = initialState, { type, payload }) => {
       // cycle through messages to see if any are unread
       payload.forEach(chat => {
         chat.messages.forEach(msg => {
-          if (msg.isUnread === true) {
+          if (msg.sentBy !== prevState.userId && msg.isUnread === true) {
             isNewMessage = true;
           }
         });
@@ -35,7 +35,7 @@ const userReducer = (prevState = initialState, { type, payload }) => {
       // cycle through messages to see if any are unread
       payload.forEach(chat => {
         chat.messages.forEach(msg => {
-          if (msg.isUnread === true) {
+          if (msg.sentBy !== prevState.userId && msg.isUnread === true) {
             isNewMessage = true;
           }
         });

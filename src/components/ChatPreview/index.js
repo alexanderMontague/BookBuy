@@ -10,11 +10,11 @@ const ChatPreview = props => {
   const [bookInfo, setBookInfo] = useState(". . .");
   let isMounted = false;
   let isUnread = false;
-  const isSender = chatData.sender === user.id;
+  const isSender = user && chatData.sender === user.id;
 
   // if unread messages, toggle flag
   chatData.messages.forEach(msg => {
-    if (msg.sentBy !== user.id && msg.isUnread === true) {
+    if (user && msg.sentBy !== user.id && msg.isUnread === true) {
       isUnread = true;
     }
   });
