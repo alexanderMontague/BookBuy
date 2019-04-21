@@ -4,17 +4,22 @@
   padding-left: 10px;
   display: flex;
 
-  @media (max-width: 768px) {
-    padding-left: 0;
-  }
-
   .chatUserName {
     font-size: 1.05rem;
     font-weight: bold;
     padding-bottom: 5px;
+
+    @media (max-width: 768px) {
+      font-size: 0.9rem;
+    }
   }
-  .interestedIn {
-    font-style: italic;
+  .chatDetails {
+    @media (max-width: 768px) {
+      font-size: 0.8rem;
+    }
+    .interestedIn {
+      font-style: italic;
+    }
   }
 }
 .chatPreview:hover {

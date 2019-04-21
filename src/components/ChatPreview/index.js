@@ -80,7 +80,7 @@ const ChatPreview = props => {
         <div className={styles.chatUserName}>
           {isFirst ? `New Chat with ${chatData.fullName} . . .` : chatName}
         </div>
-        <div>
+        <div className={styles.chatDetails}>
           {`${isSender || isFirst ? "You are" : "They are"} interested in:`}
           &nbsp;&nbsp;
           <span className={styles.interestedIn}>{bookInfo.bookTitle}</span>

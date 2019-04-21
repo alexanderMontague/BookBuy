@@ -83,16 +83,12 @@ class Postings extends Component {
       mainBookInput
     } = this.state;
 
-    console.log(this.state);
-
     // get docs from firebase that match input
     let filteredPostings = await firebase.getDocsFromCollection("postings", [
       ["userSchool.value", "==", selectedSchool.value],
       ["program.value", "==", selectedProgram.value],
       ["courseLevel", "==", courseLevel]
     ]);
-
-    console.log("filter", filteredPostings);
 
     // if there is title/author input, query that too
     if (!!mainBookInput) {

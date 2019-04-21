@@ -22,6 +22,8 @@ const Chat = props => {
   const [isFirstMessage, firstMessageHandler] = useState(false);
   const [currentMessage, updateCurrentMessage] = useState("");
   const [chatHeader, setChatHeader] = useState("...");
+  const [mobileChatOpen, setMobileChat] = useState(false);
+  const isMobileWidth = window.innerWidth <= 650;
   let isMounted = false;
 
   useEffect(() => {
@@ -131,12 +133,13 @@ const Chat = props => {
 
     if (selectedChat) {
       const messageContainer = document.getElementById("chatMessageArea");
-      if (messageContainer)
+      if (messageContainer) {
         // holy hack T_T
         setTimeout(
           () => (messageContainer.scrollTop = messageContainer.scrollHeight),
           100
         );
+      }
 
       return selectedChat.messages.map(message => {
         const wasSender = user.id === message.sentBy;
@@ -171,9 +174,29 @@ const Chat = props => {
     <div className={styles.mainChatContainer}>
       <div className={styles.header}>Current Messages</div>
       <div className={styles.contentContainer}>
-        <div className={styles.chatOverview}>
-          <div className={styles.chatsHeader}>{`${numChats} Active Chats`}</div>
-          <div className={styles.chatsContainer}>{renderChatPreviews()}</div>
+        <div
+          className={[
+            styles.chatOverview,
+            mobileChatOpen ? styles.mobileChatToggle : null
+          ].join(" ")}
+        >
+          <div
+            className={[
+              styles.chatsHeader,
+              mobileChatOpen ? styles.chatsHeaderToggle : null
+            ].join(" ")}
+          >{`${numChats} Active Chats`}</div>
+          <div style={{ display: "flex" }}>
+            <div className={styles.chatsContainer}>{renderChatPreviews()}</div>
+            {isMobileWidth && (
+              <div
+                className={styles.chatsToggle}
+                onClick={() => setMobileChat(!mobileChatOpen)}
+              >
+                Open Chats
+              </div>
+            )}
+          </div>
         </div>
         <div className={styles.activeChat}>
           {selectedChat ? (
