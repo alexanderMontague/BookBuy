@@ -23,6 +23,7 @@ const Chat = props => {
   const [isFirstMessage, firstMessageHandler] = useState(false);
   const [currentMessage, updateCurrentMessage] = useState("");
   const [chatHeader, setChatHeader] = useState("...");
+  const [chatMeetingSpot, setChatMeetingSpot] = useState("");
   const [mobileChatOpen, setMobileChat] = useState(isMobileWidth);
   let isMounted = false;
 
@@ -45,8 +46,9 @@ const Chat = props => {
     return () => (isMounted = false);
   }, []);
 
+  // on selectedChat change, fetch chat user
   useEffect(() => {
-    getChatHeader();
+    getChatDetails();
   }, [selectedChat]);
 
   const renderChatPreviews = () => {
@@ -102,6 +104,7 @@ const Chat = props => {
           sender: user.id,
           recipient: selectedChat.id,
           post: selectedChat.postId,
+          meetingStatus: null,
           messages: [
             {
               content: currentMessage,
@@ -172,16 +175,38 @@ const Chat = props => {
     }
   };
 
-  const getChatHeader = async () => {
+  let timeout = null;
+  const updateMeetingPlace = event => {
+    // for syntetic event performance reasons
+    const eventTarget = event.target;
+    setChatMeetingSpot(eventTarget.value);
+
+    clearTimeout(timeout);
+
+    timeout = setTimeout(() => {
+      firebase.updateDocument("messages", selectedChat.id, {
+        meetingSpot: eventTarget.value
+      });
+    }, 5000);
+  };
+
+  const getChatDetails = async () => {
     if (!user || !selectedChat) return;
 
     const isSender = selectedChat.sender === user.id;
 
+    // TODO: Refactor into a global redux saga so we only have to fetch details once
     const chatName = await firebase.getDocsFromCollection("users", [
       ["id", "==", isSender ? selectedChat.recipient : selectedChat.sender]
     ]);
+    const chatMeetingSpot = await firebase.getDocsFromCollection("messages", [
+      ["id", "==", selectedChat.id]
+    ]);
 
     setChatHeader(chatName[0].fullName);
+    setChatMeetingSpot(
+      chatMeetingSpot[0].meetingSpot ? chatMeetingSpot[0].meetingSpot : ""
+    );
   };
 
   const numChats = [...userSentChats, ...userReceivedChats].length;
@@ -224,6 +249,8 @@ const Chat = props => {
                 className={styles.meetingSpot}
                 type="text"
                 placeholder="Sugest a meeting place..."
+                onChange={updateMeetingPlace}
+                value={chatMeetingSpot}
               />
             </div>
           ) : (
