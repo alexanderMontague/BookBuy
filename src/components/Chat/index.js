@@ -142,7 +142,7 @@ const Chat = props => {
       }
 
       return selectedChat.messages.map(message => {
-        const wasSender = user.id === message.sentBy;
+        const wasSender = user && user.id === message.sentBy;
         return (
           <div
             className={[
