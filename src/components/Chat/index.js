@@ -193,7 +193,7 @@ const Chat = props => {
                 className={styles.chatsToggle}
                 onClick={() => setMobileChat(!mobileChatOpen)}
               >
-                Open Chats
+                {mobileChatOpen ? "Close Chats" : "Open Chats"}
               </div>
             )}
           </div>

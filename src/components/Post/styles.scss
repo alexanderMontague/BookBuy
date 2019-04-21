@@ -119,6 +119,7 @@
           }
           .value {
             font-weight: lighter;
+            margin: auto 0;
             min-width: 65%;
 
             @media (max-width: 678px) {
@@ -181,7 +182,7 @@
 }
 
 .contactButton {
-  width: 50%;
+  width: 65%;
   height: 30px;
   font-size: 15px;
   font-family: "Overpass";
@@ -193,6 +194,7 @@
   justify-content: center;
   align-items: center;
   border-radius: 5px;
+  margin: 0 auto;
 }
 .contactButton:hover {
   cursor: pointer;

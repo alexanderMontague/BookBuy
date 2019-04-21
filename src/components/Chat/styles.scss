@@ -43,8 +43,11 @@
         font-weight: bold;
         text-align: center;
         border-bottom: 1px solid lightgrey;
-        height: 0;
-        overflow: hidden;
+
+        @media (max-width: 650px) {
+          height: 0;
+          overflow: hidden;
+        }
       }
 
       .chatsHeaderToggle {

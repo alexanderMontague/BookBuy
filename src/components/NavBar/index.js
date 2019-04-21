@@ -104,6 +104,11 @@ const NavBar = props => {
                     onClick={() => toggleMobileNav(!isMobileNav)}
                   >
                     Profile
+                    {isNewMessage && (
+                      <div style={{ paddingLeft: 5 }}>
+                        <FaComments color="#ff0000" height={15} width={15} />
+                      </div>
+                    )}
                   </Link>
                   <div
                     className={styles.mobileLink}
