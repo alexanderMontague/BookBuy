@@ -18,12 +18,12 @@ const Chat = props => {
     seenChats
   } = props;
 
+  const isMobileWidth = window.innerWidth <= 650;
   const [newMessage, updateNewMessage] = useState(null);
   const [isFirstMessage, firstMessageHandler] = useState(false);
   const [currentMessage, updateCurrentMessage] = useState("");
   const [chatHeader, setChatHeader] = useState("...");
-  const [mobileChatOpen, setMobileChat] = useState(false);
-  const isMobileWidth = window.innerWidth <= 650;
+  const [mobileChatOpen, setMobileChat] = useState(isMobileWidth);
   let isMounted = false;
 
   useEffect(() => {
@@ -44,6 +44,10 @@ const Chat = props => {
 
     return () => (isMounted = false);
   }, []);
+
+  useEffect(() => {
+    getChatHeader();
+  }, [selectedChat]);
 
   const renderChatPreviews = () => {
     // clear global chat notif
@@ -166,6 +170,18 @@ const Chat = props => {
         );
       });
     }
+  };
+
+  const getChatHeader = async () => {
+    if (!user || !selectedChat) return;
+
+    const isSender = selectedChat.sender === user.id;
+
+    const chatName = await firebase.getDocsFromCollection("users", [
+      ["id", "==", isSender ? selectedChat.recipient : selectedChat.sender]
+    ]);
+
+    setChatHeader(chatName[0].fullName);
   };
 
   const numChats = [...userSentChats, ...userReceivedChats].length;
