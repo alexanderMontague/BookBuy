@@ -24,9 +24,11 @@ const Chat = props => {
   const [currentMessage, updateCurrentMessage] = useState("");
   const [chatHeader, setChatHeader] = useState("...");
   const [chatMeetingSpot, setChatMeetingSpot] = useState("");
+  const [meetingTimer, setMeetingTimer] = useState(null);
   const [mobileChatOpen, setMobileChat] = useState(isMobileWidth);
   let isMounted = false;
 
+  // on mount check if sending new message
   useEffect(() => {
     isMounted = true;
 
@@ -50,6 +52,20 @@ const Chat = props => {
   useEffect(() => {
     getChatDetails();
   }, [selectedChat]);
+
+  // on meeting spot change, update 10s after initial typing once
+  useEffect(() => {
+    clearTimeout(meetingTimer);
+
+    // update meeting message 10s after initial typing
+    setMeetingTimer(
+      setTimeout(() => {
+        firebase.updateDocument("messages", selectedChat.id, {
+          meetingSpot: chatMeetingSpot
+        });
+      }, 5000)
+    );
+  }, [chatMeetingSpot]);
 
   const renderChatPreviews = () => {
     // clear global chat notif
@@ -175,22 +191,6 @@ const Chat = props => {
     }
   };
 
-  let timeout = null;
-  const updateMeetingPlace = event => {
-    // for syntetic event performance reasons
-    const eventTarget = event.target;
-    setChatMeetingSpot(eventTarget.value);
-
-    console.log(timeout);
-    clearTimeout(timeout);
-
-    timeout = setTimeout(() => {
-      firebase.updateDocument("messages", selectedChat.id, {
-        meetingSpot: eventTarget.value
-      });
-    }, 10000);
-  };
-
   const getChatDetails = async () => {
     if (!user || !selectedChat) return;
 
@@ -250,7 +250,7 @@ const Chat = props => {
                 className={styles.meetingSpot}
                 type="text"
                 placeholder="Sugest a meeting place..."
-                onChange={updateMeetingPlace}
+                onChange={event => setChatMeetingSpot(event.target.value)}
                 value={chatMeetingSpot}
               />
             </div>

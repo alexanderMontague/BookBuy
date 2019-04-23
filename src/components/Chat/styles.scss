@@ -15,7 +15,7 @@
     color: #333333;
     width: 87%;
     border-radius: 10px;
-    height: 500px;
+    height: 550px;
 
     @media (max-width: 768px) {
       width: 90%;
@@ -95,6 +95,8 @@
       }
 
       .chatHeader {
+        padding-bottom: 10px;
+
         .meetingSpot {
           border: 1px solid lightgrey;
           width: 95%;
