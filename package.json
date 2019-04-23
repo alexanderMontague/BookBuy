@@ -19,6 +19,7 @@
     "file-loader": "^1.1.11",
     "firebase": "^5.8.6",
     "firebase-admin": "^7.2.0",
+    "firebase-tools": "^6.7.1",
     "floating-label-react": "^0.3.0",
     "gh-pages": "^2.0.1",
     "install": "^0.12.1",
