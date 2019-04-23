@@ -181,13 +181,14 @@ const Chat = props => {
     const eventTarget = event.target;
     setChatMeetingSpot(eventTarget.value);
 
+    console.log(timeout);
     clearTimeout(timeout);
 
     timeout = setTimeout(() => {
       firebase.updateDocument("messages", selectedChat.id, {
         meetingSpot: eventTarget.value
       });
-    }, 5000);
+    }, 10000);
   };
 
   const getChatDetails = async () => {

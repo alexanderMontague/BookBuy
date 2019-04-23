@@ -4,12 +4,12 @@ import "firebase/firebase-firestore";
 import "firebase/storage";
 
 const config = {
-  apiKey: "AIzaSyDC_bRxWyf3dHFkreGgJavlgIR290xe5hw",
-  authDomain: "bookbuy-783fd.firebaseapp.com",
-  databaseURL: "https://bookbuy-783fd.firebaseio.com",
-  projectId: "bookbuy-783fd",
-  storageBucket: "bookbuy-783fd.appspot.com",
-  messagingSenderId: "908982760807"
+  apiKey: process.env.APIKEY,
+  authDomain: process.env.AUTHDOMAIN,
+  databaseURL: process.env.DATABASEURL,
+  projectId: process.env.DATABASEURL,
+  storageBucket: process.env.STORAGEBUCKET,
+  messagingSenderId: process.env.MESSAGINGSENDERID
 };
 
 class Firebase {
@@ -70,7 +70,7 @@ class Firebase {
   }
 
   // public as called on refresh
-  getcurrentUserInfo() {
+  getCurrentUserInfo() {
     return this.db
       .collection("users")
       .doc(this.auth.currentUser.uid)

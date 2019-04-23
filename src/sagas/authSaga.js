@@ -9,8 +9,7 @@ function* getUserStatus() {
     return yield put(userStatusResponse(null));
   }
 
-  const userData = (yield firebase.getcurrentUserInfo()).data();
-
+  const userData = (yield firebase.getCurrentUserInfo()).data();
   yield put(userStatusResponse({ ...userData }));
 }
 
