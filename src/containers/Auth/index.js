@@ -115,7 +115,7 @@ class Auth extends Component {
     this.setState({ regLoading: true });
 
     try {
-      await firebase.register(regEmail, regPasswordOne, {
+      const newUser = await firebase.register(regEmail, regPasswordOne, {
         fullName: regName,
         phone: regPhone,
         school: regSchool
@@ -391,7 +391,6 @@ class Auth extends Component {
                         disabled={
                           !this.state.regName ||
                           !this.state.regEmail ||
-                          !this.state.regPhone ||
                           !this.state.regPasswordOne ||
                           !this.state.regPasswordTwo ||
                           !!this.state.regError
