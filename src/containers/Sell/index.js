@@ -15,6 +15,7 @@ import { programDropdownValues } from "../../assets/dropdownValues";
 import { FaUpload, FaQuestionCircle } from "react-icons/fa";
 import isbnLocation from "../../assets/isbnLocation.png";
 import { getBookInfo } from "../../helpers/requests";
+import Compressor from "compressorjs";
 import firebase from "../../firebase";
 
 const inputStyle = isDouble => ({
@@ -91,8 +92,18 @@ class Sell extends Component {
     });
 
     if (postId) {
-      // add picture if there is one
-      !!bookPic && firebase.storage.child(`postings/${postId}`).put(bookPic);
+      // compress and edit picture
+      if (!!bookPic) {
+        new Compressor(bookPic, {
+          quality: 0.6,
+          success(compressedImage) {
+            firebase.storage.child(`postings/${postId}`).put(compressedImage);
+          },
+          error(err) {
+            console.error("image compression error", err.message);
+          }
+        });
+      }
       // add posting id to own object for reference
       firebase.updateDocument("postings", postId, { postId });
       // update spinners and show success message
@@ -100,6 +111,7 @@ class Sell extends Component {
     }
   };
 
+  // using google books api for isbn lookup
   getBookInfo = async () => {
     const cleanISBN = this.state.bookISBN.replace(/-/g, "");
     const bookInfo = await getBookInfo(cleanISBN);

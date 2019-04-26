@@ -53,6 +53,17 @@ class Profile extends Component {
 
     this.setState({ userPostings });
 
+    // delete post picture from storage if there is one
+    firebase.storage
+      .child(`postings/${postId}`)
+      .delete()
+      .then(() => {
+        // successful delete
+      })
+      .catch(err => {
+        // if there is no picture it will error out but ¯\_(ツ)_/¯
+      });
+
     // delete all user chats referencing that post
     const referencedChats = await firebase.getDocsFromCollection("messages", [
       ["post", "==", postId]
