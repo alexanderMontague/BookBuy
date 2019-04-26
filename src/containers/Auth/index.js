@@ -115,7 +115,7 @@ class Auth extends Component {
     this.setState({ regLoading: true });
 
     try {
-      const newUser = await firebase.register(regEmail, regPasswordOne, {
+      await firebase.register(regEmail, regPasswordOne, {
         fullName: regName,
         phone: regPhone,
         school: regSchool
@@ -192,7 +192,17 @@ class Auth extends Component {
         1500
       );
     } catch (error) {
-      this.setState({ loginError: error.message });
+      if (
+        error.message ===
+          "The password is invalid or the user does not have a password." ||
+        "There is no user record corresponding to this identifier. The user may have been deleted."
+      ) {
+        this.setState({
+          loginError: "The email or password entered is incorrect."
+        });
+      } else {
+        this.setState({ loginError: error.message });
+      }
     } finally {
       this.setState({ loginLoading: false });
       this.props.getUserStatus();

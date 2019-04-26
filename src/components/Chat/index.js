@@ -124,7 +124,7 @@ const Chat = props => {
           sender: user.id,
           recipient: selectedChat.id,
           post: selectedChat.postId,
-          meetingStatus: null,
+          meetingSpot: null,
           messages: [
             {
               content: currentMessage,
