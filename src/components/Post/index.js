@@ -59,7 +59,8 @@ const Post = props => {
       fullName: userInfo.fullName,
       bookTitle,
       postId,
-      messages: []
+      messages: [],
+      meetingSpot: ""
     };
 
     history.push({

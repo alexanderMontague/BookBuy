@@ -45,7 +45,10 @@ const Chat = props => {
       }
     }
 
-    return () => (isMounted = false);
+    return () => {
+      isMounted = false;
+      selectChat(null);
+    };
   }, []);
 
   // on selectedChat change, fetch chat user
@@ -58,13 +61,14 @@ const Chat = props => {
     clearTimeout(meetingTimer);
 
     // update meeting message 10s after initial typing
-    setMeetingTimer(
-      setTimeout(() => {
-        firebase.updateDocument("messages", selectedChat.id, {
-          meetingSpot: chatMeetingSpot
-        });
-      }, 5000)
-    );
+    selectedChat &&
+      setMeetingTimer(
+        setTimeout(() => {
+          firebase.updateDocument("messages", selectedChat.id, {
+            meetingSpot: chatMeetingSpot
+          });
+        }, 5000)
+      );
   }, [chatMeetingSpot]);
 
   const renderChatPreviews = () => {
@@ -205,9 +209,10 @@ const Chat = props => {
     ]);
 
     setChatHeader(chatName[0].fullName);
-    setChatMeetingSpot(
-      chatMeetingSpot[0].meetingSpot ? chatMeetingSpot[0].meetingSpot : ""
-    );
+    chatMeetingSpot.length !== 0 &&
+      setChatMeetingSpot(
+        chatMeetingSpot[0].meetingSpot ? chatMeetingSpot[0].meetingSpot : ""
+      );
   };
 
   const numChats = [...userSentChats, ...userReceivedChats].length;

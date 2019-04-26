@@ -36,20 +36,21 @@ exports.sendWelcomeEmail = functions.firestore
 exports.sendNewMessageEmail = functions.firestore
   .document("messages/{userId}")
   .onCreate((snap, context) => {
-    const messageData = snap.data();
+    const newMessage = snap.data();
+
     db.collection("users")
-      .where("id", "==", messageData.recipient)
+      .where("id", "==", newMessage.recipient)
       .get()
       .then(messageDoc => {
-        const messageData = messageDoc[0].data();
+        const receiver = messageDoc.docs[0].data();
 
         mailgun.messages().send(
           {
             from: "Book Buy <info@bookbuy.ca>",
-            to: reciever.email,
+            to: receiver.email,
             subject: "You have a new message on BookBuy!",
             template: "new_chat",
-            "v:message": messageData.messages[0].content
+            "v:message": newMessage.messages[0].content
           },
           (error, body) => {
             console.log("ERR", error, "BOD", body);
