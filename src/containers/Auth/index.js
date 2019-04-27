@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import styles from "./styles.scss";
+import { Link } from "react-router-dom";
 import FloatingLabel, {
   floatingStyles,
   focusStyles,
@@ -379,6 +380,12 @@ class Auth extends Component {
                       onChange={this.formFieldInputHandler}
                       value={this.state.regPasswordTwo}
                     />
+                    <div style={{ paddingTop: 20 }}>
+                      By registering you agree to our{" "}
+                      <Link to="/terms" target="_blank">
+                        Terms and Conditions
+                      </Link>
+                    </div>
                     {this.state.regLoading ? (
                       <div
                         style={{

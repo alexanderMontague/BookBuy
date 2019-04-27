@@ -156,6 +156,12 @@ class Home extends Component {
                   Book Buy instantly connects students from all across Ontario
                   with the textbooks they’re looking for!
                 </p>
+                <p>
+                  Read more about us by visiting our{" "}
+                  <Link to="/terms" target="_blank">
+                    Terms Page!
+                  </Link>
+                </p>
               </div>
             </div>
             <div className={[styles.pictureBlock, styles.books].join(" ")} />

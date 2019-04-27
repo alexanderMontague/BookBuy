@@ -7,6 +7,7 @@ import Postings from "./containers/Postings";
 import Auth from "./containers/Auth";
 import Profile from "./containers/Profile";
 import Sell from "./containers/Sell";
+import Terms from "./containers/Terms";
 
 const ScrollToTop = () => {
   window.scrollTo(0, 0);
@@ -34,6 +35,7 @@ const routes = (
     <DefaultComponent path={"/auth"} component={Auth} />
     <DefaultComponent path={"/profile"} component={Profile} isProtected />
     <DefaultComponent path={"/sell"} component={Sell} />
+    <DefaultComponent path={"/terms"} component={Terms} />
   </Switch>
 );
 

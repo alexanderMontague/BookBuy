@@ -1,0 +1,31 @@
+.termsContainer {
+  width: 80%;
+  padding-top: 50px;
+  margin: 0 auto;
+
+  .termsMainHeader {
+    font-weight: bold;
+    font-size: 25px;
+    text-align: center;
+  }
+
+  .mainTextContainer {
+    padding-top: 50px;
+
+    .mainHeading {
+      font-weight: bold;
+      font-size: 15px;
+      padding-bottom: 15px;
+    }
+
+    .mainTextBlock {
+      font-size: 15px;
+      font-weight: lighter;
+      padding-bottom: 45px;
+    }
+
+    hr {
+      border: solid 1px #333333;
+    }
+  }
+}

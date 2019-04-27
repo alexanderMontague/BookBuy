@@ -23,6 +23,10 @@
   font-size: 1em;
   cursor: pointer;
   text-decoration: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 .footerLink:hover {
   color: #0069d9;

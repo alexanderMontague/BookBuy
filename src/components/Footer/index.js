@@ -21,9 +21,13 @@ const Footer = props => {
           Postings
         </Link>
         <div style={{ color: "grey", margin: "auto 0" }}>&#8226;</div>
-        <a className={styles.footerLink} href="mailto:nboulton@uoguelph.ca">
+        <a className={styles.footerLink} href="mailto:info@bookbuy.ca">
           Contact
         </a>
+        <div style={{ color: "grey", margin: "auto 0" }}>&#8226;</div>
+        <Link className={styles.footerLink} to="/terms">
+          Terms and Conditions
+        </Link>
         <div style={{ color: "grey", margin: "auto 0" }}>&#8226;</div>
         {props.isAuthenticated ? (
           <Link className={styles.footerLink} to="/profile">
