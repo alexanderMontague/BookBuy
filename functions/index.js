@@ -64,13 +64,14 @@ exports.sendFirstMessageEmail = functions.firestore
 // send user an email if they recieve a message with at least 2 hours since the last
 exports.sendNewMessageEmail = functions.firestore
   .document("messages/{userId}")
-  .onUpdate((snap, context) => {
-    const newMessage = snap.data();
+  .onUpdate((change, context) => {
+    const newMessage = change.after.data();
     const messages = newMessage.messages;
 
     if (messages.length > 1) {
-      const newMsg = messages[messages.length - 1];
-      const lastMsg = messages[messages.length - 2];
+      const numMsgs = messages.length;
+      const newMsg = messages[numMsgs - 1];
+      const lastMsg = messages[numMsgs - 2];
 
       // if last message was more than 2 hours ago
       if (newMsg.createdAt - lastMsg.createdAt >= 60) {
@@ -92,7 +93,7 @@ exports.sendNewMessageEmail = functions.firestore
                 to: receiver.email,
                 subject: "You have a new message on BookBuy!",
                 template: "new_chat",
-                "v:message": newMessage.messages[0].content
+                "v:message": newMessage.messages[numMsgs - 1].content
               },
               (error, body) => {
                 console.log("ERR", error, "BOD", body);
