@@ -33,7 +33,7 @@ exports.sendWelcomeEmail = functions.firestore
   });
 
 // send user an email when they recieve a first chat
-exports.sendNewMessageEmail = functions.firestore
+exports.sendFirstMessageEmail = functions.firestore
   .document("messages/{userId}")
   .onCreate((snap, context) => {
     const newMessage = snap.data();
