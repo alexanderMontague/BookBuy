@@ -32,7 +32,7 @@ exports.sendWelcomeEmail = functions.firestore
     return 0;
   });
 
-// send user an email if they recieve a new first chat message
+// send user an email when they recieve a first chat
 exports.sendNewMessageEmail = functions.firestore
   .document("messages/{userId}")
   .onCreate((snap, context) => {
@@ -57,6 +57,50 @@ exports.sendNewMessageEmail = functions.firestore
           }
         );
       });
+
+    return 0;
+  });
+
+// send user an email if they recieve a message with at least 2 hours since the last
+exports.sendNewMessageEmail = functions.firestore
+  .document("messages/{userId}")
+  .onUpdate((snap, context) => {
+    const newMessage = snap.data();
+    const messages = newMessage.messages;
+
+    if (messages.length > 1) {
+      const newMsg = messages[messages.length - 1];
+      const lastMsg = messages[messages.length - 2];
+
+      // if last message was more than 2 hours ago
+      if (newMsg.createdAt - lastMsg.createdAt >= 60) {
+        // user who should recieve email
+        const recipientId =
+          newMsg.sentBy === newMessage.recipient
+            ? newMessage.sender
+            : newMessage.recipient;
+
+        db.collection("users")
+          .where("id", "==", recipientId)
+          .get()
+          .then(messageDoc => {
+            const receiver = messageDoc.docs[0].data();
+
+            mailgun.messages().send(
+              {
+                from: "Book Buy <info@bookbuy.ca>",
+                to: receiver.email,
+                subject: "You have a new message on BookBuy!",
+                template: "new_chat",
+                "v:message": newMessage.messages[0].content
+              },
+              (error, body) => {
+                console.log("ERR", error, "BOD", body);
+              }
+            );
+          });
+      }
+    }
 
     return 0;
   });

@@ -219,7 +219,7 @@ const Chat = props => {
 
   return (
     <div className={styles.mainChatContainer}>
-      <div className={styles.header}>Current Messages</div>
+      <div className={styles.header}>Messaging</div>
       <div className={styles.contentContainer}>
         <div
           className={[
