@@ -64,7 +64,7 @@
         border-radius: 5px;
         font-size: 16px;
         color: #333333;
-        font-family: "Overpass";
+        font-family: "Poppins";
 
         @media (max-width: 1000px) {
           width: 180px;
@@ -206,8 +206,8 @@
       }
     }
     .books {
-      background: url("../../assets/textbooks.jpg") no-repeat center;
-      background-size: cover;
+      background: url("../../assets/book-buy-logo.png") no-repeat center;
+      background-size: contain;
     }
     .money {
       background: url("../../assets/bookExchange.jpg") no-repeat center;
@@ -240,7 +240,7 @@
     height: 50px;
     width: 25%;
     font-size: 20px;
-    font-family: "Overpass";
+    font-family: "Poppins";
     background: #007bff;
     border: none;
     color: #ffffff;

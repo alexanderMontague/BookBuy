@@ -6,6 +6,7 @@ import { getUserStatus } from "../../actions/authActions";
 import { FaBars, FaComments } from "react-icons/fa";
 import logo from "../../assets/BookBuy.png";
 import Modal from "react-modal";
+import BookBuyLogo from "../../assets/BookBuyNavLogo.png";
 import firebase from "../../firebase";
 
 const modalStyles = {
@@ -52,7 +53,10 @@ const NavBar = props => {
       </Modal>
       <div className={styles.navContainer}>
         <div className={styles.logoLink}>
-          <img className={styles.img} src={logo} />
+          <div>
+            <img className={styles.img} src={BookBuyLogo} />
+          </div>
+          <div className={styles.navTitle}>Book Buy</div>
         </div>
         {isMobile ? (
           <div className={styles.mobileNav}>

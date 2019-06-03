@@ -65,7 +65,8 @@ exports.sendFirstMessageEmail = functions.firestore
 exports.sendNewMessageEmail = functions.firestore
   .document("messages/{userId}")
   .onUpdate((change, context) => {
-    const newMessage = change.after.data();
+    const oldRecord = change.before.data();
+    const newRecord = change.after.data();
     const messages = newMessage.messages;
 
     if (messages.length > 1) {
@@ -73,13 +74,16 @@ exports.sendNewMessageEmail = functions.firestore
       const newMsg = messages[numMsgs - 1];
       const lastMsg = messages[numMsgs - 2];
 
-      // if last message was more than 2 hours ago
-      if (newMsg.createdAt - lastMsg.createdAt >= 60) {
+      // if last message was more than 2 hours ago and its a new message not a read flag update
+      if (
+        newMsg.createdAt - lastMsg.createdAt >= 5200 &&
+        newRecord.messages.length > oldRecord.messages.length
+      ) {
         // user who should recieve email
         const recipientId =
-          newMsg.sentBy === newMessage.recipient
-            ? newMessage.sender
-            : newMessage.recipient;
+          newMsg.sentBy === newRecord.recipient
+            ? newRecord.sender
+            : newRecord.recipient;
 
         db.collection("users")
           .where("id", "==", recipientId)

@@ -1,12 +1,12 @@
 .navContainer {
   display: flex;
   justify-content: space-between;
-  height: 70px;
+  height: 80px;
   background: white;
 }
 
 .logoLink {
-  // display: flex;
+  display: flex;
   // align-items: center;
   // font-size: 1.35rem;
   // font-weight: bolder;
@@ -15,11 +15,23 @@
 
   .img {
     height: 100%;
-    width: 50%;
+    // width: 50%;
 
     @media (max-width: 450px) {
       height: 100%;
-      width: 100%;
+      // width: 100%;
+    }
+  }
+
+  .navTitle {
+    font-weight: bold;
+    font-size: 35px;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+
+    @media (max-width: 450px) {
+      font-size: 25px;
     }
   }
 }
@@ -91,7 +103,7 @@
 
   .hamburgerMenu {
     height: 100%;
-    width: 150px;
+    width: 125px;
     display: flex;
     flex-direction: column;
     align-items: center;
