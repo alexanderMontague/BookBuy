@@ -81,7 +81,7 @@
 
     .mobileChatToggle {
       width: 60%;
-      height: 69%;
+      height: 75%;
       padding: 10px 0 10px 10px;
     }
 
@@ -114,7 +114,7 @@
         overflow-y: scroll;
       }
 
-      .chatInput {
+      .chatForm {
         height: 70px;
         display: flex;
         align-items: center;
@@ -129,6 +129,7 @@
           font-size: 16px;
           color: #333333;
           font-family: "Poppins";
+          resize: none;
         }
         .chatInput:focus {
           outline: none;
