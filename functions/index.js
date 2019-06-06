@@ -67,18 +67,16 @@ exports.sendNewMessageEmail = functions.firestore
   .onUpdate((change, context) => {
     const oldRecord = change.before.data();
     const newRecord = change.after.data();
-    const messages = newMessage.messages;
+    const messages = newRecord.messages;
 
     if (messages.length > 1) {
       const numMsgs = messages.length;
       const newMsg = messages[numMsgs - 1];
       const lastMsg = messages[numMsgs - 2];
 
-      console.log("newRecord:", newRecord, "oldRecord:", oldRecord);
-
       // if last message was more than 2 hours ago and its a new message not a read flag update
       if (
-        newMsg.createdAt - lastMsg.createdAt >= 1 &&
+        newMsg.createdAt - lastMsg.createdAt >= 7200 &&
         newRecord.messages.length > oldRecord.messages.length
       ) {
         // user who should recieve email
@@ -99,7 +97,7 @@ exports.sendNewMessageEmail = functions.firestore
                 to: receiver.email,
                 subject: "You have a new message on BookBuy!",
                 template: "new_chat",
-                "v:message": newMessage.messages[numMsgs - 1].content
+                "v:message": newRecord.messages[numMsgs - 1].content
               },
               (error, body) => {
                 console.log("ERR", error, "BOD", body);

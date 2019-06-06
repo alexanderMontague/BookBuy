@@ -9,6 +9,10 @@ function* getUserStatus() {
     return yield put(userStatusResponse(null));
   }
 
+  if (window.location.search === "?gotoProfile=true") {
+    window.location = "profile";
+  }
+
   const userData = (yield firebase.getCurrentUserInfo()).data();
   yield put(userStatusResponse({ ...userData }));
 }

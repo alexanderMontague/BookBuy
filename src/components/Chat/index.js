@@ -268,7 +268,7 @@ const Chat = props => {
             {renderMessages()}
           </div>
           <form className={styles.chatForm}>
-            <textarea
+            <input
               className={styles.chatInput}
               type="text"
               placeholder="Type your message here!"
