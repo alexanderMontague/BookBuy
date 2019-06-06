@@ -74,9 +74,11 @@ exports.sendNewMessageEmail = functions.firestore
       const newMsg = messages[numMsgs - 1];
       const lastMsg = messages[numMsgs - 2];
 
+      console.log("newRecord:", newRecord, "oldRecord:", oldRecord);
+
       // if last message was more than 2 hours ago and its a new message not a read flag update
       if (
-        newMsg.createdAt - lastMsg.createdAt >= 5200 &&
+        newMsg.createdAt - lastMsg.createdAt >= 1 &&
         newRecord.messages.length > oldRecord.messages.length
       ) {
         // user who should recieve email
