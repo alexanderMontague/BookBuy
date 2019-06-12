@@ -53,9 +53,7 @@ const NavBar = props => {
       </Modal>
       <div className={styles.navContainer}>
         <div className={styles.logoLink}>
-          <div>
-            <img className={styles.img} src={BookBuyLogo} />
-          </div>
+          <img className={styles.img} src={BookBuyLogo} />
           <div className={styles.navTitle}>Book Buy</div>
         </div>
         {isMobile ? (

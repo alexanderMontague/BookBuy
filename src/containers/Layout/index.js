@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import NavBar from "../../components/NavBar";
 import Footer from "../../components/Footer";
 import styles from "./styles.scss";
+import { redirectToProfile } from "../../actions/uiActions";
 import { getUserStatus } from "../../actions/authActions";
 import {
   updateUserSentChats,
@@ -14,6 +15,10 @@ import firebase from "../../firebase";
 
 class Layout extends Component {
   componentDidMount() {
+    if (window.location.search === "?gotoProfile=true") {
+      this.props.redirectToProfile(true);
+    }
+
     this.props.getUserStatus();
   }
 
@@ -93,5 +98,11 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { getUserStatus, updateUserSentChats, updateUserReceivedChats, firstMessages }
+  {
+    getUserStatus,
+    updateUserSentChats,
+    updateUserReceivedChats,
+    firstMessages,
+    redirectToProfile
+  }
 )(Layout);
