@@ -15,7 +15,6 @@
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-polyfill": "^6.26.0",
     "compressorjs": "^1.0.5",
-    "connected-react-router": "^6.4.0",
     "dotenv-webpack": "^1.7.0",
     "eslint": "^5.9.0",
     "file-loader": "^1.1.11",
