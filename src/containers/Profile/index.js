@@ -9,7 +9,6 @@ import Chat from "../../components/Chat";
 class Profile extends Component {
   state = {
     name: this.props.user.fullName,
-    phone: this.props.user.phone,
     email: this.props.user.email,
     passNew1: "",
     passNew2: "",
@@ -88,12 +87,11 @@ class Profile extends Component {
   };
 
   updateUserInformation = async () => {
-    const { name, email, phone, passNew1, passNew2 } = this.state;
+    const { name, email, passNew1, passNew2 } = this.state;
 
     await firebase.updateDocument("users", this.props.user.id, {
       fullName: name,
-      email,
-      phone
+      email
     });
 
     this.props.getUserStatus();
@@ -113,7 +111,7 @@ class Profile extends Component {
         await firebase.userObject().updatePassword(passNew1);
         this.setState({ passNew1: "", passNew2: "" });
       } catch (error) {
-        alert(error.message);
+        alert(error.message); // TODO: proper error handling
       }
     }
   };
@@ -135,16 +133,6 @@ class Profile extends Component {
                   type="text"
                   value={this.state.name}
                   id="name"
-                  onChange={this.inputChangeHandler}
-                />
-              </label>
-              <label className={styles.inputLabel}>
-                Phone:
-                <input
-                  className={styles.input}
-                  type="tel"
-                  value={this.state.phone}
-                  id="phone"
                   onChange={this.inputChangeHandler}
                 />
               </label>
@@ -184,7 +172,6 @@ class Profile extends Component {
                 disabled={
                   user &&
                   this.state.name === user.fullName &&
-                  this.state.phone === user.phone &&
                   this.state.email === user.email &&
                   ((!this.state.passNew1 && !this.state.passNew2) ||
                     ((this.state.passNew1 !== this.state.passNew2 &&

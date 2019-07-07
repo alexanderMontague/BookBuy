@@ -170,14 +170,14 @@
   flex-direction: column;
 
   .messageContainer {
-    min-height: 35px;
+    min-height: 25px;
     max-width: 250px;
     color: #f8f9fa;
     border-radius: 20px;
     padding: 5px 10px;
-    display: flex;
     align-items: center;
     margin: 2px 0px;
+    word-break: break-word;
 
     @media (max-width: 650px) {
       font-size: 15px;
@@ -198,6 +198,15 @@
     align-items: center;
     margin: 0 5px;
     font-size: 12px;
+  }
+
+  .chatLink,
+  .chatLink:visited {
+    color: #f8f9fa;
+    text-decoration: "underline";
+  }
+  .chatLink:hover {
+    font-weight: bold;
   }
 }
 .receiverPos {

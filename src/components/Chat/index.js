@@ -7,6 +7,7 @@ import ChatPreview from "../ChatPreview";
 import { withRouter } from "react-router";
 import firebase from "../../firebase";
 import moment from "moment";
+import sanitizeHTML from "sanitize-html";
 
 const Chat = props => {
   const {
@@ -155,6 +156,38 @@ const Chat = props => {
     updateCurrentMessage("");
   };
 
+  const linkify = inputText => {
+    const sanitizedInput = sanitizeHTML(inputText);
+    let replacedText, replacePattern1, replacePattern2, replacePattern3;
+
+    //URLs starting with http://, https://, or ftp://
+    replacePattern1 = /(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gim;
+    replacedText = sanitizedInput.replace(
+      replacePattern1,
+      `<a href="$1" target="_blank" rel="noopener noreferrer" class="${
+        styles.chatLink
+      }">$1</a>`
+    );
+
+    //URLs starting with "www." (without // before it, or it'd re-link the ones done above).
+    replacePattern2 = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
+    replacedText = replacedText.replace(
+      replacePattern2,
+      `$1<a href="http://$2" target="_blank" rel="noopener noreferrer" class="${
+        styles.chatLink
+      }">$2</a>`
+    );
+
+    //Change email addresses to mailto:: links.
+    replacePattern3 = /(([a-zA-Z0-9\-\_\.])+@[a-zA-Z\_]+?(\.[a-zA-Z]{2,6})+)/gim;
+    replacedText = replacedText.replace(
+      replacePattern3,
+      `<a href="mailto:$1" class="${styles.chatLink}">$1</a>`
+    );
+
+    return { __html: replacedText };
+  };
+
   const renderMessages = () => {
     const { selectedChat } = props;
 
@@ -179,15 +212,16 @@ const Chat = props => {
             key={message.createdAt + message.sentBy}
           >
             <div className={styles.dateContainer}>
-              {moment.unix(message.createdAt).format("MMMM DD, hh:mm A")}
+              {moment.unix(message.createdAt).format("MMMM DD, h:mm A")}
             </div>
             <div
               className={[
                 styles.messageContainer,
                 wasSender ? styles.sender : styles.receiver
               ].join(" ")}
+              dangerouslySetInnerHTML={linkify(message.content)}
             >
-              {message.content}
+              {/* {message.content} */}
             </div>
           </div>
         );

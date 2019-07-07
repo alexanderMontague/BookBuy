@@ -37,18 +37,22 @@ const Post = props => {
   const drawerToggle = async () => {
     drawerToggleHandler(!isDrawerOpen);
 
-    // once post is opened get user info
-    if (Object.keys(userInfo).length === 0) {
-      const postUserInfo = await firebase.getDocsFromCollection("users", [
-        ["id", "==", userId]
-      ]);
-      setUserInfo(postUserInfo[0]);
-    }
+    try {
+      // once post is opened get user info
+      if (Object.keys(userInfo).length === 0) {
+        const postUserInfo = await firebase.getDocsFromCollection("users", [
+          ["id", "==", userId]
+        ]);
+        setUserInfo(postUserInfo[0]);
+      }
 
-    // once post is opened get picture if one
-    if (bookURL === "" && hasPicture) {
-      const bookURL = await firebase.getBookPicture(postId);
-      updateBookURL(bookURL);
+      // once post is opened get picture if one
+      if (bookURL === "" && hasPicture) {
+        const bookURL = await firebase.getBookPicture(postId);
+        updateBookURL(bookURL);
+      }
+    } catch (err) {
+      console.error("Failed to fetch user details + pic on POSTING", err)
     }
   };
 
