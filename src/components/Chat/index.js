@@ -24,8 +24,8 @@ const Chat = props => {
   const [isFirstMessage, firstMessageHandler] = useState(false);
   const [currentMessage, updateCurrentMessage] = useState("");
   const [chatHeader, setChatHeader] = useState("...");
-  const [chatMeetingSpot, setChatMeetingSpot] = useState("");
-  const [meetingTimer, setMeetingTimer] = useState(null);
+  // const [chatMeetingSpot, setChatMeetingSpot] = useState("");
+  // const [meetingTimer, setMeetingTimer] = useState(null);
   const [mobileChatOpen, setMobileChat] = useState(isMobileWidth);
   let isMounted = false;
 
@@ -58,19 +58,19 @@ const Chat = props => {
   }, [selectedChat]);
 
   // on meeting spot change, update 10s after initial typing once
-  useEffect(() => {
-    clearTimeout(meetingTimer);
+  // useEffect(() => {
+  //   clearTimeout(meetingTimer);
 
-    // update meeting message 10s after initial typing
-    selectedChat &&
-      setMeetingTimer(
-        setTimeout(() => {
-          firebase.updateDocument("messages", selectedChat.id, {
-            meetingSpot: chatMeetingSpot
-          });
-        }, 5000)
-      );
-  }, [chatMeetingSpot]);
+  //   // update meeting message 10s after initial typing
+  //   selectedChat &&
+  //     setMeetingTimer(
+  //       setTimeout(() => {
+  //         firebase.updateDocument("messages", selectedChat.id, {
+  //           meetingSpot: chatMeetingSpot
+  //         });
+  //       }, 5000)
+  //     );
+  // }, [chatMeetingSpot]);
 
   const renderChatPreviews = () => {
     // clear global chat notif
@@ -125,7 +125,7 @@ const Chat = props => {
           sender: user.id,
           recipient: selectedChat.id,
           post: selectedChat.postId,
-          meetingSpot: null,
+          // meetingSpot: null,
           messages: [
             {
               content: currentMessage,
@@ -220,9 +220,7 @@ const Chat = props => {
                 wasSender ? styles.sender : styles.receiver
               ].join(" ")}
               dangerouslySetInnerHTML={linkify(message.content)}
-            >
-              {/* {message.content} */}
-            </div>
+            />
           </div>
         );
       });
@@ -238,15 +236,15 @@ const Chat = props => {
     const chatName = await firebase.getDocsFromCollection("users", [
       ["id", "==", isSender ? selectedChat.recipient : selectedChat.sender]
     ]);
-    const chatMeetingSpot = await firebase.getDocsFromCollection("messages", [
-      ["id", "==", selectedChat.id]
-    ]);
+    // const chatMeetingSpot = await firebase.getDocsFromCollection("messages", [
+    //   ["id", "==", selectedChat.id]
+    // ]);
 
     setChatHeader(chatName[0].fullName);
-    chatMeetingSpot.length !== 0 &&
-      setChatMeetingSpot(
-        chatMeetingSpot[0].meetingSpot ? chatMeetingSpot[0].meetingSpot : ""
-      );
+    // chatMeetingSpot.length !== 0 &&
+    //   setChatMeetingSpot(
+    //     chatMeetingSpot[0].meetingSpot ? chatMeetingSpot[0].meetingSpot : ""
+    //   );
   };
 
   const numChats = [...userSentChats, ...userReceivedChats].length;
@@ -285,13 +283,13 @@ const Chat = props => {
               <div className={styles.chatName}>{`Chat with ${
                 selectedChat.fullName ? selectedChat.fullName : chatHeader
               }`}</div>
-              <input
+              {/* <input
                 className={styles.meetingSpot}
                 type="text"
                 placeholder="Sugest a meeting place..."
                 onChange={event => setChatMeetingSpot(event.target.value)}
                 value={chatMeetingSpot}
-              />
+              /> */}
             </div>
           ) : (
             <div style={{ textAlign: "center" }}>
@@ -301,24 +299,28 @@ const Chat = props => {
           <div className={styles.chatMessageArea} id="chatMessageArea">
             {renderMessages()}
           </div>
-          <form className={styles.chatForm}>
-            <input
-              className={styles.chatInput}
-              type="text"
-              placeholder="Type your message here!"
-              value={currentMessage}
-              onChange={e => updateCurrentMessage(e.target.value)}
-              disabled={!selectedChat}
-            />
-            <button
-              type="submit"
-              className={styles.chatSendButton}
-              onClick={onChatSend}
-              disabled={!currentMessage}
-            >
-              Send
-            </button>
-          </form>
+          {selectedChat && (
+            <form className={styles.chatForm}>
+              <textarea
+                className={styles.chatInput}
+                id="chatInput"
+                type="text"
+                placeholder="Type your message here!"
+                value={currentMessage}
+                onChange={e => updateCurrentMessage(e.target.value)}
+                disabled={!selectedChat}
+                spellCheck="true"
+              />
+              <button
+                type="submit"
+                className={styles.chatSendButton}
+                onClick={onChatSend}
+                disabled={!currentMessage}
+              >
+                Send
+              </button>
+            </form>
+          )}
         </div>
       </div>
     </div>

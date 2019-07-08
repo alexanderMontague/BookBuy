@@ -30,7 +30,7 @@
       @media (max-width: 650px) {
         overflow: hidden;
         position: absolute;
-        height: 72%;
+        max-height: 550px;
         width: 6%;
         background: #ffffff;
         z-index: 1;
@@ -81,7 +81,7 @@
 
     .mobileChatToggle {
       width: 60%;
-      height: 75%;
+      max-height: 530px;
       padding: 10px 0 10px 10px;
     }
 
@@ -95,8 +95,6 @@
       }
 
       .chatHeader {
-        padding-bottom: 10px;
-
         .meetingSpot {
           border: 1px solid lightgrey;
           width: 95%;
@@ -110,19 +108,20 @@
       }
 
       .chatMessageArea {
-        height: 80%;
+        height: 78%;
         overflow-y: scroll;
+        margin: 10px 0;
       }
 
       .chatForm {
-        height: 70px;
+        height: 60px;
         display: flex;
         align-items: center;
         justify-content: space-around;
 
         .chatInput {
-          width: 75%;
-          height: 40px;
+          width: 80%;
+          height: 50px;
           padding: 0 10px;
           border: solid 1px grey;
           border-radius: 5px;
@@ -151,6 +150,11 @@
           justify-content: center;
           align-items: center;
           border-radius: 5px;
+
+          @media (max-width: 650px) {
+            height: 90%;
+            margin-left: 10px;
+          }
         }
         .chatSendButton:hover {
           cursor: pointer;
