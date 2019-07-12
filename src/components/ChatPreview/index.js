@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
+import moment from "moment";
 import styles from "./styles.scss";
 import { selectChat } from "../../actions/uiActions";
 import firebase from "../../firebase";
@@ -66,6 +67,14 @@ const ChatPreview = props => {
     }
   };
 
+  const renderChatDate = () => {
+    console.log(chatData.messages, Array(chatData.messages).length);
+  };
+
+  renderChatDate();
+
+  console.log(chatData);
+
   return (
     <div
       className={[
@@ -86,7 +95,12 @@ const ChatPreview = props => {
           <span className={styles.interestedIn}>{bookInfo.bookTitle}</span>
         </div>
       </div>
-      {isUnread && <div className={styles.unread} />}
+      <div className={styles.chatMetaData}>
+        <div className={styles.chatDate}>
+          {moment.unix().format("MMMM DD, h:mm A")}
+        </div>
+        {isUnread && <div className={styles.unread} />}
+      </div>
     </div>
   );
 };
