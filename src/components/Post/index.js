@@ -52,7 +52,7 @@ const Post = props => {
         updateBookURL(bookURL);
       }
     } catch (err) {
-      console.error("Failed to fetch user details + pic on POSTING", err)
+      console.error("Failed to fetch user details + pic on POSTING", err);
     }
   };
 
@@ -64,7 +64,8 @@ const Post = props => {
       bookTitle,
       postId,
       messages: [],
-      meetingSpot: ""
+      meetingSpot: "",
+      content: ""
     };
 
     history.push({

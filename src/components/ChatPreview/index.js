@@ -68,12 +68,30 @@ const ChatPreview = props => {
   };
 
   const renderChatDate = () => {
-    console.log(chatData.messages, Array(chatData.messages).length);
+    if (isFirst) {
+      return moment().format("h:mm A");
+    }
+
+    const currMessage = moment.unix(
+      chatData.messages[chatData.messages.length - 1].createdAt
+    );
+
+    if (currMessage.isSame(new Date(), "day")) {
+      return currMessage.format("h:mm A");
+    }
+    return currMessage.format("MMM DD");
   };
 
-  renderChatDate();
+  const renderMessagePreview = () => {
+    if (isFirst) {
+      return;
+    }
 
-  console.log(chatData);
+    const currMessage = chatData.messages[chatData.messages.length - 1].content;
+    return currMessage.length > 50
+      ? currMessage.slice(0, 50) + ". . ."
+      : currMessage;
+  };
 
   return (
     <div
@@ -90,15 +108,16 @@ const ChatPreview = props => {
           {isFirst ? `New Chat with ${chatData.fullName} . . .` : chatName}
         </div>
         <div className={styles.chatDetails}>
-          {`${isSender || isFirst ? "You are" : "They are"} interested in:`}
+          {/* {`${isSender || isFirst ? "You are" : "They are"} interested in:`}
           &nbsp;&nbsp;
-          <span className={styles.interestedIn}>{bookInfo.bookTitle}</span>
+          <span className={styles.interestedIn}>{bookInfo.bookTitle}</span> */}
+          <span className={styles.messagePreview}>
+            {renderMessagePreview()}
+          </span>
         </div>
       </div>
       <div className={styles.chatMetaData}>
-        <div className={styles.chatDate}>
-          {moment.unix().format("MMMM DD, h:mm A")}
-        </div>
+        <div className={styles.chatDate}>{renderChatDate()}</div>
         {isUnread && <div className={styles.unread} />}
       </div>
     </div>

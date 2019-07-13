@@ -1,13 +1,14 @@
 .chatPreview {
   min-height: 85px;
   border-bottom: 1px solid lightgrey;
-  padding-left: 10px;
+  padding: 10px 5px;
   display: flex;
 
   .chatUserName {
-    font-size: 1.05rem;
+    font-size: 1.2rem;
     font-weight: bold;
     padding-bottom: 5px;
+    color: #007bff;
 
     @media (max-width: 768px) {
       font-size: 0.9rem;
@@ -17,7 +18,9 @@
     @media (max-width: 768px) {
       font-size: 0.8rem;
     }
-    .interestedIn {
+    .messagePreview {
+      font-size: 1 rem;
+      color: rgb(139, 139, 139);
       font-style: italic;
     }
   }
@@ -35,18 +38,25 @@
 .previewContent {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  width: 75%;
+  width: 80%;
+
+  @media (max-width: 768px) {
+    width: 65%;
+  }
 }
 
 .chatMetaData {
-  width: 25%;
+  width: 20%;
   display: flex;
   flex-direction: column;
+  align-items: center;
+
+  @media (max-width: 768px) {
+    width: 35%;
+  }
 
   .chatDate {
-    width: 12px;
-    height: 12px;
+    height: 20px;
   }
   .unread {
     margin: auto 2.5%;
