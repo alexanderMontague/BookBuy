@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import styles from "./styles.scss";
+import { FaTrashAlt, FaFlag } from "react-icons/fa";
 import { selectChat } from "../../actions/uiActions";
 import { seenChats } from "../../actions/userActions";
 import ChatPreview from "../ChatPreview";
@@ -23,7 +24,10 @@ const Chat = props => {
   const [newMessage, updateNewMessage] = useState(null);
   const [isFirstMessage, firstMessageHandler] = useState(false);
   const [currentMessage, updateCurrentMessage] = useState("");
-  const [chatHeader, setChatHeader] = useState("...");
+  const [chatHeader, setChatHeader] = useState({
+    chatName: "...",
+    chatDetails: "..."
+  });
   // const [chatMeetingSpot, setChatMeetingSpot] = useState("");
   // const [meetingTimer, setMeetingTimer] = useState(null);
   const [mobileChatOpen, setMobileChat] = useState(isMobileWidth);
@@ -56,21 +60,6 @@ const Chat = props => {
   useEffect(() => {
     getChatDetails();
   }, [selectedChat]);
-
-  // on meeting spot change, update 10s after initial typing once
-  // useEffect(() => {
-  //   clearTimeout(meetingTimer);
-
-  //   // update meeting message 10s after initial typing
-  //   selectedChat &&
-  //     setMeetingTimer(
-  //       setTimeout(() => {
-  //         firebase.updateDocument("messages", selectedChat.id, {
-  //           meetingSpot: chatMeetingSpot
-  //         });
-  //       }, 5000)
-  //     );
-  // }, [chatMeetingSpot]);
 
   const renderChatPreviews = () => {
     // clear global chat notif
@@ -194,7 +183,7 @@ const Chat = props => {
     if (selectedChat) {
       const messageContainer = document.getElementById("chatMessageArea");
       if (messageContainer) {
-        // holy hack T_T
+        // once messages render, scroll to bottom of messages
         setTimeout(
           () => (messageContainer.scrollTop = messageContainer.scrollHeight),
           100
@@ -229,22 +218,32 @@ const Chat = props => {
 
   const getChatDetails = async () => {
     if (!user || !selectedChat) return;
-
     const isSender = selectedChat.sender === user.id;
 
     // TODO: Refactor into a global redux saga so we only have to fetch details once
-    const chatName = await firebase.getDocsFromCollection("users", [
+    const chatUser = await firebase.getDocsFromCollection("users", [
       ["id", "==", isSender ? selectedChat.recipient : selectedChat.sender]
     ]);
-    // const chatMeetingSpot = await firebase.getDocsFromCollection("messages", [
-    //   ["id", "==", selectedChat.id]
-    // ]);
 
-    setChatHeader(chatName[0].fullName);
-    // chatMeetingSpot.length !== 0 &&
-    //   setChatMeetingSpot(
-    //     chatMeetingSpot[0].meetingSpot ? chatMeetingSpot[0].meetingSpot : ""
-    //   );
+    const postDetails = await firebase.getDocsFromCollection("postings", [
+      ["postId", "==", selectedChat.post]
+    ]);
+
+    console.log(chatUser, postDetails);
+
+    const chatDetails = (
+      <div>
+        {isSender
+          ? "You are interested in their book: "
+          : "They are interested in your book: "}
+        <span className={styles.bookLink}>{postDetails[0].bookTitle}</span>
+      </div>
+    );
+
+    setChatHeader({
+      chatName: chatUser[0].fullName,
+      chatDetails
+    });
   };
 
   const numChats = [...userSentChats, ...userReceivedChats].length;
@@ -280,16 +279,20 @@ const Chat = props => {
         <div className={styles.activeChat}>
           {selectedChat ? (
             <div className={styles.chatHeader}>
-              <div className={styles.chatName}>{`Chat with ${
-                selectedChat.fullName ? selectedChat.fullName : chatHeader
-              }`}</div>
-              {/* <input
-                className={styles.meetingSpot}
-                type="text"
-                placeholder="Sugest a meeting place..."
-                onChange={event => setChatMeetingSpot(event.target.value)}
-                value={chatMeetingSpot}
-              /> */}
+              <div className={styles.headerLeft}>
+                <div className={styles.chatName}>
+                  {selectedChat.fullName
+                    ? selectedChat.fullName
+                    : chatHeader.chatName}
+                </div>
+                <div className={styles.chatDetails}>
+                  {chatHeader.chatDetails}
+                </div>
+              </div>
+              <div className={styles.headerRight}>
+                <FaFlag />
+                <FaTrashAlt />
+              </div>
             </div>
           ) : (
             <div style={{ textAlign: "center" }}>

@@ -40,7 +40,7 @@ const Footer = props => {
         )}
       </div>
       <div className={styles.disclaimer}>
-        © Textbook Trade {new Date().getFullYear()}. All Rights Reserved.
+        © BookBuy {new Date().getFullYear()}. All Rights Reserved.
       </div>
     </div>
   );

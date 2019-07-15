@@ -108,9 +108,6 @@ const ChatPreview = props => {
           {isFirst ? `New Chat with ${chatData.fullName} . . .` : chatName}
         </div>
         <div className={styles.chatDetails}>
-          {/* {`${isSender || isFirst ? "You are" : "They are"} interested in:`}
-          &nbsp;&nbsp;
-          <span className={styles.interestedIn}>{bookInfo.bookTitle}</span> */}
           <span className={styles.messagePreview}>
             {renderMessagePreview()}
           </span>

@@ -87,28 +87,51 @@
 
     .activeChat {
       width: 65%;
-      padding: 20px;
+      padding: 0 20px;
 
       @media (max-width: 650px) {
         width: 95%;
-        padding: 20px 30px 20px 30px;
+        padding: 0 20px 0 30px;
       }
 
       .chatHeader {
-        .meetingSpot {
-          border: 1px solid lightgrey;
-          width: 95%;
-          font-family: "Poppins";
-          border-radius: 5px;
-          padding: 0 10px;
+        display: flex;
+        min-height: 65px;
+
+        .headerLeft {
+          width: 90%;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-evenly;
+
+          .chatName {
+            font-size: 1.2em;
+            color: #0069d9;
+          }
+
+          .chatDetails {
+            font-style: italic;
+
+            .bookLink {
+              text-decoration: underline;
+            }
+            .bookLink:hover {
+              cursor: pointer;
+            }
+          }
         }
-        .meetingSpot:focus {
-          outline: none;
+
+        .headerRight {
+          width: 10%;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-evenly;
+          align-items: center;
         }
       }
 
       .chatMessageArea {
-        height: 78%;
+        height: 73%;
         overflow-y: scroll;
         margin: 10px 0;
       }
@@ -185,6 +208,7 @@
 
     @media (max-width: 650px) {
       font-size: 15px;
+      max-width: 200px;
     }
   }
 
