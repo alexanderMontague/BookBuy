@@ -231,12 +231,22 @@ const Chat = props => {
 
     console.log(chatUser, postDetails);
 
+    const postingLink = `${window.location.host}/postings?id=${
+      postDetails[0].postId
+    }`;
     const chatDetails = (
       <div>
         {isSender
           ? "You are interested in their book: "
           : "They are interested in your book: "}
-        <span className={styles.bookLink}>{postDetails[0].bookTitle}</span>
+        <a
+          href={postingLink}
+          rel="noopener"
+          target="_blank"
+          className={styles.bookLink}
+        >
+          {postDetails[0].bookTitle}
+        </a>
       </div>
     );
 
@@ -290,8 +300,8 @@ const Chat = props => {
                 </div>
               </div>
               <div className={styles.headerRight}>
-                <FaFlag />
-                <FaTrashAlt />
+                <FaFlag className={styles.chatIcons} />
+                <FaTrashAlt className={styles.chatIcons} />
               </div>
             </div>
           ) : (

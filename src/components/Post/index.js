@@ -27,12 +27,14 @@ const Post = props => {
     isAuthenticated,
     history,
     user,
-    userSchool
+    userSchool,
+    openPosts
   } = props;
 
   const [isDrawerOpen, drawerToggleHandler] = useState(false);
   const [bookURL, updateBookURL] = useState("");
   const [userInfo, setUserInfo] = useState({});
+  const [openPostsOnLoad, setOpenPostsOnLoad] = useState(false);
 
   const drawerToggle = async () => {
     drawerToggleHandler(!isDrawerOpen);
@@ -73,6 +75,11 @@ const Post = props => {
       search: `?send=${btoa(JSON.stringify(sellerInfo))}`
     });
   };
+
+  if (openPostsOnLoad) {
+    drawerToggle();
+    setOpenPostsOnLoad(false);
+  }
 
   return (
     <Fragment>

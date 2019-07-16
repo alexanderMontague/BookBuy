@@ -42,26 +42,39 @@ class Postings extends Component {
 
     shownPosts: 20,
     filteredPostings: [],
-    allPostings: []
+    allPostings: [],
+    openPosts: false
   };
 
   async componentDidMount() {
-    if (!!window.location.search) {
+    // book search params coming from home
+    if (window.location.search.includes("?params=")) {
       const rawParams = new URLSearchParams(window.location.search).get(
         "params"
       );
       const searchParams = JSON.parse(atob(rawParams));
       this.setState({ ...searchParams }, () => this.searchForTextbook());
     }
+    // book ID coming from chat
+    else if (window.location.search.includes("?id=")) {
+      const postId = new URLSearchParams(window.location.search).get("id");
 
-    // TODO: Pagination with firebase when it gets to that
-    const allPostings = await firebase.getAllPostings();
+      const filteredPostings = await firebase.getDocsFromCollection(
+        "postings",
+        [["postId", "==", postId]]
+      );
 
-    this.setState({
-      filteredPostings: allPostings,
-      allPostings,
-      postsLoading: false
-    });
+      this.setState({ filteredPostings, postsLoading: false, openPosts: true });
+    } else {
+      // TODO: Pagination with firebase when it gets to that
+      const allPostings = await firebase.getAllPostings();
+
+      this.setState({
+        filteredPostings: allPostings,
+        allPostings,
+        postsLoading: false
+      });
+    }
   }
 
   schoolSelector = option => {
@@ -104,7 +117,7 @@ class Postings extends Component {
   };
 
   renderPostings = () => {
-    const { filteredPostings, shownPosts } = this.state;
+    const { filteredPostings, shownPosts, openPosts } = this.state;
 
     filteredPostings.sort((postA, postB) => {
       if (postA.datePosted < postB.datePosted) return 1;
@@ -120,6 +133,7 @@ class Postings extends Component {
           key={`${posting.userId}${posting.bookAuthor}${posting.bookTitle}`}
           {...posting}
           isGrey={isGrey}
+          openPosts
         />
       );
     });
