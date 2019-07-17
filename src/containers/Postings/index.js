@@ -87,7 +87,11 @@ class Postings extends Component {
 
   searchForTextbook = async event => {
     event && event.preventDefault();
-    this.setState({ filteredPostings: [], postsLoading: true });
+    this.setState({
+      filteredPostings: [],
+      postsLoading: true,
+      openPosts: false
+    });
 
     const {
       selectedSchool,
@@ -133,7 +137,7 @@ class Postings extends Component {
           key={`${posting.userId}${posting.bookAuthor}${posting.bookTitle}`}
           {...posting}
           isGrey={isGrey}
-          openPosts
+          openPosts={openPosts}
         />
       );
     });

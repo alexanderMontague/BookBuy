@@ -34,7 +34,7 @@ const Post = props => {
   const [isDrawerOpen, drawerToggleHandler] = useState(false);
   const [bookURL, updateBookURL] = useState("");
   const [userInfo, setUserInfo] = useState({});
-  const [openPostsOnLoad, setOpenPostsOnLoad] = useState(false);
+  const [openPostsOnLoad, setOpenPostsOnLoad] = useState(openPosts);
 
   const drawerToggle = async () => {
     drawerToggleHandler(!isDrawerOpen);
@@ -67,7 +67,8 @@ const Post = props => {
       postId,
       messages: [],
       meetingSpot: "",
-      content: ""
+      content: "",
+      isFirst: true
     };
 
     history.push({
@@ -190,51 +191,54 @@ const Post = props => {
                       {moment.unix(datePosted).format("MMMM Do YYYY")}
                     </div>
                   </div>
-                  <div className={styles.row}>
-                    {!user ? (
-                      <button
-                        className={styles.contactButton}
-                        onClick={isAuthenticated ? contactSeller : () => {}}
-                      >
-                        Register to contact seller!
-                      </button>
-                    ) : (
-                      user.id !== userId && (
-                        <button
-                          className={styles.contactButton}
-                          onClick={isAuthenticated ? contactSeller : () => {}}
-                        >
-                          Contact Seller!
-                        </button>
-                      )
-                    )}
-                  </div>
+
                   <div />
                 </div>
               </div>
-              <div className={styles.picture}>
-                {bookURL === "" && hasPicture ? (
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      marginTop: 10
-                    }}
-                  >
-                    <ClipLoader
-                      sizeUnit={"px"}
-                      size={70}
-                      color={"#0069d9"}
-                      loading={true}
+              <div className={styles.pictureContainer}>
+                <div className={styles.picture}>
+                  {bookURL === "" && hasPicture ? (
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        marginTop: 10
+                      }}
+                    >
+                      <ClipLoader
+                        sizeUnit={"px"}
+                        size={70}
+                        color={"#0069d9"}
+                        loading={true}
+                      />
+                    </div>
+                  ) : (
+                    <img
+                      className={styles.asset}
+                      src={hasPicture ? bookURL : placeholder}
+                      alt="Textbook Picture"
                     />
-                  </div>
-                ) : (
-                  <img
-                    className={styles.asset}
-                    src={hasPicture ? bookURL : placeholder}
-                    alt="Textbook Picture"
-                  />
-                )}
+                  )}
+                </div>
+                <div className={styles.row}>
+                  {!user ? (
+                    <button
+                      className={styles.contactButton}
+                      onClick={isAuthenticated ? contactSeller : () => {}}
+                    >
+                      Register to contact seller!
+                    </button>
+                  ) : user.id !== userId ? (
+                    <button
+                      className={styles.contactButton}
+                      onClick={isAuthenticated ? contactSeller : () => {}}
+                    >
+                      Contact Seller!
+                    </button>
+                  ) : (
+                    "This is your book!"
+                  )}
+                </div>
               </div>
             </div>
           </div>

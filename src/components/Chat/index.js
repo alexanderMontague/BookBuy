@@ -28,8 +28,6 @@ const Chat = props => {
     chatName: "...",
     chatDetails: "..."
   });
-  // const [chatMeetingSpot, setChatMeetingSpot] = useState("");
-  // const [meetingTimer, setMeetingTimer] = useState(null);
   const [mobileChatOpen, setMobileChat] = useState(isMobileWidth);
   let isMounted = false;
 
@@ -39,6 +37,7 @@ const Chat = props => {
 
     // if we are sending a first message
     if (!!window.location.search) {
+      // TODO: put this shit in redux
       const rawSellerInfo = new URLSearchParams(window.location.search).get(
         "send"
       );
@@ -114,7 +113,6 @@ const Chat = props => {
           sender: user.id,
           recipient: selectedChat.id,
           post: selectedChat.postId,
-          // meetingSpot: null,
           messages: [
             {
               content: currentMessage,
@@ -217,19 +215,35 @@ const Chat = props => {
   };
 
   const getChatDetails = async () => {
+    console.log("IN GET DETAILS", props, isFirstMessage);
     if (!user || !selectedChat) return;
-    const isSender = selectedChat.sender === user.id;
+    const isSender = selectedChat.sender === user.id || selectedChat.isFirst;
+    let chatUser = [];
+    let postDetails = [];
 
-    // TODO: Refactor into a global redux saga so we only have to fetch details once
-    const chatUser = await firebase.getDocsFromCollection("users", [
-      ["id", "==", isSender ? selectedChat.recipient : selectedChat.sender]
-    ]);
+    // save an API call if new message from postings
+    if (selectedChat.isFirst) {
+      chatUser = [
+        {
+          fullName: selectedChat.fullName
+        }
+      ];
+      postDetails = [
+        {
+          postId: selectedChat.postId,
+          bookTitle: selectedChat.bookTitle
+        }
+      ];
+    } else {
+      // TODO: Refactor into a global redux saga so we only have to fetch details once
+      chatUser = await firebase.getDocsFromCollection("users", [
+        ["id", "==", isSender ? selectedChat.recipient : selectedChat.sender]
+      ]);
 
-    const postDetails = await firebase.getDocsFromCollection("postings", [
-      ["postId", "==", selectedChat.post]
-    ]);
-
-    console.log(chatUser, postDetails);
+      postDetails = await firebase.getDocsFromCollection("postings", [
+        ["postId", "==", selectedChat.post]
+      ]);
+    }
 
     const postingLink = `${window.location.host}/postings?id=${
       postDetails[0].postId
@@ -286,7 +300,7 @@ const Chat = props => {
             )}
           </div>
         </div>
-        <div className={styles.activeChat}>
+        <div className={[styles.activeChat].join(" ")}>
           {selectedChat ? (
             <div className={styles.chatHeader}>
               <div className={styles.headerLeft}>

@@ -262,3 +262,7 @@
   color: #0069d9;
   cursor: pointer;
 }
+
+.isLoading {
+  filter: blur(8px);
+}
