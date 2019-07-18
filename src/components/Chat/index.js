@@ -9,6 +9,20 @@ import { withRouter } from "react-router";
 import firebase from "../../firebase";
 import moment from "moment";
 import sanitizeHTML from "sanitize-html";
+import Modal from "react-modal";
+
+const modalStyles = {
+  content: {
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    marginRight: "-50%",
+    transform: "translate(-50%, -50%)",
+    minWidth: "300px"
+  },
+  overlay: { zIndex: 10 }
+};
 
 const Chat = props => {
   const {
@@ -29,6 +43,7 @@ const Chat = props => {
     chatDetails: "..."
   });
   const [mobileChatOpen, setMobileChat] = useState(isMobileWidth);
+  const [selectedModal, setModal] = useState(null);
   let isMounted = false;
 
   // on mount check if sending new message
@@ -215,7 +230,6 @@ const Chat = props => {
   };
 
   const getChatDetails = async () => {
-    console.log("IN GET DETAILS", props, isFirstMessage);
     if (!user || !selectedChat) return;
     const isSender = selectedChat.sender === user.id || selectedChat.isFirst;
     let chatUser = [];
@@ -245,9 +259,9 @@ const Chat = props => {
       ]);
     }
 
-    const postingLink = `${window.location.host}/postings?id=${
-      postDetails[0].postId
-    }`;
+    const postingLink = `${
+      process.env.NODE_ENV === "development" ? "" : "https://www."
+    }${window.location.host}/postings?id=${postDetails[0].postId}`;
     const chatDetails = (
       <div>
         {isSender
@@ -274,6 +288,23 @@ const Chat = props => {
 
   return (
     <div className={styles.mainChatContainer}>
+      <Modal
+        isOpen={!!selectedModal}
+        onRequestClose={() => setModal(null)}
+        style={modalStyles}
+        contentLabel="Report or Delete Post"
+      >
+        <div className={styles.deleteModalText}>
+          Are you sure you want to delete this chat?
+        </div>
+        <div className={styles.confirmText}>
+          This removes the chat forever. Forever is a very long time.
+        </div>
+        <div className={styles.confirmButton} onClick={() => setModal(null)}>
+          No
+        </div>
+        <div className={styles.confirmButton}>Yes</div>
+      </Modal>
       <div className={styles.header}>Messaging</div>
       <div className={styles.contentContainer}>
         <div
@@ -315,7 +346,10 @@ const Chat = props => {
               </div>
               <div className={styles.headerRight}>
                 <FaFlag className={styles.chatIcons} />
-                <FaTrashAlt className={styles.chatIcons} />
+                <FaTrashAlt
+                  className={styles.chatIcons}
+                  onClick={() => setModal("delete")}
+                />
               </div>
             </div>
           ) : (
