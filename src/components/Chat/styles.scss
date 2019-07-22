@@ -266,3 +266,61 @@
 .isLoading {
   filter: blur(8px);
 }
+
+.modalTitleText {
+  font-size: 20px;
+  color: #007bff;
+  text-align: center;
+}
+
+.confirmText {
+  font-size: 10px;
+  padding-bottom: 25px;
+  font-style: italic;
+  text-align: center;
+}
+
+.reportText {
+  font-size: 14px;
+  padding-bottom: 25px;
+  font-style: italic;
+  text-align: center;
+}
+
+.reportInput {
+  width: 100%;
+  min-height: 50px;
+  font-size: 12px;
+  padding: 5px;
+  border: 1px solid #007bff;
+  border-radius: 5px;
+  font-family: "Poppins";
+}
+.reportInput:focus {
+  outline: none;
+}
+
+.confirmContainer {
+  display: flex;
+  justify-content: space-evenly;
+  padding: 15px 0;
+
+  .confirmButton {
+    width: 100px;
+    height: 42px;
+    font-size: 15px;
+    font-family: "Poppins";
+    background: #007bff;
+    border: none;
+    color: #ffffff;
+    transition: 0.3s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+  }
+  .confirmButton:hover {
+    cursor: pointer;
+    background: #0069d9;
+  }
+}

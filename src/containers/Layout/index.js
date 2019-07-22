@@ -7,8 +7,7 @@ import { redirectToProfile } from "../../actions/uiActions";
 import { getUserStatus } from "../../actions/authActions";
 import {
   updateUserSentChats,
-  updateUserReceivedChats,
-  firstMessages
+  updateUserReceivedChats
 } from "../../actions/userActions";
 import { ClipLoader } from "react-spinners";
 import firebase from "../../firebase";
@@ -23,12 +22,7 @@ class Layout extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const {
-      user,
-      updateUserSentChats,
-      updateUserReceivedChats,
-      firstMessages
-    } = this.props;
+    const { user, updateUserSentChats, updateUserReceivedChats } = this.props;
 
     // once we fetch the users info, create stream to get chats
     if (prevProps.user === null && user) {
@@ -48,8 +42,6 @@ class Layout extends Component {
             updateUserReceivedChats(snapshot.docs.map(doc => doc.data())),
           err => console.error("chat recipient error", err)
         );
-
-      setTimeout(firstMessages, 200);
     }
   }
 
@@ -102,7 +94,6 @@ export default connect(
     getUserStatus,
     updateUserSentChats,
     updateUserReceivedChats,
-    firstMessages,
     redirectToProfile
   }
 )(Layout);

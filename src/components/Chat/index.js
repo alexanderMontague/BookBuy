@@ -19,7 +19,8 @@ const modalStyles = {
     bottom: "auto",
     marginRight: "-50%",
     transform: "translate(-50%, -50%)",
-    minWidth: "300px"
+    minWidth: "300px",
+    maxWidth: "375px"
   },
   overlay: { zIndex: 10 }
 };
@@ -44,6 +45,7 @@ const Chat = props => {
   });
   const [mobileChatOpen, setMobileChat] = useState(isMobileWidth);
   const [selectedModal, setModal] = useState(null);
+  const [reportInput, setReportInput] = useState("");
   let isMounted = false;
 
   // on mount check if sending new message
@@ -260,7 +262,7 @@ const Chat = props => {
     }
 
     const postingLink = `${
-      process.env.NODE_ENV === "development" ? "" : "https://www."
+      process.env.NODE_ENV === "development" ? "" : "https://"
     }${window.location.host}/postings?id=${postDetails[0].postId}`;
     const chatDetails = (
       <div>
@@ -284,6 +286,40 @@ const Chat = props => {
     });
   };
 
+  const deleteChatHandler = async () => {
+    setModal(null);
+    selectChat(null);
+
+    if (isFirstMessage) {
+      firstMessageHandler(false);
+      props.history.push({
+        search: ""
+      });
+      return;
+    }
+
+    try {
+      await firebase.deleteDocument("messages", selectedChat.id);
+    } catch (error) {
+      console.error("Delete Chat Error", error);
+    }
+  };
+
+  const reportUserHandler = async () => {
+    const newChat = await firebase.createDocument("reports", {
+      dateReported: moment().unix(),
+      chatId: selectedChat.id,
+      reportNotes: reportInput,
+      reportedUserId:
+        user.id === selectedChat.sender
+          ? selectedChat.recipient
+          : selectedChat.sender,
+      reporterUserId: user.id
+    });
+
+    setModal(null);
+  };
+
   const numChats = [...userSentChats, ...userReceivedChats].length;
 
   return (
@@ -294,16 +330,69 @@ const Chat = props => {
         style={modalStyles}
         contentLabel="Report or Delete Post"
       >
-        <div className={styles.deleteModalText}>
-          Are you sure you want to delete this chat?
-        </div>
-        <div className={styles.confirmText}>
-          This removes the chat forever. Forever is a very long time.
-        </div>
-        <div className={styles.confirmButton} onClick={() => setModal(null)}>
-          No
-        </div>
-        <div className={styles.confirmButton}>Yes</div>
+        {selectedModal === "delete" ? (
+          <>
+            <div className={styles.modalTitleText}>
+              Are you sure you want to delete this chat?
+            </div>
+            <div className={styles.confirmText}>
+              This removes the chat forever. Forever is a very long time.
+            </div>
+            <div className={styles.confirmContainer}>
+              <div
+                className={styles.confirmButton}
+                onClick={() => setModal(null)}
+              >
+                No
+              </div>
+              <div className={styles.confirmButton} onClick={deleteChatHandler}>
+                Yes
+              </div>
+            </div>
+          </>
+        ) : isFirstMessage ? (
+          <>
+            <div className={styles.modalTitleText}>
+              You can only report messages that have already been sent
+            </div>
+            <div
+              className={styles.confirmButton}
+              onClick={() => setModal(null)}
+            >
+              Close
+            </div>
+          </>
+        ) : (
+          <>
+            <div className={styles.modalTitleText}>
+              Would you like to report this User?
+            </div>
+            <div className={styles.reportText}>
+              Report a user if they make you feel uncomfortable or unsafe in
+              anyway. The report will be reviewed by a member of our team and
+              acted upon accordingly.
+            </div>
+            <textarea
+              placeholder="Enter any report notes"
+              className={styles.reportInput}
+              onChange={event => setReportInput(event.target.value)}
+              value={reportInput}
+            >
+              Enter any report notes
+            </textarea>
+            <div className={styles.confirmContainer}>
+              <div
+                className={styles.confirmButton}
+                onClick={() => setModal(null)}
+              >
+                No
+              </div>
+              <div className={styles.confirmButton} onClick={reportUserHandler}>
+                Yes
+              </div>
+            </div>
+          </>
+        )}
       </Modal>
       <div className={styles.header}>Messaging</div>
       <div className={styles.contentContainer}>
@@ -345,7 +434,10 @@ const Chat = props => {
                 </div>
               </div>
               <div className={styles.headerRight}>
-                <FaFlag className={styles.chatIcons} />
+                <FaFlag
+                  className={styles.chatIcons}
+                  onClick={() => setModal("report")}
+                />
                 <FaTrashAlt
                   className={styles.chatIcons}
                   onClick={() => setModal("delete")}

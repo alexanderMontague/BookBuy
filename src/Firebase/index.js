@@ -2,6 +2,8 @@ import app from "firebase/app";
 import "firebase/auth";
 import "firebase/firebase-firestore";
 import "firebase/storage";
+import "core-js/stable";
+import "regenerator-runtime/runtime";
 
 const config = {
   apiKey: process.env.APIKEY,
@@ -85,6 +87,7 @@ class Firebase {
 
   // query a collection
   async getDocsFromCollection(collection, queries) {
+    this.db = this.db;
     let fullQueryLine = `this.db.collection('${collection}')`;
 
     for (let i = 0; i < queries.length; i++) {
@@ -97,6 +100,19 @@ class Firebase {
 
     let filteredQueries = await eval(fullQueryLine).get();
     return filteredQueries.docs.map(doc => doc.data());
+  }
+
+  // create a document
+  async createDocument(collection, data) {
+    this.db
+      .collection(collection)
+      .add(data)
+      .then(async doc => {
+        return (await doc.get()).data();
+      })
+      .catch(err => {
+        console.error("error reporting user", err);
+      });
   }
 
   // update a document

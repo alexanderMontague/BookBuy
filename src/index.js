@@ -5,14 +5,14 @@ import store from "./store";
 import ReactGA from "react-ga";
 
 import Routes from "./routes";
-import { BrowserRouter as Router, browserHistory } from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 
 ReactGA.initialize("UA-137825522-1");
 ReactGA.pageview(window.location.pathname);
 
 ReactDOM.render(
   <Provider store={store}>
-    <Router history={browserHistory}>{Routes}</Router>
+    <Router>{Routes}</Router>
   </Provider>,
   document.getElementById("app")
 );
