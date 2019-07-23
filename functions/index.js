@@ -2,9 +2,10 @@ const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 admin.initializeApp();
 const db = admin.firestore();
-
 const config = functions.config();
 
+const vision = require("@google-cloud/vision");
+const visionClient = new vision.ImageAnnotatorClient();
 const mailgun = require("mailgun-js")({
   apiKey: config.bookbuy.mailgun_api_key,
   domain: config.bookbuy.mailgun_domain
@@ -108,4 +109,13 @@ exports.sendNewMessageEmail = functions.firestore
     }
 
     return 0;
+  });
+
+// use google cloud API to check uploaded books for nsfw content
+exports.checkBookPostPicture = functions.storage
+  .object()
+  .onFinalize(async object => {
+    const filePath = `gs://bookbuy-783fd.appspot.com/${object.name}`;
+    const [result] = await visionClient.safeSearchDetection(filePath);
+    console.log("RESULT", result);
   });
