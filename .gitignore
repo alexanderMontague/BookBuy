@@ -124,6 +124,9 @@ btg.png
 # .env Files
 .env.*
 
+#firebase stuff
+GC_vision_key.json
+
 *.xml
 .idea/
 *.iml
