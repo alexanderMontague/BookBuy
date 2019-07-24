@@ -26,7 +26,7 @@ exports.sendWelcomeEmail = functions.firestore
         "v:fullName": user.fullName
       },
       (error, body) => {
-        console.log("ERR", error, "BOD", body);
+        console.log("ERR:", error, "BOD:", body);
       }
     );
 
@@ -54,7 +54,7 @@ exports.sendFirstMessageEmail = functions.firestore
             "v:message": newMessage.messages[0].content
           },
           (error, body) => {
-            console.log("ERR", error, "BOD", body);
+            console.log("ERR:", error, "BOD:", body);
           }
         );
       });
@@ -101,7 +101,7 @@ exports.sendNewMessageEmail = functions.firestore
                 "v:message": newRecord.messages[numMsgs - 1].content
               },
               (error, body) => {
-                console.log("ERR", error, "BOD", body);
+                console.log("ERR:", error, "BOD:", body);
               }
             );
           });
@@ -117,5 +117,34 @@ exports.checkBookPostPicture = functions.storage
   .onFinalize(async object => {
     const filePath = `gs://bookbuy-783fd.appspot.com/${object.name}`;
     const [result] = await visionClient.safeSearchDetection(filePath);
-    console.log("RESULT", result);
+    // check if image rating could be nsfw
+    const isNSFW = Object.values(result.safeSearchAnnotation).some(rating =>
+      ["POSSIBLE", "LIKELY", "VERY_LIKELY"].includes(rating)
+    );
+
+    if (isNSFW) {
+      try {
+        const postId = object.name.replace("postings/", "");
+
+        // get nsfw post
+        const post = await db
+          .collection("postings")
+          .where("postId", "==", postId)
+          .get();
+
+        console.log("POST", post.docs[0].data());
+
+        // update post flagged property
+        const success = await db
+          .collection("postings")
+          .doc(postId)
+          .update({
+            flagged: true
+          });
+
+        console.log("succ", success);
+      } catch (error) {
+        console.log("ERROR FETCHING NSFW POST:", error);
+      }
+    }
   });
