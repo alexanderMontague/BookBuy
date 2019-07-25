@@ -20,7 +20,8 @@ class Profile extends Component {
 
     // fetch user's posts
     const userPostings = await firebase.getDocsFromCollection("postings", [
-      ["userId", "==", user.id]
+      ["userId", "==", user.id],
+      ["flagged", "==", false]
     ]);
     userPostings.sort((postA, postB) => {
       if (postA.datePosted < postB.datePosted) return 1;

@@ -4,6 +4,7 @@ admin.initializeApp();
 const db = admin.firestore();
 const config = functions.config();
 
+const moment = require("moment");
 const vision = require("@google-cloud/vision");
 const visionClient = new vision.ImageAnnotatorClient();
 const mailgun = require("mailgun-js")({
@@ -125,26 +126,57 @@ exports.checkBookPostPicture = functions.storage
     if (isNSFW) {
       try {
         const postId = object.name.replace("postings/", "");
-
-        // get nsfw post
-        const post = await db
-          .collection("postings")
-          .where("postId", "==", postId)
-          .get();
-
-        console.log("POST", post.docs[0].data());
-
+        let post = {};
         // update post flagged property
-        const success = await db
+        await db
           .collection("postings")
           .doc(postId)
           .update({
             flagged: true
           });
 
-        console.log("succ", success);
+        // get nsfw post
+        const postData = await db
+          .collection("postings")
+          .where("postId", "==", postId)
+          .get();
+        post = [postData.docs].data();
       } catch (error) {
-        console.log("ERROR FETCHING NSFW POST:", error);
+        console.log("ERROR FETCHING OR UPDATING NSFW POST:", error);
       }
+
+      const chatRef = db.collection("messages");
+      await chatRef
+        .add({
+          sender: "bT1L5gvZnKTW15zq4whF0qkJy6J2", // book_buy ID,
+          recipient: post.userId,
+          post: {
+            id: "BOOK_BUY",
+            fullName: "Book Buy",
+            bookTitle: "",
+            postId: "",
+            messages: [],
+            content: "",
+            isFirst: false
+          },
+          messages: [
+            {
+              content: `
+              Your book listing ${
+                post.bookTitle
+              } has been flagged for inappropriate content.\n
+              This is most likely because your post image contains profanity, nudity, graphic violence or other sensitive content.\n
+              If you believe this is a mistake, feel free to respond to this chat or send us an email at info@bookbuy.ca
+            `,
+              createdAt: moment().unix(),
+              sentBy: "bT1L5gvZnKTW15zq4whF0qkJy6J2",
+              isUnread: true
+            }
+          ]
+        })
+        .then(async msg => await chatRef.doc(msg.id).update({ id: doc.id }))
+        .catch(err => {
+          console.log("ERROR SENDING REMOVAL CHAT", err);
+        });
     }
   });

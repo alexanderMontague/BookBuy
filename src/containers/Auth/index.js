@@ -125,7 +125,7 @@ class Auth extends Component {
       setTimeout(
         () =>
           this.props.history.push({
-            pathname: "/sell"
+            pathname: "/postings"
           }),
         2000
       );
@@ -188,7 +188,7 @@ class Auth extends Component {
       setTimeout(
         () =>
           this.props.history.push({
-            pathname: "/sell"
+            pathname: "/postings"
           }),
         1500
       );

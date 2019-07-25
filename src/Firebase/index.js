@@ -80,8 +80,12 @@ class Firebase {
   }
 
   // public
+  // TODO: DEPRECATE
   async getAllPostings() {
-    const allPostings = await this.db.collection("postings").get();
+    const allPostings = await this.db
+      .collection("postings")
+      .where("flagged", "==", false)
+      .get();
     return allPostings.docs.map(doc => doc.data());
   }
 

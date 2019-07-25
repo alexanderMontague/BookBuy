@@ -61,9 +61,22 @@ class Postings extends Component {
 
       const filteredPostings = await firebase.getDocsFromCollection(
         "postings",
-        [["postId", "==", postId]]
+        [["postId", "==", postId], ["flagged", "==", false]]
       );
 
+      // if linked to post, scroll into view automagically
+      setTimeout(
+        () =>
+          window.scroll({
+            top:
+              window.innerWidth <= 450
+                ? document.body.scrollHeight - 500
+                : document.body.scrollHeight,
+            left: 0,
+            behavior: "smooth"
+          }),
+        500
+      );
       this.setState({ filteredPostings, postsLoading: false, openPosts: true });
     } else {
       // TODO: Pagination with firebase when it gets to that
@@ -104,7 +117,8 @@ class Postings extends Component {
     let filteredPostings = await firebase.getDocsFromCollection("postings", [
       ["userSchool.value", "==", selectedSchool.value],
       ["program.value", "==", selectedProgram.value],
-      ["courseLevel", "==", courseLevel]
+      ["courseLevel", "==", courseLevel],
+      ["flagged", "==", false]
     ]);
 
     // if there is title/author input, query that too

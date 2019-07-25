@@ -27,7 +27,6 @@
     "eslint": "^5.9.0",
     "file-loader": "^1.1.11",
     "firebase": "^5.8.6",
-    "firebase-admin": "^7.2.0",
     "firebase-tools": "^6.11.0",
     "floating-label-react": "^0.3.0",
     "install": "^0.12.1",

@@ -234,36 +234,38 @@ const Chat = props => {
   const getChatDetails = async () => {
     if (!user || !selectedChat) return;
     const isSender = selectedChat.sender === user.id || selectedChat.isFirst;
-    let chatUser = [];
-    let postDetails = [];
+    let chatUser = {};
+    let postDetails = {};
 
     // save an API call if new message from postings
     if (selectedChat.isFirst) {
-      chatUser = [
-        {
-          fullName: selectedChat.fullName
-        }
-      ];
-      postDetails = [
-        {
-          postId: selectedChat.postId,
-          bookTitle: selectedChat.bookTitle
-        }
-      ];
+      chatUser = {
+        fullName: selectedChat.fullName
+      };
+      postDetails = {
+        postId: selectedChat.postId,
+        bookTitle: selectedChat.bookTitle
+      };
+    } else if (selectedChat.id === "BOOK_BUY") {
+      // if message from Book Buy
+      setChatHeader({
+        chatName: "Book Buy",
+        chatDetails: "info@bookbuy.ca"
+      });
     } else {
       // TODO: Refactor into a global redux saga so we only have to fetch details once
-      chatUser = await firebase.getDocsFromCollection("users", [
+      [chatUser] = await firebase.getDocsFromCollection("users", [
         ["id", "==", isSender ? selectedChat.recipient : selectedChat.sender]
       ]);
 
-      postDetails = await firebase.getDocsFromCollection("postings", [
+      [postDetails] = await firebase.getDocsFromCollection("postings", [
         ["postId", "==", selectedChat.post]
       ]);
     }
 
     const postingLink = `${
       process.env.NODE_ENV === "development" ? "" : "https://"
-    }${window.location.host}/postings?id=${postDetails[0].postId}`;
+    }${window.location.host}/postings?id=${postDetails.postId}`;
     const chatDetails = (
       <div>
         {isSender
@@ -275,13 +277,13 @@ const Chat = props => {
           target="_blank"
           className={styles.bookLink}
         >
-          {postDetails[0].bookTitle}
+          {postDetails.bookTitle}
         </a>
       </div>
     );
 
     setChatHeader({
-      chatName: chatUser[0].fullName,
+      chatName: chatUser.fullName,
       chatDetails
     });
   };
