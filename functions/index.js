@@ -124,9 +124,10 @@ exports.checkBookPostPicture = functions.storage
     );
 
     if (isNSFW) {
+      let post = {};
+
       try {
         const postId = object.name.replace("postings/", "");
-        let post = {};
         // update post flagged property
         await db
           .collection("postings")
@@ -140,43 +141,58 @@ exports.checkBookPostPicture = functions.storage
           .collection("postings")
           .where("postId", "==", postId)
           .get();
-        post = [postData.docs].data();
+        post = postData.docs[0].data();
       } catch (error) {
         console.log("ERROR FETCHING OR UPDATING NSFW POST:", error);
       }
 
+      // send message to user stating why their post was flagged
       const chatRef = db.collection("messages");
-      await chatRef
-        .add({
-          sender: "bT1L5gvZnKTW15zq4whF0qkJy6J2", // book_buy ID,
-          recipient: post.userId,
-          post: {
-            id: "BOOK_BUY",
-            fullName: "Book Buy",
-            bookTitle: "",
-            postId: "",
-            messages: [],
-            content: "",
-            isFirst: false
-          },
-          messages: [
-            {
-              content: `
-              Your book listing ${
-                post.bookTitle
-              } has been flagged for inappropriate content.\n
-              This is most likely because your post image contains profanity, nudity, graphic violence or other sensitive content.\n
-              If you believe this is a mistake, feel free to respond to this chat or send us an email at info@bookbuy.ca
-            `,
-              createdAt: moment().unix(),
-              sentBy: "bT1L5gvZnKTW15zq4whF0qkJy6J2",
-              isUnread: true
-            }
-          ]
-        })
-        .then(async msg => await chatRef.doc(msg.id).update({ id: doc.id }))
-        .catch(err => {
-          console.log("ERROR SENDING REMOVAL CHAT", err);
+      const currentBookbuyChats = await chatRef
+        .where("sender", "==", "bT1L5gvZnKTW15zq4whF0qkJy6J2")
+        .where("recipient", "==", post.userId)
+        .get();
+
+      const messageContent = {
+        sender: "bT1L5gvZnKTW15zq4whF0qkJy6J2", // book_buy ID,
+        recipient: post.userId,
+        post: {
+          id: "BOOK_BUY",
+          fullName: "Book Buy",
+          bookTitle: "",
+          postId: "",
+          messages: [],
+          content: "",
+          isFirst: false
+        },
+        messages: [
+          {
+            content: `
+            Your book listing ${
+              post.bookTitle
+            } has been flagged for inappropriate content.\n
+            This is most likely because your post image contains profanity, nudity, graphic violence or other sensitive content.\n
+            If you believe this is a mistake, feel free to respond to this chat or send us an email at info@bookbuy.ca
+          `,
+            createdAt: moment().unix(),
+            sentBy: "bT1L5gvZnKTW15zq4whF0qkJy6J2",
+            isUnread: true
+          }
+        ]
+      };
+
+      // if first message from bookbuy
+      if (currentBookbuyChats.length === 0) {
+        await chatRef
+          .add(messageContent)
+          .then(async msg => await chatRef.doc(msg.id).update({ id: msg.id }))
+          .catch(err => {
+            console.log("ERROR SENDING REMOVAL CHAT", err);
+          });
+      } else {
+        await chatRef.doc(currentBookbuyChats[0].data().id).update({
+          messages: admin.firestore.FieldValue.arrayUnion(messageContent)
         });
+      }
     }
   });

@@ -246,12 +246,13 @@ const Chat = props => {
         postId: selectedChat.postId,
         bookTitle: selectedChat.bookTitle
       };
-    } else if (selectedChat.id === "BOOK_BUY") {
+    } else if (selectedChat.post.id === "BOOK_BUY") {
       // if message from Book Buy
       setChatHeader({
         chatName: "Book Buy",
-        chatDetails: "info@bookbuy.ca"
+        chatDetails: "Find and Sell Used Books Easily! info@bookbuy.ca"
       });
+      return;
     } else {
       // TODO: Refactor into a global redux saga so we only have to fetch details once
       [chatUser] = await firebase.getDocsFromCollection("users", [
@@ -436,10 +437,12 @@ const Chat = props => {
                 </div>
               </div>
               <div className={styles.headerRight}>
-                <FaFlag
-                  className={styles.chatIcons}
-                  onClick={() => setModal("report")}
-                />
+                {selectedChat.post.id !== "BOOK_BUY" && (
+                  <FaFlag
+                    className={styles.chatIcons}
+                    onClick={() => setModal("report")}
+                  />
+                )}
                 <FaTrashAlt
                   className={styles.chatIcons}
                   onClick={() => setModal("delete")}

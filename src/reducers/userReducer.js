@@ -44,8 +44,7 @@ const userReducer = (prevState = initialState, { type, payload }) => {
       return {
         ...prevState,
         userReceivedChats: [...payload],
-        isNewMessage,
-        isFirstFetch: false
+        isNewMessage
       };
 
     case "CHATS_SEEN":

@@ -34,6 +34,9 @@ class Layout extends Component {
           err => console.error("chat sender error", err)
         );
 
+      // block so received chats are looked at second
+      setTimeout(() => {}, 0);
+
       firebase.db
         .collection("messages")
         .where("recipient", "==", user.id)
