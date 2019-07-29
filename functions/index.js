@@ -182,7 +182,7 @@ exports.checkBookPostPicture = functions.storage
       };
 
       // if first message from bookbuy
-      if (currentBookbuyChats.length === 0) {
+      if (currentBookbuyChats.docs.length === 0) {
         await chatRef
           .add(messageContent)
           .then(async msg => await chatRef.doc(msg.id).update({ id: msg.id }))
@@ -190,8 +190,19 @@ exports.checkBookPostPicture = functions.storage
             console.log("ERROR SENDING REMOVAL CHAT", err);
           });
       } else {
-        await chatRef.doc(currentBookbuyChats[0].data().id).update({
-          messages: admin.firestore.FieldValue.arrayUnion(messageContent)
+        await chatRef.doc(currentBookbuyChats.docs[0].data().id).update({
+          messages: admin.firestore.FieldValue.arrayUnion({
+            content: `
+            Your book listing ${
+              post.bookTitle
+            } has been flagged for inappropriate content.\n
+            This is most likely because your post image contains profanity, nudity, graphic violence or other sensitive content.\n
+            If you believe this is a mistake, feel free to respond to this chat or send us an email at info@bookbuy.ca
+          `,
+            createdAt: moment().unix(),
+            sentBy: "bT1L5gvZnKTW15zq4whF0qkJy6J2",
+            isUnread: true
+          })
         });
       }
     }
