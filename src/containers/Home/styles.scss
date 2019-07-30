@@ -108,9 +108,10 @@
 
 .featuresPanel {
   min-height: 450px;
-  background: #f8f9fa;
   display: flex;
+  border-bottom: 3px solid #0069d9;
   justify-content: space-around;
+  margin: 0 25px;
 
   @media (max-width: 1000px) {
     flex-direction: column;
@@ -163,10 +164,11 @@
 .infoPanel {
   display: flex;
   flex-direction: column;
+  margin-top: 25px;
 
   .infoRow {
     display: flex;
-    min-height: 400px;
+    min-height: 450px;
     background: #ffffff;
     @media (max-width: 1000px) {
       flex-direction: column;

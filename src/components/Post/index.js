@@ -224,7 +224,7 @@ const Post = props => {
                   {!user ? (
                     <button
                       className={styles.contactButton}
-                      onClick={isAuthenticated ? contactSeller : () => {}}
+                      onClick={() => props.history.push("/auth")}
                     >
                       Register to contact seller!
                     </button>

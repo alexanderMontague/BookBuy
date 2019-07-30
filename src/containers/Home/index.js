@@ -11,6 +11,14 @@ import {
   programDropdownValues
 } from "../../assets/dropdownValues";
 
+const renderTitleText = index => {
+  const titleText = "Search Hundreds of Textbooks Now";
+  const titleElem = document.getElementById("titleText");
+  if (index == titleText.length || titleElem === null) return;
+  titleElem.innerHTML = titleElem.innerHTML + titleText[index];
+  setTimeout(() => renderTitleText(index + 1), 100);
+};
+
 class Home extends Component {
   state = {
     selectedSchool: { label: "University of Guelph", value: "UofG" },
@@ -18,6 +26,10 @@ class Home extends Component {
     courseLevel: "",
     mainBookInput: ""
   };
+
+  componentDidMount() {
+    renderTitleText(0);
+  }
 
   schoolSelector = option => {
     this.setState({ selectedSchool: option });
@@ -54,9 +66,7 @@ class Home extends Component {
       <div className={styles.homeContainer}>
         {/* SEARCH PANEL */}
         <div className={styles.searchPanel}>
-          <div className={styles.searchHeader}>
-            Search Hundreds of Textbooks Now
-          </div>
+          <div id="titleText" className={styles.searchHeader} />
           <div className={styles.searchForm}>
             <form onSubmit={this.searchForTextbook}>
               <div className={styles.inputRow}>
