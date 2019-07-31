@@ -89,6 +89,16 @@ class Firebase {
     return allPostings.docs.map(doc => doc.data());
   }
 
+  // method used to get paginated posting data
+  async getPaginatedPostings(limit) {
+    const postings = await this.db
+      .collection("postings")
+      .where("flagged", "==", false)
+      .limit(limit)
+      .get();
+    return postings.docs.map(doc => doc.data());
+  }
+
   // query a collection
   async getDocsFromCollection(collection, queries) {
     this.db = this.db;

@@ -40,7 +40,7 @@ class Postings extends Component {
     mainBookInput: "",
     postsLoading: true,
 
-    shownPosts: 20,
+    shownPosts: 19,
     filteredPostings: [],
     allPostings: [],
     openPosts: false
@@ -80,11 +80,13 @@ class Postings extends Component {
       this.setState({ filteredPostings, postsLoading: false, openPosts: true });
     } else {
       // TODO: Pagination with firebase when it gets to that
-      const allPostings = await firebase.getAllPostings();
+      // const allPostings = await firebase.getAllPostings();
+
+      this.fetchPostings();
 
       this.setState({
-        filteredPostings: allPostings,
-        allPostings,
+        // filteredPostings: allPostings,
+        // allPostings,
         postsLoading: false
       });
     }
@@ -174,6 +176,12 @@ class Postings extends Component {
     const { shownPosts } = this.state;
 
     this.setState({ shownPosts: shownPosts + 10 }, () => this.renderPostings());
+  };
+
+  fetchPostings = async () => {
+    const { shownPosts } = this.state;
+    const allPostings = await firebase.getPaginatedPostings(shownPosts + 1);
+    console.log(allPostings);
   };
 
   render() {
@@ -288,9 +296,9 @@ class Postings extends Component {
             {this.renderPostings()}
             {/* Expand more posts section */}
             {allPostings.length !== 0 &&
-              allPostings[shownPosts + 1] !== undefined && (
+              allPostings[shownPosts] !== undefined && (
                 <Post
-                  {...allPostings[shownPosts + 1]}
+                  {...allPostings[shownPosts]}
                   isExpandPost
                   expandMorePosts={this.expandMorePosts}
                 />
