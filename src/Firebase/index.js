@@ -93,10 +93,11 @@ class Firebase {
   async getPaginatedPostings(limit) {
     const postings = await this.db
       .collection("postings")
-      .where("flagged", "==", false)
+      .orderBy("datePosted", "desc")
       .limit(limit)
       .get();
-    return postings.docs.map(doc => doc.data());
+
+    return postings.docs.map(doc => doc.data()).filter(post => !post.flagged);
   }
 
   // query a collection

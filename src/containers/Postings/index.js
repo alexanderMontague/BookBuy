@@ -39,10 +39,9 @@ class Postings extends Component {
     courseLevel: "",
     mainBookInput: "",
     postsLoading: true,
-
-    shownPosts: 19,
-    filteredPostings: [],
-    allPostings: [],
+    shownPostLimit: 20,
+    fetchedPostings: [],
+    isLastPost: false,
     openPosts: false
   };
 
@@ -59,10 +58,11 @@ class Postings extends Component {
     else if (window.location.search.includes("?id=")) {
       const postId = new URLSearchParams(window.location.search).get("id");
 
-      const filteredPostings = await firebase.getDocsFromCollection(
-        "postings",
-        [["postId", "==", postId], ["flagged", "==", false]]
-      );
+      // TODO: use new query structure
+      const fetchedPostings = await firebase.getDocsFromCollection("postings", [
+        ["postId", "==", postId],
+        ["flagged", "==", false]
+      ]);
 
       // if linked to post, scroll into view automagically
       setTimeout(
@@ -77,18 +77,12 @@ class Postings extends Component {
           }),
         500
       );
-      this.setState({ filteredPostings, postsLoading: false, openPosts: true });
+      this.setState({ fetchedPostings, postsLoading: false, openPosts: true });
     } else {
       // TODO: Pagination with firebase when it gets to that
       // const allPostings = await firebase.getAllPostings();
 
-      this.fetchPostings();
-
-      this.setState({
-        // filteredPostings: allPostings,
-        // allPostings,
-        postsLoading: false
-      });
+      this.fetchPostings(this.state.shownPostLimit);
     }
   }
 
@@ -103,7 +97,7 @@ class Postings extends Component {
   searchForTextbook = async event => {
     event && event.preventDefault();
     this.setState({
-      filteredPostings: [],
+      fetchedPostings: [],
       postsLoading: true,
       openPosts: false
     });
@@ -116,7 +110,7 @@ class Postings extends Component {
     } = this.state;
 
     // get docs from firebase that match input
-    let filteredPostings = await firebase.getDocsFromCollection("postings", [
+    let fetchedPostings = await firebase.getDocsFromCollection("postings", [
       ["userSchool.value", "==", selectedSchool.value],
       ["program.value", "==", selectedProgram.value],
       ["courseLevel", "==", courseLevel],
@@ -125,7 +119,7 @@ class Postings extends Component {
 
     // if there is title/author input, query that too
     if (!!mainBookInput) {
-      filteredPostings = filteredPostings.filter(post => {
+      fetchedPostings = fetchedPostings.filter(post => {
         return (
           post.bookTitle.toLowerCase().includes(mainBookInput.toLowerCase()) ||
           post.bookAuthor.toLowerCase().includes(mainBookInput.toLowerCase())
@@ -133,19 +127,19 @@ class Postings extends Component {
       });
     }
 
-    this.setState({ filteredPostings, postsLoading: false });
+    this.setState({ fetchedPostings, postsLoading: false });
   };
 
   renderPostings = () => {
-    const { filteredPostings, shownPosts, openPosts } = this.state;
+    const { fetchedPostings, shownPostLimit, openPosts } = this.state;
 
-    filteredPostings.sort((postA, postB) => {
+    fetchedPostings.sort((postA, postB) => {
       if (postA.datePosted < postB.datePosted) return 1;
       else if (postA.datePosted > postB.datePosted) return -1;
       return 0;
     });
 
-    return filteredPostings.slice(0, shownPosts).map((posting, index) => {
+    return fetchedPostings.slice(0, shownPostLimit).map((posting, index) => {
       const isGrey = index % 2 !== 0;
 
       return (
@@ -160,32 +154,47 @@ class Postings extends Component {
   };
 
   resetForm = () => {
+    // TODO: fetch new posts and reset postings
     this.setState({
       selectedProgram: null,
       courseLevel: "",
-      mainBookInput: "",
-      filteredPostings: this.state.allPostings
+      mainBookInput: ""
     });
     this.props.history.push({
       search: ""
     });
-    this.setState({ test: true });
   };
 
   expandMorePosts = () => {
-    const { shownPosts } = this.state;
-
-    this.setState({ shownPosts: shownPosts + 10 }, () => this.renderPostings());
+    const { shownPostLimit } = this.state;
+    this.fetchPostings(shownPostLimit + 10);
   };
 
-  fetchPostings = async () => {
-    const { shownPosts } = this.state;
-    const allPostings = await firebase.getPaginatedPostings(shownPosts + 1);
-    console.log(allPostings);
+  fetchPostings = async limit => {
+    this.setState({ postsLoading: true });
+    const fetchedPostings = await firebase.getPaginatedPostings(limit);
+    const fetchedPostsLength = fetchedPostings.length;
+    let offset = 0;
+
+    // if the number of posts we get back is the same, we've hit the last post
+    if (this.state.shownPostLimit === fetchedPostsLength - 1) {
+      // add one as we use the last post for the expand more posts preview
+      offset = 1;
+    }
+
+    this.setState(
+      {
+        fetchedPostings,
+        shownPostLimit: fetchedPostsLength - 1 + offset,
+        postsLoading: false
+      },
+      () => this.renderPostings()
+    );
   };
 
   render() {
-    const { allPostings, shownPosts } = this.state;
+    const { fetchedPostings, shownPostLimit } = this.state;
+    console.log(fetchedPostings, shownPostLimit);
 
     return (
       <div className={styles.postingsContainer}>
@@ -295,10 +304,10 @@ class Postings extends Component {
             )}
             {this.renderPostings()}
             {/* Expand more posts section */}
-            {allPostings.length !== 0 &&
-              allPostings[shownPosts] !== undefined && (
+            {fetchedPostings.length !== 0 &&
+              fetchedPostings[shownPostLimit] !== undefined && (
                 <Post
-                  {...allPostings[shownPosts]}
+                  {...fetchedPostings[shownPostLimit]}
                   isExpandPost
                   expandMorePosts={this.expandMorePosts}
                 />
