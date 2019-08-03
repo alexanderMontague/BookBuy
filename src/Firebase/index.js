@@ -90,14 +90,32 @@ class Firebase {
   }
 
   // method used to get paginated posting data
-  async getPaginatedPostings(limit) {
-    const postings = await this.db
-      .collection("postings")
-      .orderBy("datePosted", "desc")
-      .limit(limit)
-      .get();
+  async getPaginatedPostings(limit, lastDocument = null) {
+    // if we pass the last document, pick up from pagination from there
+    let postings = [];
 
-    return postings.docs.map(doc => doc.data()).filter(post => !post.flagged);
+    if (lastDocument) {
+      postings = await this.db
+        .collection("postings")
+        .orderBy("datePosted", "desc")
+        .where("flagged", "==", false)
+        .startAfter(lastDocument)
+        .limit(limit)
+        .get();
+    } else {
+      // if first request get base limit
+      postings = await this.db
+        .collection("postings")
+        .orderBy("datePosted", "desc")
+        .where("flagged", "==", false)
+        .limit(limit)
+        .get();
+    }
+
+    return [
+      postings.docs.map(doc => doc.data()),
+      postings.docs[postings.docs.length - 1]
+    ];
   }
 
   // query a collection

@@ -41,7 +41,8 @@ class Postings extends Component {
     postsLoading: true,
     shownPostLimit: 20,
     fetchedPostings: [],
-    isLastPost: false,
+    lastPostRef: null,
+    getMorePosts: true,
     openPosts: false
   };
 
@@ -79,10 +80,8 @@ class Postings extends Component {
       );
       this.setState({ fetchedPostings, postsLoading: false, openPosts: true });
     } else {
-      // TODO: Pagination with firebase when it gets to that
-      // const allPostings = await firebase.getAllPostings();
-
-      this.fetchPostings(this.state.shownPostLimit);
+      // if regular fetch, get paginated posts
+      this.fetchPostings(this.state.shownPostLimit, null);
     }
   }
 
@@ -156,6 +155,7 @@ class Postings extends Component {
   resetForm = () => {
     // TODO: fetch new posts and reset postings
     this.setState({
+      fetchPostings: [],
       selectedProgram: null,
       courseLevel: "",
       mainBookInput: ""
@@ -163,37 +163,46 @@ class Postings extends Component {
     this.props.history.push({
       search: ""
     });
+    this.fetchPostings(20, null);
   };
 
   expandMorePosts = () => {
-    const { shownPostLimit } = this.state;
-    this.fetchPostings(shownPostLimit + 10);
+    const { shownPostLimit, lastPostRef } = this.state;
+    this.fetchPostings(shownPostLimit + 10, lastPostRef);
   };
 
-  fetchPostings = async limit => {
-    this.setState({ postsLoading: true });
-    const fetchedPostings = await firebase.getPaginatedPostings(limit);
-    const fetchedPostsLength = fetchedPostings.length;
-    let offset = 0;
+  fetchPostings = async (limit, lastDocument = null) => {
+    const { lastPostRef: stateLastPostRef } = this.state;
 
-    // if the number of posts we get back is the same, we've hit the last post
-    if (this.state.shownPostLimit === fetchedPostsLength - 1) {
-      // add one as we use the last post for the expand more posts preview
-      offset = 1;
-    }
+    this.setState({ postsLoading: true });
+    const [fetchedPostings, lastPostRef] = await firebase.getPaginatedPostings(
+      limit,
+      lastDocument
+    );
+
+    console.log("last Post", lastPostRef);
+
+    console.log("state last post", stateLastPostRef);
 
     this.setState(
       {
         fetchedPostings,
-        shownPostLimit: fetchedPostsLength - 1 + offset,
-        postsLoading: false
+        shownPostLimit: fetchedPostings.length,
+        lastPostRef,
+        postsLoading: false,
+        getMorePosts: stateLastPostRef
+          ? JSON.stringify(stateLastPostRef._document.proto) ===
+            JSON.stringify(lastPostRef._document.proto)
+            ? false
+            : true
+          : true
       },
       () => this.renderPostings()
     );
   };
 
   render() {
-    const { fetchedPostings, shownPostLimit } = this.state;
+    const { fetchedPostings, shownPostLimit, getMorePosts } = this.state;
     console.log(fetchedPostings, shownPostLimit);
 
     return (
@@ -304,14 +313,31 @@ class Postings extends Component {
             )}
             {this.renderPostings()}
             {/* Expand more posts section */}
-            {fetchedPostings.length !== 0 &&
-              fetchedPostings[shownPostLimit] !== undefined && (
-                <Post
-                  {...fetchedPostings[shownPostLimit]}
-                  isExpandPost
-                  expandMorePosts={this.expandMorePosts}
-                />
-              )}
+            {fetchedPostings.length !== 0 && getMorePosts && (
+              // pass along dummy post as graphic to load more posts
+              <Post
+                {...{
+                  bookAuthor: "BookBuy",
+                  bookEdition: "",
+                  bookPrice: "0",
+                  bookQuality: "",
+                  bookTitle: "More Textbooks",
+                  courseLevel: "100",
+                  datePosted: 1554339752,
+                  flagged: false,
+                  hasPicture: false,
+                  postId: "JQ2BPSeb8JD51u7lXFCq",
+                  program: { label: "BUS (Business)", value: "BUS" },
+                  userId: "bT1L5gvZnKTW15zq4whF0qkJy6J2",
+                  userSchool: {
+                    label: "University of Guelph",
+                    value: "UofG"
+                  }
+                }}
+                isExpandPost
+                expandMorePosts={this.expandMorePosts}
+              />
+            )}
           </div>
         </div>
       </div>
