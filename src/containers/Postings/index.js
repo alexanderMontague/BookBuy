@@ -39,7 +39,7 @@ class Postings extends Component {
     courseLevel: "",
     mainBookInput: "",
     postsLoading: true,
-    shownPostLimit: 20,
+    shownPostLimit: 0,
     fetchedPostings: [],
     lastPostRef: null,
     getMorePosts: true,
@@ -58,8 +58,6 @@ class Postings extends Component {
     // book ID coming from chat
     else if (window.location.search.includes("?id=")) {
       const postId = new URLSearchParams(window.location.search).get("id");
-
-      // TODO: use new query structure
       const fetchedPostings = await firebase.getDocsFromCollection("postings", [
         ["postId", "==", postId],
         ["flagged", "==", false]
@@ -76,12 +74,12 @@ class Postings extends Component {
             left: 0,
             behavior: "smooth"
           }),
-        500
+        200
       );
       this.setState({ fetchedPostings, postsLoading: false, openPosts: true });
     } else {
-      // if regular fetch, get paginated posts
-      this.fetchPostings(this.state.shownPostLimit, null);
+      // if regular fetch, get 20 posts on load
+      this.fetchPostings(20, null);
     }
   }
 
@@ -95,42 +93,20 @@ class Postings extends Component {
 
   searchForTextbook = async event => {
     event && event.preventDefault();
-    this.setState({
-      fetchedPostings: [],
-      postsLoading: true,
-      openPosts: false
-    });
-
-    const {
-      selectedSchool,
-      selectedProgram,
-      courseLevel,
-      mainBookInput
-    } = this.state;
-
-    // get docs from firebase that match input
-    let fetchedPostings = await firebase.getDocsFromCollection("postings", [
-      ["userSchool.value", "==", selectedSchool.value],
-      ["program.value", "==", selectedProgram.value],
-      ["courseLevel", "==", courseLevel],
-      ["flagged", "==", false]
-    ]);
-
-    // if there is title/author input, query that too
-    if (!!mainBookInput) {
-      fetchedPostings = fetchedPostings.filter(post => {
-        return (
-          post.bookTitle.toLowerCase().includes(mainBookInput.toLowerCase()) ||
-          post.bookAuthor.toLowerCase().includes(mainBookInput.toLowerCase())
-        );
-      });
-    }
-
-    this.setState({ fetchedPostings, postsLoading: false });
+    this.setState(
+      {
+        fetchedPostings: [],
+        lastPostRef: null,
+        postsLoading: true,
+        openPosts: false,
+        shownPostLimit: 0
+      },
+      () => this.fetchPostings(10, null)
+    );
   };
 
   renderPostings = () => {
-    const { fetchedPostings, shownPostLimit, openPosts } = this.state;
+    const { fetchedPostings, openPosts } = this.state;
 
     fetchedPostings.sort((postA, postB) => {
       if (postA.datePosted < postB.datePosted) return 1;
@@ -138,7 +114,7 @@ class Postings extends Component {
       return 0;
     });
 
-    return fetchedPostings.slice(0, shownPostLimit).map((posting, index) => {
+    return fetchedPostings.map((posting, index) => {
       const isGrey = index % 2 !== 0;
 
       return (
@@ -153,57 +129,68 @@ class Postings extends Component {
   };
 
   resetForm = () => {
-    // TODO: fetch new posts and reset postings
-    this.setState({
-      fetchPostings: [],
-      selectedProgram: null,
-      courseLevel: "",
-      mainBookInput: ""
-    });
+    this.setState(
+      {
+        fetchedPostings: [],
+        lastPostRef: null,
+        selectedProgram: null,
+        courseLevel: "",
+        mainBookInput: "",
+        shownPostLimit: 0,
+        openPosts: false
+      },
+      // fetch 20 posts on reset
+      () => this.fetchPostings(20, null)
+    );
     this.props.history.push({
       search: ""
     });
-    this.fetchPostings(20, null);
   };
 
   expandMorePosts = () => {
     const { shownPostLimit, lastPostRef } = this.state;
+    // fetch 10 more posts each show more click
     this.fetchPostings(shownPostLimit + 10, lastPostRef);
   };
 
   fetchPostings = async (limit, lastDocument = null) => {
-    const { lastPostRef: stateLastPostRef } = this.state;
+    const {
+      lastPostRef,
+      fetchedPostings,
+      shownPostLimit,
+      selectedSchool,
+      selectedProgram,
+      courseLevel,
+      mainBookInput
+    } = this.state;
 
     this.setState({ postsLoading: true });
-    const [fetchedPostings, lastPostRef] = await firebase.getPaginatedPostings(
-      limit,
-      lastDocument
-    );
+    // get paginated posts and last document reference
+    const [
+      newFetchedPostings,
+      newLastPostRef
+    ] = await firebase.getPaginatedPostings(limit, lastDocument, {
+      school: selectedSchool.value,
+      program: selectedProgram ? selectedProgram.value : null,
+      level: courseLevel,
+      authorTitle: mainBookInput
+    });
 
-    console.log("last Post", lastPostRef);
-
-    console.log("state last post", stateLastPostRef);
-
+    // aggregate new postings, set last doc ref, determine if showing more posts
     this.setState(
       {
-        fetchedPostings,
-        shownPostLimit: fetchedPostings.length,
-        lastPostRef,
+        fetchedPostings: [...fetchedPostings, ...newFetchedPostings],
+        shownPostLimit: shownPostLimit + newFetchedPostings.length,
+        lastPostRef: newLastPostRef,
         postsLoading: false,
-        getMorePosts: stateLastPostRef
-          ? JSON.stringify(stateLastPostRef._document.proto) ===
-            JSON.stringify(lastPostRef._document.proto)
-            ? false
-            : true
-          : true
+        getMorePosts: newLastPostRef ? true : false
       },
       () => this.renderPostings()
     );
   };
 
   render() {
-    const { fetchedPostings, shownPostLimit, getMorePosts } = this.state;
-    console.log(fetchedPostings, shownPostLimit);
+    const { fetchedPostings, getMorePosts, openPosts } = this.state;
 
     return (
       <div className={styles.postingsContainer}>
@@ -313,7 +300,7 @@ class Postings extends Component {
             )}
             {this.renderPostings()}
             {/* Expand more posts section */}
-            {fetchedPostings.length !== 0 && getMorePosts && (
+            {fetchedPostings.length !== 0 && getMorePosts && !openPosts && (
               // pass along dummy post as graphic to load more posts
               <Post
                 {...{
@@ -327,7 +314,7 @@ class Postings extends Component {
                   flagged: false,
                   hasPicture: false,
                   postId: "JQ2BPSeb8JD51u7lXFCq",
-                  program: { label: "BUS (Business)", value: "BUS" },
+                  program: { label: "BKBY (BookBuy)", value: "BOOKBUY" },
                   userId: "bT1L5gvZnKTW15zq4whF0qkJy6J2",
                   userSchool: {
                     label: "University of Guelph",

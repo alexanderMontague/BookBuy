@@ -246,7 +246,7 @@ const Chat = props => {
         postId: selectedChat.postId,
         bookTitle: selectedChat.bookTitle
       };
-    } else if (selectedChat.post.id === "BOOK_BUY") {
+    } else if (selectedChat.post && selectedChat.post.id === "BOOK_BUY") {
       // if message from Book Buy
       setChatHeader({
         chatName: "Book Buy",
@@ -437,7 +437,7 @@ const Chat = props => {
                 </div>
               </div>
               <div className={styles.headerRight}>
-                {selectedChat.post.id !== "BOOK_BUY" && (
+                {selectedChat.post && selectedChat.post.id !== "BOOK_BUY" && (
                   <FaFlag
                     className={styles.chatIcons}
                     onClick={() => setModal("report")}

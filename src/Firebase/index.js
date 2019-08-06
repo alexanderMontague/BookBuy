@@ -90,32 +90,51 @@ class Firebase {
   }
 
   // method used to get paginated posting data
-  async getPaginatedPostings(limit, lastDocument = null) {
-    // if we pass the last document, pick up from pagination from there
+  async getPaginatedPostings(limit, lastDocument = null, searchParams) {
     let postings = [];
+    let query = this.db
+      .collection("postings")
+      .orderBy("datePosted", "desc")
+      .where("flagged", "==", false);
 
-    if (lastDocument) {
-      postings = await this.db
-        .collection("postings")
-        .orderBy("datePosted", "desc")
-        .where("flagged", "==", false)
-        .startAfter(lastDocument)
-        .limit(limit)
-        .get();
-    } else {
-      // if first request get base limit
-      postings = await this.db
-        .collection("postings")
-        .orderBy("datePosted", "desc")
-        .where("flagged", "==", false)
-        .limit(limit)
-        .get();
+    // set up query to handle additional params
+    if (!!searchParams.school) {
+      query = query.where("userSchool.value", "==", searchParams.school);
+    }
+    if (!!searchParams.program) {
+      query = query.where("program.value", "==", searchParams.program);
+    }
+    if (!!searchParams.level) {
+      query = query.where("courseLevel", "==", searchParams.level);
+    }
+    // if we dont provide main text, limit query
+    if (!searchParams.authorTitle) {
+      query = query.limit(limit);
     }
 
-    return [
-      postings.docs.map(doc => doc.data()),
-      postings.docs[postings.docs.length - 1]
-    ];
+    // if we provide a document to search from
+    if (lastDocument) {
+      postings = await query.startAfter(lastDocument).get();
+      // if first query
+    } else {
+      postings = await query.get();
+    }
+
+    // filter title + author if applicable
+    let postingsData = postings.docs.map(doc => doc.data());
+    if (!!searchParams.authorTitle) {
+      postingsData = postingsData.filter(
+        post =>
+          post.bookTitle
+            .toLowerCase()
+            .includes(searchParams.authorTitle.toLowerCase()) ||
+          post.bookAuthor
+            .toLowerCase()
+            .includes(searchParams.authorTitle.toLowerCase())
+      );
+    }
+
+    return [postingsData, postings.docs[postings.docs.length - 1]];
   }
 
   // query a collection
