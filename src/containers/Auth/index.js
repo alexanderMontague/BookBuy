@@ -343,7 +343,7 @@ class Auth extends Component {
                     <FloatingLabel
                       styles={inputStyle}
                       type="text"
-                      placeholder="Full Name (This will be shown on your posts)"
+                      placeholder="Full Name (Shown on your posts)"
                       id="regName"
                       onChange={this.formFieldInputHandler}
                       value={this.state.regName}

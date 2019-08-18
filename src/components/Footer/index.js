@@ -26,7 +26,7 @@ const Footer = props => {
         </a>
         <div style={{ color: "grey", margin: "auto 0" }}>&#8226;</div>
         <Link className={styles.footerLink} to="/terms">
-          Terms and Conditions
+          Terms
         </Link>
         <div style={{ color: "grey", margin: "auto 0" }}>&#8226;</div>
         {props.isAuthenticated ? (

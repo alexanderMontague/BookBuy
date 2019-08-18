@@ -158,20 +158,24 @@ class Home extends Component {
             <div className={styles.textBlock}>
               <div className={styles.textTitle}>About Book Buy</div>
               <div className={styles.textDesc}>
-                <p>
-                  Book Buy offers students a simple way of finding, buying and
-                  selling their textbooks
-                </p>
-                <p>
-                  Book Buy instantly connects students from all across Ontario
-                  with the textbooks they’re looking for!
-                </p>
-                <p>
-                  Read more about us by visiting our{" "}
-                  <Link to="/terms" target="_blank">
-                    Terms Page!
-                  </Link>
-                </p>
+                <ul styles="margin: 0;">
+                  <li className={styles.bulletPoint}>
+                    Book Buy offers students a simple way of finding, buying and
+                    selling their textbooks without the need to release personal
+                    information like an email or phone number.
+                  </li>
+                  <li className={styles.bulletPoint}>
+                    Book Buy instantly connects students from all across Ontario
+                    with the textbooks they’re looking for, in one single place.
+                    No more searching through endless facebook groups.
+                  </li>
+                  <li className={styles.bulletPoint}>
+                    Read more about us by visiting our{" "}
+                    <Link to="/terms" target="_blank">
+                      Terms Page!
+                    </Link>
+                  </li>
+                </ul>
               </div>
             </div>
             <div className={[styles.pictureBlock, styles.books].join(" ")} />
@@ -184,14 +188,31 @@ class Home extends Component {
                 <p>
                   BookBuy provides two unique services for students to utilize:
                 </p>
-                <p>
-                  1) Search for cheap, used books using the 'Postings' section
-                  and contact a seller
-                </p>
-                <p>
-                  2) Create a posting to sell your old book for cash using the
-                  'Sell Books' section
-                </p>
+
+                <div className={styles.stepItem}>
+                  <div className={styles.stepContainer}>
+                    <div className={styles.stepLabel}>STEP</div>
+                    <div className={styles.stepValue}>01</div>
+                  </div>
+                  <div className={styles.divider} />
+                  <div className={styles.stepText}>
+                    Search for cheap, used books using the 'Postings' section
+                    and contact a seller
+                  </div>
+                </div>
+
+                <div className={styles.stepItem}>
+                  <div className={styles.stepContainer}>
+                    <div className={styles.stepLabel}>STEP</div>
+                    <div className={styles.stepValue}>02</div>
+                  </div>
+                  <div className={styles.divider} />
+                  <div className={styles.stepText}>
+                    Create a posting to sell your old book for cash using the
+                    'Sell Books' section
+                  </div>
+                </div>
+
                 <p>Find your book now or create an account to start selling!</p>
               </div>
             </div>

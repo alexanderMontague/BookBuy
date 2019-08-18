@@ -14,6 +14,7 @@ import { ClipLoader } from "react-spinners";
 let hasScrolled = false;
 let startingHeaderOffset = 0;
 window.onscroll = () => {
+  const container = document.getElementById("postContainer");
   const header = document.getElementById("postHeader");
   if (header) {
     if (!hasScrolled) {
@@ -21,12 +22,18 @@ window.onscroll = () => {
       hasScrolled = true;
     }
     const currHeaderOffset = header.offsetTop;
+
+    console.log("OFFSET", currHeaderOffset);
+    console.log("Y OFFSET", window.pageYOffset);
+    console.log("START HEADER OFFSET", startingHeaderOffset);
     if (
       window.pageYOffset > currHeaderOffset &&
       window.pageYOffset > startingHeaderOffset
     ) {
+      container.classList.add(styles.addPadding);
       header.classList.add(styles.sticky);
     } else {
+      container.classList.remove(styles.addPadding);
       header.classList.remove(styles.sticky);
     }
   }
@@ -262,7 +269,7 @@ class Postings extends Component {
 
         {/* POSTINGS SECTION */}
         <div className={styles.postContainer}>
-          <div className={styles.postings}>
+          <div className={styles.postings} id="postContainer">
             <div className={styles.postHeader} id="postHeader">
               <div className={[styles.postHeaderItem, styles.date].join(" ")}>
                 Date Posted
