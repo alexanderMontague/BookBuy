@@ -23,9 +23,6 @@ window.onscroll = () => {
     }
     const currHeaderOffset = header.offsetTop;
 
-    console.log("OFFSET", currHeaderOffset);
-    console.log("Y OFFSET", window.pageYOffset);
-    console.log("START HEADER OFFSET", startingHeaderOffset);
     if (
       window.pageYOffset > currHeaderOffset &&
       window.pageYOffset > startingHeaderOffset
