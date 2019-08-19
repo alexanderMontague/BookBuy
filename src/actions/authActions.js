@@ -1,5 +1,6 @@
-export const getUserStatus = () => ({
-  type: "GET_USER_STATUS"
+export const getUserStatus = payload => ({
+  type: "GET_USER_STATUS",
+  payload
 });
 
 export const userStatusResponse = data => ({

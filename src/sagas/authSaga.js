@@ -2,7 +2,7 @@ import { put, takeLatest, select } from "redux-saga/effects";
 import { userStatusResponse } from "../actions/authActions";
 import firebase from "../firebase";
 
-function* getUserStatus() {
+function* getUserStatus({ type, payload }) {
   const gotoProfile = yield select(state => state.interfaceState.gotoProfile);
   const userStatus = yield firebase.isAuthenticated();
 
@@ -13,12 +13,11 @@ function* getUserStatus() {
   const userData = (yield firebase.getCurrentUserInfo()).data();
   yield put(userStatusResponse({ ...userData }));
 
-  console.log("here boi2", gotoProfile);
-
+  // redirect to profile if query param is passed
   if (gotoProfile) {
-    console.log("here boi", gotoProfile);
-
-    window.location.href = `${window.location.host}/profile`;
+    payload.history.push({
+      pathname: "/profile"
+    });
   }
 }
 

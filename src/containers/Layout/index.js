@@ -18,7 +18,7 @@ class Layout extends Component {
       this.props.redirectToProfile(true);
     }
 
-    this.props.getUserStatus();
+    this.props.getUserStatus({ history: this.props.history });
   }
 
   componentDidUpdate(prevProps) {
