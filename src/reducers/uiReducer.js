@@ -1,6 +1,7 @@
 const initialState = {
   selectedChat: null,
-  gotoProfile: false
+  gotoProfile: false,
+  isMobile: window.innerWidth <= 550 ? true : false
 };
 
 const uiReducer = (prevState = initialState, { type, payload }) => {

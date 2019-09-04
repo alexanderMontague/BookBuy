@@ -28,13 +28,15 @@ const Post = props => {
     history,
     user,
     userSchool,
-    openPosts
+    openPosts,
+    isMobile
   } = props;
 
   const [isDrawerOpen, drawerToggleHandler] = useState(false);
   const [bookURL, updateBookURL] = useState("");
   const [userInfo, setUserInfo] = useState({});
   const [openPostsOnLoad, setOpenPostsOnLoad] = useState(openPosts);
+  const [copyButtonText, setCopyButtonText] = useState("Copy Post Link");
 
   const drawerToggle = async () => {
     drawerToggleHandler(!isDrawerOpen);
@@ -82,6 +84,19 @@ const Post = props => {
     setOpenPostsOnLoad(false);
   }
 
+  const copyPostLink = () => {
+    const tempInput = document.createElement("input");
+    tempInput.style = "position: absolute; left: -1000px; top: -1000px";
+    tempInput.value = `https://www.bookbuy.ca/postings?id=${postId}`;
+    document.body.appendChild(tempInput);
+    tempInput.select();
+    document.execCommand("copy");
+    document.body.removeChild(tempInput);
+
+    setCopyButtonText("Copied!");
+    setTimeout(() => setCopyButtonText("Copy Post Link"), 2000);
+  };
+
   return (
     <Fragment>
       {isExpandPost && (
@@ -98,7 +113,9 @@ const Post = props => {
         onClick={isExpandPost ? () => expandMorePosts() : drawerToggle}
       >
         <div className={[styles.postHeaderItem, styles.date].join(" ")}>
-          {moment.unix(datePosted).format("MMMM Do YYYY")}
+          {isMobile
+            ? moment.unix(datePosted).format("MMM Do YYYY")
+            : moment.unix(datePosted).format("MMMM Do YYYY")}
         </div>
         <div className={[styles.postHeaderItem, styles.name].join(" ")}>
           {bookTitle}
@@ -239,6 +256,15 @@ const Post = props => {
                     "This is your book!"
                   )}
                 </div>
+                <div className={styles.row}>
+                  <button
+                    className={styles.contactButton}
+                    onClick={copyPostLink}
+                    style={{ marginTop: "10px" }}
+                  >
+                    {copyButtonText}
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -250,7 +276,8 @@ const Post = props => {
 
 const mapStateToProps = state => ({
   isAuthenticated: state.authState.isAuthenticated,
-  user: state.authState.user
+  user: state.authState.user,
+  isMobile: state.interfaceState.isMobile
 });
 
 export default connect(mapStateToProps)(withRouter(Post));

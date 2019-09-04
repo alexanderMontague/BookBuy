@@ -110,7 +110,6 @@
 .featuresPanel {
   min-height: 450px;
   display: flex;
-  border-bottom: 3px solid #0069d9;
   justify-content: space-around;
   margin: 0 25px;
 
@@ -181,6 +180,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      background-color: rgb(248, 249, 250);
 
       @media (max-width: 1000px) {
         min-height: 300px;
@@ -242,6 +242,7 @@
 
     .pictureBlock {
       width: 50%;
+
       @media (max-width: 1000px) {
         height: 300px;
         width: auto;
@@ -249,6 +250,7 @@
     }
     .books {
       background: url("../../assets/book-buy-logo.png") no-repeat center;
+      background-color: rgb(248, 249, 250);
       background-size: contain;
     }
     .money {

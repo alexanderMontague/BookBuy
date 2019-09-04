@@ -120,7 +120,14 @@ exports.checkBookPostPicture = functions.storage
     const [result] = await visionClient.safeSearchDetection(filePath);
     // check if image rating could be nsfw
     const isNSFW = Object.values(result.safeSearchAnnotation).some(rating =>
-      ["POSSIBLE", "LIKELY", "VERY_LIKELY"].includes(rating)
+      ["LIKELY", "VERY_LIKELY"].includes(rating)
+    );
+
+    console.log(
+      "POST ID:",
+      object.name,
+      "NSFW SEARCH RESULTS:",
+      result.safeSearchAnnotation
     );
 
     if (isNSFW) {
@@ -168,15 +175,14 @@ exports.checkBookPostPicture = functions.storage
         messages: [
           {
             content: `
-            Your book listing ${
-              post.bookTitle
-            } has been flagged for inappropriate content.\n
+            Your book listing "${post.bookTitle}" has been flagged for inappropriate content.\n
             This is most likely because your post image contains profanity, nudity, graphic violence or other sensitive content.\n
             If you believe this is a mistake, feel free to respond to this chat or send us an email at info@bookbuy.ca
           `,
             createdAt: moment().unix(),
             sentBy: "bT1L5gvZnKTW15zq4whF0qkJy6J2",
-            isUnread: true
+            isUnread: true,
+            flaggedPostID: post.postId
           }
         ]
       };
@@ -193,15 +199,14 @@ exports.checkBookPostPicture = functions.storage
         await chatRef.doc(currentBookbuyChats.docs[0].data().id).update({
           messages: admin.firestore.FieldValue.arrayUnion({
             content: `
-            Your book listing ${
-              post.bookTitle
-            } has been flagged for inappropriate content.\n
+            Your book listing "${post.bookTitle}" has been flagged for inappropriate content.\n
             This is most likely because your post image contains profanity, nudity, graphic violence or other sensitive content.\n
             If you believe this is a mistake, feel free to respond to this chat or send us an email at info@bookbuy.ca
           `,
             createdAt: moment().unix(),
             sentBy: "bT1L5gvZnKTW15zq4whF0qkJy6J2",
-            isUnread: true
+            isUnread: true,
+            flaggedPostID: post.postId
           })
         });
       }

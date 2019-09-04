@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import styles from "./styles.scss";
 
 import InputWrapper from "../../components/InputWrapper";
@@ -195,6 +196,7 @@ class Postings extends Component {
 
   render() {
     const { fetchedPostings, getMorePosts, openPosts } = this.state;
+    const { isMobile } = this.props;
 
     return (
       <div className={styles.postingsContainer}>
@@ -280,7 +282,7 @@ class Postings extends Component {
                 Program
               </div>
               <div className={[styles.postHeaderItem, styles.code].join(" ")}>
-                Course Code
+                {isMobile ? "Code" : "Course Code"}
               </div>
               <div className={[styles.postHeaderItem, styles.price].join(" ")}>
                 Price
@@ -336,4 +338,8 @@ class Postings extends Component {
   }
 }
 
-export default Postings;
+const mapStateToProps = state => ({
+  isMobile: state.interfaceState.isMobile
+});
+
+export default connect(mapStateToProps)(Postings);
