@@ -6,10 +6,8 @@ import InputWrapper from "../../components/InputWrapper";
 import Select from "react-select";
 import Post from "../../components/Post";
 import firebase from "../../firebase";
-import {
-  schoolDropdownValues,
-  programDropdownValues
-} from "../../assets/dropdownValues";
+import { schools, courses } from "../../assets/courses";
+
 import { ClipLoader } from "react-spinners";
 
 let hasScrolled = false;
@@ -39,7 +37,7 @@ window.onscroll = () => {
 
 class Postings extends Component {
   state = {
-    selectedSchool: { label: "University of Guelph", value: "UofG" },
+    selectedSchool: [],
     selectedProgram: null,
     courseLevel: "",
     mainBookInput: "",
@@ -89,7 +87,7 @@ class Postings extends Component {
   }
 
   schoolSelector = option => {
-    this.setState({ selectedSchool: option });
+    this.setState({ selectedSchool: option, selectedProgram: null });
   };
 
   programSelector = option => {
@@ -136,6 +134,7 @@ class Postings extends Component {
   resetForm = () => {
     this.setState(
       {
+        selectedSchool: [],
         fetchedPostings: [],
         lastPostRef: null,
         selectedProgram: null,
@@ -194,6 +193,12 @@ class Postings extends Component {
     );
   };
 
+  getCoursesFromSchool() {
+    return this.state.selectedSchool
+      ? courses[this.state.selectedSchool.value]
+      : null;
+  }
+
   render() {
     const { fetchedPostings, getMorePosts, openPosts } = this.state;
     const { isMobile } = this.props;
@@ -210,15 +215,16 @@ class Postings extends Component {
                   <Select
                     value={this.state.selectedSchool}
                     onChange={this.schoolSelector}
-                    options={schoolDropdownValues}
+                    options={schools}
                     className={styles.schoolInput}
+                    placeholder="Select a School"
                   />
                 </InputWrapper>
                 <InputWrapper label="Program" required>
                   <Select
                     value={this.state.selectedProgram}
                     onChange={this.programSelector}
-                    options={programDropdownValues}
+                    options={this.getCoursesFromSchool()}
                     className={styles.schoolInput}
                     placeholder="Select a Program"
                   />

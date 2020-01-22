@@ -11,9 +11,9 @@ import FloatingLabel, {
 import InputWrapper from "../../components/InputWrapper";
 import Select from "react-select";
 import { ClipLoader } from "react-spinners";
-import { programDropdownValues } from "../../assets/dropdownValues";
+import { courses } from "../../assets/courses";
 import { FaUpload, FaQuestionCircle } from "react-icons/fa";
-import isbnLocation from "../../assets/isbnLocation.png";
+import isbnLocation from "../../assets/media/isbnLocation.png";
 import { getBookInfo } from "../../helpers/requests";
 import Compressor from "compressorjs";
 import firebase from "../../firebase";
@@ -232,7 +232,7 @@ class Sell extends Component {
                     <Select
                       value={this.state.selectedProgram}
                       onChange={this.programSelector}
-                      options={programDropdownValues}
+                      options={courses[this.props.user.school.value]}
                       className={styles.schoolInput}
                       placeholder="Select a Program"
                     />

@@ -13,7 +13,7 @@ import { ClipLoader } from "react-spinners";
 import Select from "react-select";
 import { getUserStatus } from "../../actions/authActions";
 import firebase from "../../firebase";
-import { schoolDropdownValues } from "../../assets/dropdownValues";
+import { schools } from "../../assets/courses";
 import Modal from "react-modal";
 
 const inputStyle = {
@@ -211,7 +211,7 @@ class Auth extends Component {
   };
 
   schoolSelector = option => {
-    this.setState({ selectedSchool: option });
+    this.setState({ regSchool: option });
   };
 
   forgotPasswordHandler = () => {
@@ -336,7 +336,7 @@ class Auth extends Component {
                       <Select
                         value={this.state.regSchool}
                         onChange={this.schoolSelector}
-                        options={schoolDropdownValues}
+                        options={schools}
                         className={styles.schoolInput}
                       />
                     </InputWrapper>
@@ -488,7 +488,4 @@ const mapStateToProps = state => ({
   isAuthenticated: state.authState.isAuthenticated
 });
 
-export default connect(
-  mapStateToProps,
-  { getUserStatus }
-)(Auth);
+export default connect(mapStateToProps, { getUserStatus })(Auth);

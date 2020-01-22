@@ -6,10 +6,7 @@ import Select from "react-select";
 import { Link } from "react-router-dom";
 import { FaRecycle, FaRegCheckCircle, FaSearchDollar } from "react-icons/fa";
 
-import {
-  schoolDropdownValues,
-  programDropdownValues
-} from "../../assets/dropdownValues";
+import { schools, courses } from "../../assets/courses";
 
 const renderTitleText = index => {
   const titleText = "Search Hundreds of Textbooks Now";
@@ -21,7 +18,7 @@ const renderTitleText = index => {
 
 class Home extends Component {
   state = {
-    selectedSchool: { label: "University of Guelph", value: "UofG" },
+    selectedSchool: null,
     selectedProgram: null,
     courseLevel: "",
     mainBookInput: ""
@@ -32,7 +29,7 @@ class Home extends Component {
   }
 
   schoolSelector = option => {
-    this.setState({ selectedSchool: option });
+    this.setState({ selectedSchool: option, selectedProgram: null });
   };
 
   programSelector = option => {
@@ -61,6 +58,12 @@ class Home extends Component {
     });
   };
 
+  getCoursesFromSchool() {
+    return this.state.selectedSchool
+      ? courses[this.state.selectedSchool.value]
+      : [];
+  }
+
   render() {
     return (
       <div className={styles.homeContainer}>
@@ -74,15 +77,16 @@ class Home extends Component {
                   <Select
                     value={this.state.selectedSchool}
                     onChange={this.schoolSelector}
-                    options={schoolDropdownValues}
+                    options={schools}
                     className={styles.schoolInput}
+                    placeholder="Select a School"
                   />
                 </InputWrapper>
                 <InputWrapper label="Program" required>
                   <Select
                     value={this.state.selectedProgram}
                     onChange={this.programSelector}
-                    options={programDropdownValues}
+                    options={this.getCoursesFromSchool()}
                     className={styles.schoolInput}
                     placeholder="Select a Program"
                   />

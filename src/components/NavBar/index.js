@@ -4,9 +4,9 @@ import { Link } from "react-router-dom";
 import styles from "./styles.scss";
 import { getUserStatus } from "../../actions/authActions";
 import { FaBars, FaComments } from "react-icons/fa";
-import logo from "../../assets/BookBuy.png";
+import logo from "../../assets/media/BookBuy.png";
 import Modal from "react-modal";
-import BookBuyLogo from "../../assets/BookBuyNavLogo.png";
+import BookBuyLogo from "../../assets/media/BookBuyNavLogo.png";
 import firebase from "../../firebase";
 
 const modalStyles = {

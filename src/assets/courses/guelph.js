@@ -1,11 +1,4 @@
-export const schoolDropdownValues = [
-  {
-    label: "University of Guelph",
-    value: "UofG"
-  }
-];
-
-export const programDropdownValues = [
+const guelphCourses = [
   { label: "ACCT (Accounting)", value: "ACCT" },
   { label: "AGR (Agriculture)", value: "AGR" },
   { label: "ANSC (Animal Science)", value: "ANSC" },
@@ -102,3 +95,5 @@ export const programDropdownValues = [
   { label: "WMST (Women's Studies)", value: "WMST" },
   { label: "ZOO (Zoology)", value: "ZOO" }
 ];
+
+export default guelphCourses;

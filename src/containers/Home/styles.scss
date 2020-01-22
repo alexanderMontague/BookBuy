@@ -6,7 +6,7 @@
 .searchPanel {
   height: 575px;
   background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-    url("../../assets/students.jpg") no-repeat center;
+    url("../../assets/media/students.jpg") no-repeat center;
   background-size: cover;
   display: flex;
   flex-direction: column;
@@ -249,12 +249,12 @@
       }
     }
     .books {
-      background: url("../../assets/book-buy-logo.png") no-repeat center;
+      background: url("../../assets/media/book-buy-logo.png") no-repeat center;
       background-color: rgb(248, 249, 250);
       background-size: contain;
     }
     .money {
-      background: url("../../assets/bookExchange.jpg") no-repeat center;
+      background: url("../../assets/media/bookExchange.jpg") no-repeat center;
       background-size: cover;
     }
   }

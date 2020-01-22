@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import "./styles.scss";
 import styles from "./styles.scss";
 import moment from "moment";
-import placeholder from "../../assets/noPic.png";
+import placeholder from "../../assets/media/noPic.png";
 import { ClipLoader } from "react-spinners";
 import firebase from "../../firebase";
 import { withRouter } from "react-router";
