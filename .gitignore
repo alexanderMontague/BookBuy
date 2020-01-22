@@ -130,4 +130,3 @@ GC_vision_key.json
 *.xml
 .idea/
 *.iml
-package-lock.json
