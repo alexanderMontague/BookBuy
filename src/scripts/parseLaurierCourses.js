@@ -1,3 +1,5 @@
+// https://loris.wlu.ca/register/ssb/classSearch/classSearch
+
 var fs = require("fs");
 const laurierArr = require("./courses/laurier");
 

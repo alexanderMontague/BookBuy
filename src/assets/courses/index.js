@@ -1,5 +1,7 @@
 import guelph from "./guelph";
 import laurier from "./laurier";
+import waterloo from "./waterloo";
+import mcmaster from "./mcmaster";
 
 export const schools = [
   {
@@ -9,10 +11,20 @@ export const schools = [
   {
     label: "Wilfred Laurier University",
     value: "WLU"
+  },
+  {
+    label: "University of Waterloo",
+    value: "UW"
+  },
+  {
+    label: "McMaster University",
+    value: "MAC"
   }
 ];
 
 export const courses = {
   UofG: guelph,
-  WLU: laurier
+  WLU: laurier,
+  UW: waterloo,
+  MAC: mcmaster
 };

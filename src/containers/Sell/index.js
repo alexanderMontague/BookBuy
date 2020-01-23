@@ -112,6 +112,23 @@ class Sell extends Component {
     }
   };
 
+  validateSellForm() {
+    const { courseLevel, bookPrice } = this.state;
+
+    Number(courseLevel) === NaN
+      ? this.setState({
+          statusMessage:
+            "Course levels can only contain numbers! Ex. If the course was BUS*100, enter 100"
+        })
+      : this.setState({ statusMessage: "" });
+
+    Number(bookPrice) === NaN
+      ? this.setState({
+          statusMessage: "Book price must be a number. Do not put a '$' in!"
+        })
+      : this.setState({ statusMessage: "" });
+  }
+
   // using google books api for isbn lookup
   getBookInfo = async () => {
     const cleanISBN = this.state.bookISBN.replace(/-/g, "");
@@ -136,6 +153,7 @@ class Sell extends Component {
   };
 
   formFieldInputHandler = event => {
+    this.validateSellForm();
     this.setState({ [event.target.id]: event.target.value });
   };
 
