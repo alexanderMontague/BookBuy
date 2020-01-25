@@ -112,23 +112,6 @@ class Sell extends Component {
     }
   };
 
-  validateSellForm() {
-    const { courseLevel, bookPrice } = this.state;
-
-    Number(courseLevel) === NaN
-      ? this.setState({
-          statusMessage:
-            "Course levels can only contain numbers! Ex. If the course was BUS*100, enter 100"
-        })
-      : this.setState({ statusMessage: "" });
-
-    Number(bookPrice) === NaN
-      ? this.setState({
-          statusMessage: "Book price must be a number. Do not put a '$' in!"
-        })
-      : this.setState({ statusMessage: "" });
-  }
-
   // using google books api for isbn lookup
   getBookInfo = async () => {
     const cleanISBN = this.state.bookISBN.replace(/-/g, "");
@@ -153,7 +136,13 @@ class Sell extends Component {
   };
 
   formFieldInputHandler = event => {
-    this.validateSellForm();
+    if (event.target.id === "courseLevel" || event.target.id === "bookPrice") {
+      if (!event.target.value.match(/^\d*\.?\d*$/)) {
+        document.getElementById(event.target.id).value = this.state[
+          event.target.id
+        ];
+      }
+    }
     this.setState({ [event.target.id]: event.target.value });
   };
 
@@ -178,7 +167,9 @@ class Sell extends Component {
           {isAuthenticated ? (
             !addPostSuccessful ? (
               <form className={styles.form} onSubmit={this.uploadBook}>
-                <div>{this.state.statusMessage}</div>
+                <div className={styles.statusMessage}>
+                  {this.state.statusMessage}
+                </div>
                 {/* <div className={styles.row2}>
                   <div className={styles.isbnContainer}>
                     <FloatingLabel
@@ -256,7 +247,7 @@ class Sell extends Component {
                     />
                   </InputWrapper>
                   <FloatingLabel
-                    type="number"
+                    type="text"
                     placeholder="Course Level"
                     id="courseLevel"
                     onChange={this.formFieldInputHandler}
@@ -266,7 +257,7 @@ class Sell extends Component {
                 </div>
                 <div className={styles.row}>
                   <FloatingLabel
-                    type="number"
+                    type="text"
                     placeholder="Price $"
                     id="bookPrice"
                     onChange={this.formFieldInputHandler}
