@@ -33,6 +33,17 @@
   text-decoration: underline;
 }
 
+.socialLinks {
+  width: 20%;
+  display: flex;
+  justify-content: space-evenly;
+  margin-top: 15px;
+
+  .socialLink:hover {
+    cursor: pointer;
+  }
+}
+
 .disclaimer {
   color: #c0c0c0;
   font-size: 0.8em;

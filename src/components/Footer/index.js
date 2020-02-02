@@ -2,16 +2,17 @@ import React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
+import { FaInstagram, FaFacebookSquare, FaLinkedin } from "react-icons/fa";
+
 import styles from "./styles.scss";
 
 const Footer = props => {
-  // const darkFooter = window.location.hash === "#/postings";
+  const openLink = url => {
+    window.open(url);
+  };
 
   return (
-    <div
-      className={styles.footerContainer}
-      style={{ background: false ? "#333333" : null }}
-    >
+    <div className={styles.footerContainer}>
       <div className={styles.linksContainer}>
         <Link className={styles.footerLink} to="/">
           Home
@@ -38,6 +39,26 @@ const Footer = props => {
             Sign Up!
           </Link>
         )}
+      </div>
+      <div className={styles.socialLinks}>
+        <div
+          className={styles.socialLink}
+          onClick={() => openLink("https://www.instagram.com/bookbuy.ca/")}
+        >
+          <FaInstagram />
+        </div>
+        <div
+          className={styles.socialLink}
+          onClick={() => openLink("https://www.facebook.com/www.bookbuy.ca/")}
+        >
+          <FaFacebookSquare />
+        </div>
+        <div
+          className={styles.socialLink}
+          onClick={() => openLink("https://www.linkedin.com/company/book-buy/")}
+        >
+          <FaLinkedin />
+        </div>
       </div>
       <div className={styles.disclaimer}>
         © BookBuy {new Date().getFullYear()}. All Rights Reserved.
